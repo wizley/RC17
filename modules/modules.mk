@@ -1,0 +1,13 @@
+MODULESPATH = ./modules
+
+MODULESSRC = $(MODULESPATH)/bubbles/bubbles.c
+MODULESSRC += $(MODULESPATH)/usb_shell/usb_shell.c
+MODULESSRC += $(MODULESPATH)/ps4/ps4.c
+MODULESSRC += $(MODULESPATH)/buzzer/buzzer.c
+#MODULESSRC += $(MODULESPATH)/uart_md/comm.c
+
+MODULESINC = $(MODULESPATH)/bubbles
+MODULESINC += $(MODULESPATH)/usb_shell
+MODULESINC += $(MODULESPATH)/ps4
+MODULESINC += $(MODULESPATH)/buzzer
+#MODULESINC += $(MODULESPATH)/uart_md
