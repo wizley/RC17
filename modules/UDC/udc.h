@@ -24,7 +24,7 @@ typedef enum{
 
 typedef uint8_t* tx_data_ptr;
 typedef uint8_t* rx_data_ptr;
-typedef void (*message_callback)();
+typedef void (*rx_callback)();
 typedef void (*udc_message_cb)();
 typedef UDC_Obj_t* UDC_ObjectList;
 
@@ -33,7 +33,7 @@ typedef struct{
   tx_data_ptr tx_data;
   uint8_t tx_len;
   rx_data_ptr rx_data;
-  rx_func_callback rx_callback;
+  rx_callback rx_callback;
   uint8_t rx_len;
 
 }UDC_Obj_t;
