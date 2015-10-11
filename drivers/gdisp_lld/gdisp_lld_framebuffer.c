@@ -11,7 +11,7 @@
 #if GFX_USE_GDISP
 
 #define GDISP_DRIVER_VMT			GDISPVMT_STM32_LTDC_DMA2D
-#include "./gdisp_lld_config.h"
+#include "gdisp_lld_config.h"
 #include "src/gdisp/gdisp_driver.h"
 #include "drivers.h"
 
@@ -27,7 +27,7 @@
 /*===========================================================================*/
 
 static uint8_t screen[800 * 480 * 2] __attribute__((section(".sdram")));
-static uint8_t fb[800 * 480 * 2] __attribute__((section(".sdram")));
+//static uint8_t fb[800 * 480 * 2] __attribute__((section(".sdram")));
 
 
 //static uint8_t view_buffer[800 * 480]__attribute__((section(".sdram")));
@@ -113,7 +113,7 @@ extern LTDCDriver LTDCD1;
 //static uint8_t *buff_pt_ltdc;
 
 static dma2d_laycfg_t dma2d_frame_laycfg = {
-  fb,
+  screen,
   0,
   DMA2D_FMT_RGB565,
   DMA2D_COLOR_AQUA,
@@ -168,7 +168,7 @@ static const dma2d_laycfg_t dma2d_bg_laycfg = {
 /* Driver local routines    .                                                */
 /*===========================================================================*/
 #define PIXIL_POS(g, x, y)		((y) * 800 * 2 + (x) * 2)
-#define PIXEL_ADDR(g, pos)		((LLDCOLOR_TYPE *)((uint8_t *)fb+pos))
+#define PIXEL_ADDR(g, pos)		((LLDCOLOR_TYPE *)((uint8_t *)screen+pos))
 
 /*===========================================================================*/
 /* Driver exported functions.                                                */
@@ -195,14 +195,14 @@ LLDSPEC bool_t gdisp_lld_init(GDisplay *g) {
   	dma2dStart(&DMA2DD1, &dma2d_cfg);
 
   	DMA2DDriver *const dma2dp = &DMA2DD1;
-
+//
   	dma2d_frame_laycfg.bufferp = screen;//buff_pt_ltdc;
   	dma2dOutSetConfig(dma2dp, &dma2d_frame_laycfg);
-
-  	dma2d_frame_laycfg.bufferp = fb;
-  	dma2dFgSetConfig(dma2dp, &dma2d_frame_laycfg);
-  	dma2dJobSetMode(dma2dp, DMA2D_JOB_COPY);
-  	dma2dJobSetSize(dma2dp, 800, 480);
+//
+//  	dma2d_frame_laycfg.bufferp = fb;
+//  	dma2dFgSetConfig(dma2dp, &dma2d_frame_laycfg);
+//  	dma2dJobSetMode(dma2dp, DMA2D_JOB_COPY);
+//  	dma2dJobSetSize(dma2dp, 800, 480);
 
   	return TRUE;
 }
@@ -210,14 +210,9 @@ LLDSPEC bool_t gdisp_lld_init(GDisplay *g) {
 
 #if GDISP_HARDWARE_DRAWPIXEL
 LLDSPEC void gdisp_lld_draw_pixel(GDisplay *g) {
-  //pos = PIXIL_POS(g, g->g.Width-g->p.x-1, g->g.Height-g->p.y-1);
-  //coord_t x,y;
-  //PIXEL_ADDR(g, pos)[0] = gdispColor2Native(g->p.color);
+
 	if(g->p.x > g->g.Width - 1 || g->p.y > g->g.Height - 1) return;
-  //fb[(g->g.Height-g->p.y-1) * g->g.Width * 3 + (g->g.Width-g->p.x-1) * 3] = gdispColor2Native(g->p.color);//(uint8_t)(x ^ y);
-  //fb[(g->g.Height-g->p.y-1) * g->g.Width * 3 + (g->g.Width-g->p.x-1) * 3+1] = gdispColor2Native(g->p.color)>>8;
-  //fb[(g->g.Height-g->p.y-1) * g->g.Width * 3 + (g->g.Width-g->p.x-1) * 3+2] = gdispColor2Native(g->p.color)>>16;
-  //buff_pt[(g->g.Height-g->p.y-1) * g->g.Width + (g->g.Width-g->p.x-1)] = gdispColor2Native(g->p.color);
+
   unsigned	pos;
   pos = PIXIL_POS(g, g->g.Width-g->p.x-1, g->g.Height-g->p.y-1);
   PIXEL_ADDR(g, pos)[0] = gdispColor2Native(g->p.color);
@@ -226,17 +221,6 @@ LLDSPEC void gdisp_lld_draw_pixel(GDisplay *g) {
 
 #if GDISP_HARDWARE_FILLS
 LLDSPEC void gdisp_lld_fill_area(GDisplay *g) {
-//	coord_t		sy, ey;
-//	coord_t		sx, ex;
-//	unsigned	pos_s, pos_e;
-//	sx = GDISP_SCREEN_WIDTH - g->p.x - g->p.cx;
-//
-//	sy = GDISP_SCREEN_HEIGHT - g->p.y - g->p.cy;
-//	pos_s = PIXIL_POS(g, GDISP_SCREEN_WIDTH - g->p.x - g->p.cx, GDISP_SCREEN_HEIGHT - g->p.y - g->p.cy);
-
-//	ex = GDISP_SCREEN_WIDTH-1 - g->p.x;
-//	ey = GDISP_SCREEN_HEIGHT-1 - g->p.y;
-//	pos_e = PIXIL_POS(g, GDISP_SCREEN_WIDTH-1 - g->p.x, GDISP_SCREEN_HEIGHT-1 - g->p.y);
 
 	DMA2DDriver *const dma2dp = &DMA2DD1;
 	dma2dAcquireBus(dma2dp);
@@ -245,9 +229,9 @@ LLDSPEC void gdisp_lld_fill_area(GDisplay *g) {
 	dma2dJobSetMode(dma2dp, DMA2D_JOB_CONST);
 	dma2dOutSetDefaultColor(dma2dp, gdispColor2Native(g->p.color));
 	dma2dOutSetAddress(dma2dp, dma2dComputeAddress(
-			fb, 800*2, DMA2D_FMT_RGB565,
-			GDISP_SCREEN_WIDTH - g->p.x - g->p.cx,
-			GDISP_SCREEN_HEIGHT - g->p.y - g->p.cy
+			screen, 800*2, DMA2D_FMT_RGB565,
+			800 - g->p.x - g->p.cx,
+			480 - g->p.y - g->p.cy
 	));
 	dma2dOutSetWrapOffset(dma2dp, 800 - g->p.cx);
 	dma2dJobSetSize(dma2dp, g->p.cx, g->p.cy);
@@ -269,7 +253,7 @@ LLDSPEC void gdisp_lld_blit_area(GDisplay* g) {
 	dma2dJobSetMode(dma2dp, DMA2D_JOB_COPY);
 	//dma2dOutSetDefaultColor(dma2dp, gdispColor2Native(g->p.color));
 	dma2dOutSetAddress(dma2dp, dma2dComputeAddress(
-			fb, 800*2, DMA2D_FMT_RGB565,
+			screen, 800*2, DMA2D_FMT_RGB565,
 			GDISP_SCREEN_WIDTH - g->p.x - g->p.cx,
 			GDISP_SCREEN_HEIGHT - g->p.y - g->p.cy
 	));
@@ -288,18 +272,18 @@ LLDSPEC void gdisp_lld_blit_area(GDisplay* g) {
 #if GDISP_HARDWARE_FLUSH
 LLDSPEC void gdisp_lld_flush(GDisplay *g) {
   (void) g;
-  DMA2DDriver *const dma2dp = &DMA2DD1;
-  dma2dAcquireBus(dma2dp);
-
-  dma2d_frame_laycfg.bufferp = screen;
-  dma2dOutSetConfig(dma2dp, &dma2d_frame_laycfg);
-
-  dma2d_frame_laycfg.bufferp = fb;
-  dma2dFgSetConfig(dma2dp, &dma2d_frame_laycfg);
-  dma2dJobSetMode(dma2dp, DMA2D_JOB_COPY);
-  dma2dJobSetSize(dma2dp, 800, 480);
-  dma2dJobExecute(dma2dp);
-  dma2dReleaseBus(dma2dp);
+//  DMA2DDriver *const dma2dp = &DMA2DD1;
+//  dma2dAcquireBus(dma2dp);
+//
+//  dma2d_frame_laycfg.bufferp = screen;
+//  dma2dOutSetConfig(dma2dp, &dma2d_frame_laycfg);
+//
+//  dma2d_frame_laycfg.bufferp = fb;
+//  dma2dFgSetConfig(dma2dp, &dma2d_frame_laycfg);
+//  dma2dJobSetMode(dma2dp, DMA2D_JOB_COPY);
+//  dma2dJobSetSize(dma2dp, 800, 480);
+//  dma2dJobExecute(dma2dp);
+//  dma2dReleaseBus(dma2dp);
 }
 #endif
 

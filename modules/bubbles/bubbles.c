@@ -168,7 +168,8 @@ THD_FUNCTION(bubbles_thread, arg) {
 		else if (angleZ < 0)
 			angleZ += SCALE;
 
-		gdispFlush();
+		//gdispFlush();
+		gfxSleepMilliseconds(10);
 	}
 
 }

@@ -16,6 +16,8 @@
 #include "bubbles.h"
 #include "buzzer.h"
 
+#include "udc.h"
+
 
 #define QEI_DRIVER              QEID4
 
@@ -69,6 +71,10 @@ static THD_FUNCTION(Thread2, arg) {
       //palSetPad(GPIOA, GPIOA_BUZZER);
       //chThdSleepMicroseconds(125);
       chThdSleepMilliseconds(333);
+
+      uint16_t setpoint=55, feedback;
+      UDC_Obj_t m0 = {.id = 8, .tx_data = (udc_tx_data_t)&setpoint,.rx_data = (udc_rx_data_t)&feedback, .tx_len = 2, .rx_len = 2};
+      UDC_Poll_Single(&m0);
   }
 }
 
@@ -243,13 +249,18 @@ int main(void) {
 	{0, 150},
 	{0, 0}
   };
-  buzzer_play(tone, 3);
+  //buzzer_play(tone, 3);
 //  chThdSleepMilliseconds(1500);
 //  buzzer_stop();
 //  buzzer_play(tone, 6);
 
   gfxInit();
   //ginputGetMouse(0);
+
+  UDC_config_t udc_config;
+  UDC_Init(&udc_config);
+
+  UDC_Start();
 
   /*
    * Creating the blinker threads.
@@ -259,10 +270,18 @@ int main(void) {
   chThdCreateStatic(waThread2, sizeof(waThread2), LOWPRIO,
                     Thread2, NULL);
 
-  chThdCreateStatic(wabubbles, sizeof(wabubbles), NORMALPRIO + 10, bubbles_thread, NULL);
+  chThdCreateStatic(wabubbles, sizeof(wabubbles), LOWPRIO, bubbles_thread, NULL);
 
 
-  app_init();
+  //app_init();
+
+
+//  uint16_t setpoint=55, feedback;
+
+//  UDC_Obj_t m0 = {.id = 8, .tx_data = &setpoint,.rx_data = &feedback, .tx_len = 2, .rx_len = 2};
+//
+//  UDC_Poll_Single(&m0);
+
 
 
   /*
