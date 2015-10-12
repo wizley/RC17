@@ -130,8 +130,8 @@ void udc_lld_timer_init(void){
 }
 
 void udc_lld_event_init(void){
-  chEvtObjectInit(&UDCD.tx_evt);
-  chEvtObjectInit(&UDCD.rx_evt);
+  osalEventObjectInit(&UDCD.tx_evt);
+  osalEventObjectInit(&UDCD.rx_evt);
 }
 
 void udc_lld_mutex_init(void){

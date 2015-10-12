@@ -3,7 +3,7 @@
 
 #include "motor.h"
 #include "driving.h"
-#include "comm.h"
+//#include "comm.h"
 //#include "lcd.h"
 
 #define LOOP_TIME 10   /* Control Loop time in ms */

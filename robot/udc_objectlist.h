@@ -8,54 +8,18 @@
 #ifndef ROBOT_UDC_OBJECTLIST_H_
 #define ROBOT_UDC_OBJECTLIST_H_
 
-#define CAL_ID_VMODE(n) (8+(n*4)+0)
-#define CAL_ID_PMODE(n) (8+(n*4)+1)
-#define CAL_ID_M_STATUS(n) (8+(n*4)+2)
-#define CAL_ID_M_SETTING(n) (8+(n*4)+3)
+#define ID_SYNC 0
 
-#define ID_M0_VMODE CAL_ID_VMODE(0)
-#define ID_M1_VMODE CAL_ID_VMODE(1)
-#define ID_M2_VMODE CAL_ID_VMODE(2)
-#define ID_M3_VMODE CAL_ID_VMODE(3)
-#define ID_M4_VMODE CAL_ID_VMODE(4)
-#define ID_M5_VMODE CAL_ID_VMODE(5)
-#define ID_M6_VMODE CAL_ID_VMODE(6)
-#define ID_M7_VMODE CAL_ID_VMODE(7)
-
-#define ID_M0_PMODE CAL_ID_PMODE(0)
-#define ID_M1_PMODE CAL_ID_PMODE(1)
-#define ID_M2_PMODE CAL_ID_PMODE(2)
-#define ID_M3_PMODE CAL_ID_PMODE(3)
-#define ID_M4_PMODE CAL_ID_PMODE(4)
-#define ID_M5_PMODE CAL_ID_PMODE(5)
-#define ID_M6_PMODE CAL_ID_PMODE(6)
-#define ID_M7_PMODE CAL_ID_PMODE(7)
-
-#define ID_M0_STATUS CAL_ID_M_STATUS(0)
-#define ID_M1_STATUS CAL_ID_M_STATUS(1)
-#define ID_M2_STATUS CAL_ID_M_STATUS(2)
-#define ID_M3_STATUS CAL_ID_M_STATUS(3)
-#define ID_M4_STATUS CAL_ID_M_STATUS(4)
-#define ID_M5_STATUS CAL_ID_M_STATUS(5)
-#define ID_M6_STATUS CAL_ID_M_STATUS(6)
-#define ID_M7_STATUS CAL_ID_M_STATUS(7)
-
-#define ID_M0_SETTING CAL_ID_M_SETTING(0)
-#define ID_M1_SETTING CAL_ID_M_SETTING(1)
-#define ID_M2_SETTING CAL_ID_M_SETTING(2)
-#define ID_M3_SETTING CAL_ID_M_SETTING(3)
-#define ID_M4_SETTING CAL_ID_M_SETTING(4)
-#define ID_M5_SETTING CAL_ID_M_SETTING(5)
-#define ID_M6_SETTING CAL_ID_M_SETTING(6)
-#define ID_M7_SETTING CAL_ID_M_SETTING(7)
-
-#define ID_ENCODER1 4
-#define ID_ENCODER2 5
-
-
-UDC_ObjectList udc_objectlist[32] =
+UDC_Obj_t udc_objectlist[32] =
 {
-    {ID_M0_VMODE, &M[0].NewSetPoint, 2, &M[0].Feedback, 2, NULL},
+    {ID_M0_VMODE, (udc_tx_data_t)&M[0].SetPoint, 2, (udc_rx_data_t)&M[0].Feedback, 2, NULL},
+    {ID_M1_VMODE, (udc_tx_data_t)&M[1].SetPoint, 2, (udc_rx_data_t)&M[1].Feedback, 2, NULL},
+    {ID_M2_VMODE, (udc_tx_data_t)&M[2].SetPoint, 2, (udc_rx_data_t)&M[2].Feedback, 2, NULL},
+    {ID_M3_VMODE, (udc_tx_data_t)&M[3].SetPoint, 2, (udc_rx_data_t)&M[3].Feedback, 2, NULL},
+    {ID_SERVO1, (udc_tx_data_t)&Servo1.command, 16, (udc_rx_data_t)&Servo1.current, 2, NULL},
+    {ID_SYNC, NULL, 0, NULL, 0, NULL},
+    {ID_ENCODER1_2, NULL, 0, (udc_rx_data_t)&encoder1_2.count, 4, NULL},
+    {ID_ENCODER3_4, NULL, 0, (udc_rx_data_t)&encoder3_4.count, 4, NULL},
     {-1, NULL, 0, NULL, 0, NULL}
 };
 

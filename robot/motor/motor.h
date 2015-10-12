@@ -1,27 +1,67 @@
 #ifndef _MOTOR_H_
 #define _MOTOR_H_
 
-#include "ch.h"
+#include "udc.h"
 
-#define NUMBER_OF_MOTOR 8
+#define MOTOR_STATE_OK 0x8000
 
-#define IDLE 0x0
-#define BRAKE 0x1
-#define VMODE 0x2
-#define PMODE 0x3
+#define CAL_ID_VMODE(n) (8+(n*4)+0)
+#define CAL_ID_PMODE(n) (8+(n*4)+1)
+#define CAL_ID_M_STATUS(n) (8+(n*4)+2)
+#define CAL_ID_M_SETTING(n) (8+(n*4)+3)
 
-typedef struct tagBoardFeedback {
+#define ID_M0_VMODE CAL_ID_VMODE(0)
+#define ID_M1_VMODE CAL_ID_VMODE(1)
+#define ID_M2_VMODE CAL_ID_VMODE(2)
+#define ID_M3_VMODE CAL_ID_VMODE(3)
+#define ID_M4_VMODE CAL_ID_VMODE(4)
+#define ID_M5_VMODE CAL_ID_VMODE(5)
+#define ID_M6_VMODE CAL_ID_VMODE(6)
+#define ID_M7_VMODE CAL_ID_VMODE(7)
+
+#define ID_M0_PMODE CAL_ID_PMODE(0)
+#define ID_M1_PMODE CAL_ID_PMODE(1)
+#define ID_M2_PMODE CAL_ID_PMODE(2)
+#define ID_M3_PMODE CAL_ID_PMODE(3)
+#define ID_M4_PMODE CAL_ID_PMODE(4)
+#define ID_M5_PMODE CAL_ID_PMODE(5)
+#define ID_M6_PMODE CAL_ID_PMODE(6)
+#define ID_M7_PMODE CAL_ID_PMODE(7)
+
+#define ID_M0_STATUS CAL_ID_M_STATUS(0)
+#define ID_M1_STATUS CAL_ID_M_STATUS(1)
+#define ID_M2_STATUS CAL_ID_M_STATUS(2)
+#define ID_M3_STATUS CAL_ID_M_STATUS(3)
+#define ID_M4_STATUS CAL_ID_M_STATUS(4)
+#define ID_M5_STATUS CAL_ID_M_STATUS(5)
+#define ID_M6_STATUS CAL_ID_M_STATUS(6)
+#define ID_M7_STATUS CAL_ID_M_STATUS(7)
+
+#define ID_M0_SETTING CAL_ID_M_SETTING(0)
+#define ID_M1_SETTING CAL_ID_M_SETTING(1)
+#define ID_M2_SETTING CAL_ID_M_SETTING(2)
+#define ID_M3_SETTING CAL_ID_M_SETTING(3)
+#define ID_M4_SETTING CAL_ID_M_SETTING(4)
+#define ID_M5_SETTING CAL_ID_M_SETTING(5)
+#define ID_M6_SETTING CAL_ID_M_SETTING(6)
+#define ID_M7_SETTING CAL_ID_M_SETTING(7)
+
+typedef enum{
+  motor_idle = 0,
+  motor_brake,
+  motor_Vmode,
+  motor_Pmode
+}motor_mode_e;
+
+typedef struct{
     int16_t Voltage;		// in mV
     int16_t Current;		// in mA
     int16_t Temperature;	// in Degree Celsius
     uint16_t ADCValue;
     uint16_t State;
-} __attribute__((packed)) BOARD_FEEDBACK;
+}__attribute__((packed)) board_status_t;
 
-
-//enum { IDLE = 0, BRAKE = 1, VMODE = 2, PMODE = 3 } Mode ;
-
-typedef struct tagMotorSetting {
+typedef struct{
     /** 
      *  IDLE  : Motor terminals is left open (not shorted or driven)
      *  BRAKE : Motor terminals are short
@@ -31,10 +71,10 @@ typedef struct tagMotorSetting {
      *  motor will be in brake state
      */
     //enum { IDLE = 0, BRAKE = 1, VMODE = 2, PMODE = 3 } Mode ;
-    uint16_t Mode;
-    float ScaleFactor;				// PID Controller SetPoint = Input SetPoint * ScaleFactor
-    uint16_t AccelerationLimit;	// in Encoder count / CommandCycle
-    uint16_t SpeedLimit;		// in Encoder count / CommandCycle
+  uint8_t Mode;
+  float ScaleFactor;				// PID Controller SetPoint = Input SetPoint * ScaleFactor
+  uint16_t AccelerationLimit;	// in Encoder count / CommandCycle
+  uint16_t SpeedLimit;		// in Encoder count / CommandCycle
 	uint16_t CommandCycle;		// in us
 	uint16_t MotorVoltage;		// in mV
 	uint16_t CurrentLimit;		// in mA
@@ -42,38 +82,25 @@ typedef struct tagMotorSetting {
 	int16_t kI;
 	int16_t kD;
 	int16_t kFF;
-} __attribute__((packed)) MOTOR_SETTING;
+}__attribute__((packed)) motor_setting_t;
 
-typedef struct tagAbsolutePosition {
-	uint16_t ADCValue;
-	float ADCToEncoderScale;
-	int16_t SteadyCount;
-} __attribute__((packed)) ABSOLUTE_POSITION;
-
-typedef volatile struct tagMotor {
+typedef struct{
 	int16_t SetPoint;
 	int16_t Feedback;
-	
-	int16_t Offset;
 
-	volatile int16_t NewSetPoint;	// For Communication
-	volatile int16_t NewFeedback;	// For Communication
-
-	uint16_t Synced;
-	uint16_t Alive;
-
-	int16_t Initializing;
-	ABSOLUTE_POSITION AbsolutePosition;
-
-	BOARD_FEEDBACK Board;
-	MOTOR_SETTING Setting;
+	board_status_t Board;
+	motor_setting_t Setting;
 	const uint8_t id;
-} MotorObj;// __attribute__((packed)) MotorObj;
+}MotorObj;
 
-extern MotorObj M[NUMBER_OF_MOTOR];
+extern MotorObj M[8];
+extern const motor_setting_t DefaultVMode;
+extern const motor_setting_t DefaultPMode;
 
-void InitMotors(void);
-void InitMotor(int index);
-void CheckMotorStatus(void);
+
+void motor_init(MotorObj *motor, const motor_setting_t *cfg);
+udc_rx_state_e motor_send_setpoint(MotorObj *motor);
+udc_rx_state_e motor_get_status(MotorObj *motor);
+udc_rx_state_e motor_send_setting(MotorObj *motor);
 
 #endif  /* _MOTOR_H_ */

@@ -33,8 +33,8 @@ typedef struct{
   udc_tx_data_t tx_data;
   uint8_t tx_len;
   udc_rx_data_t rx_data;
-  udc_rx_callback rx_callback;
   uint8_t rx_len;
+  udc_rx_callback rx_callback;
 }UDC_Obj_t;
 
 typedef struct{
