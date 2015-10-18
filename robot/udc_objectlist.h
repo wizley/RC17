@@ -9,6 +9,7 @@
 #define ROBOT_UDC_OBJECTLIST_H_
 
 #define ID_SYNC 0
+#define ID_END -1
 
 UDC_Obj_t udc_objectlist[32] =
 {
@@ -20,7 +21,7 @@ UDC_Obj_t udc_objectlist[32] =
     {ID_SYNC, NULL, 0, NULL, 0, NULL},
     {ID_ENCODER1_2, NULL, 0, (udc_rx_data_t)&encoder1_2.count, 4, NULL},
     {ID_ENCODER3_4, NULL, 0, (udc_rx_data_t)&encoder3_4.count, 4, NULL},
-    {-1, NULL, 0, NULL, 0, NULL}
+    {ID_END, NULL, 0, NULL, 0, NULL}
 };
 
 #endif /* ROBOT_UDC_OBJECTLIST_H_ */

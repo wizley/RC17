@@ -5,7 +5,7 @@
 
 # Compiler options here.
 ifeq ($(USE_OPT),)
-  USE_OPT = -O2 -ggdb -fomit-frame-pointer -falign-functions=16 -fshort-enums
+  USE_OPT = -O3 -ggdb -fomit-frame-pointer -falign-functions=16 -fshort-enums
 endif
 
 # C specific options here (added to USE_OPT).
@@ -126,7 +126,7 @@ CSRC = $(STARTUPSRC) \
        $(CHIBIOS)/os/hal/lib/streams/chprintf.c \
        $(GFXSRC) \
        main.c \
-       driving.c app.c exception.c
+       app.c exception.c
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.

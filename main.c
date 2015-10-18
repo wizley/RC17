@@ -46,11 +46,13 @@ static THD_FUNCTION(Thread1, arg) {
   chRegSetThreadName("blinker1");
   while (TRUE) {
       //palClearPad(GPIOC, GPIOC_LED_R);
-	  palClearPad(GPIOB, GPIOB_TIM2_CH4);
-      chThdSleepMilliseconds(25);
+//	  palClearPad(GPIOB, GPIOB_TIM2_CH4);
+//    gdispFillArea(0, 0, 800, 480, Blue);
+      chThdSleepMilliseconds(400);
       //palSetPad(GPIOC, GPIOC_LED_R);
-      palSetPad(GPIOB, GPIOB_TIM2_CH4);
-      chThdSleepMilliseconds(25);
+//      palSetPad(GPIOB, GPIOB_TIM2_CH4);
+//      gdispFillArea(0, 0, 800, 480, Red);
+      chThdSleepMilliseconds(400);
   }
 }
 
@@ -64,10 +66,12 @@ static THD_FUNCTION(Thread2, arg) {
   chRegSetThreadName("blinker2");
   while (TRUE) {
       palClearPad(GPIOC, GPIOC_LED_B);
+
       //palClearPad(GPIOA, GPIOA_BUZZER);
       //chThdSleepMicroseconds(125);
       chThdSleepMilliseconds(333);
       palSetPad(GPIOC, GPIOC_LED_B);
+
       //palSetPad(GPIOA, GPIOA_BUZZER);
       //chThdSleepMicroseconds(125);
       chThdSleepMilliseconds(333);

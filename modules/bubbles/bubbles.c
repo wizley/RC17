@@ -6,7 +6,7 @@
  */
 #include "gfx.h"
 #include <math.h>
-#include <modules/bubbles/bubbles.h>
+#include <bubbles.h>
 #include <string.h>
 /* ---------------------------------------------------------------------- */
 
