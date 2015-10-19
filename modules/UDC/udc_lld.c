@@ -160,7 +160,7 @@ udc_rx_state_e udc_lld_get_rx_event(event_listener_t *el_rx){
 
 void udc_lld_start(void){
   uartStart(&UDC_UART, &udc_uart_cfg);
-  udc_lld_thread_ptr = chThdCreateStatic(udc_lld_process_wa, sizeof(udc_lld_process_wa), NORMALPRIO + 7,
+  udc_lld_thread_ptr = chThdCreateStatic(udc_lld_process_wa, sizeof(udc_lld_process_wa),HIGHPRIO,
         udc_lld_process, NULL);
   UDCD.udc_state = UDC_READY;
 }

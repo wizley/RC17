@@ -1,5 +1,6 @@
 #include "ch.h"
 #include "hal.h"
+#include "drivers.h"
 #include "app.h"
 #include "motor.h"
 #include "servo.h"
@@ -31,12 +32,14 @@ static THD_FUNCTION(RunManualControl, arg) {
 	chEvtRegister(&CtrlLp_evt, &el, CONTROL_EVENT);
 
 	while (!chThdShouldTerminateX()) {
-		chEvtWaitAny(ALL_EVENTS);
+		chEvtWaitAny(EVENT_MASK(CONTROL_EVENT));
+		chEvtGetAndClearEvents(EVENT_MASK(CONTROL_EVENT));
 
 		UDC_PollObjectList(udc_objectlist);
+		//motor_send_setpoint(&M[0]);
 
 
-		M[0].SetPoint = 50;
+		M[0].SetPoint = qeiGetCount(&QEID4) * 10;
 
 	}
 	chEvtUnregister(&CtrlLp_evt, &el);
@@ -49,12 +52,13 @@ int app_init(void) {
 
   UDC_Start();
 
-	/* Control Loop Thread */
-	chThdCreateStatic(waCtrlLp, sizeof(waCtrlLp), HIGHPRIO, RunManualControl, NULL);
 
 	motor_init(&M[0], &DefaultVMode);
 	motor_send_setting(&M[0]);
 
+
+	/* Control Loop Thread */
+  chThdCreateStatic(waCtrlLp, sizeof(waCtrlLp), HIGHPRIO, RunManualControl, NULL);
 
 
 	chSysLock();

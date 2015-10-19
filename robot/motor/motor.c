@@ -12,11 +12,11 @@ const motor_setting_t DefaultVMode = {
     .SpeedLimit = 600,
     .CommandCycle = 4000,
     .MotorVoltage = 12000,
-    .CurrentLimit = 10000,
-    .kP = 100,
-    .kI = 100,
-    .kD = 200,
-    .kFF = 1350
+    .CurrentLimit = 1000,
+    .kP = 500,
+    .kI = 1,
+    .kD = 1,
+    .kFF = 0
 };
 
 const motor_setting_t DefaultPMode = {

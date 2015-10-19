@@ -25,29 +25,30 @@
  */
 
 #include "application.h"
-#include "event.h"
-#include <FreeRTOSConfig.h>
+THD_WORKING_AREA(waApp, 2048);
+//#include "event.h"
+//#include <FreeRTOSConfig.h>
 
 ///> Capacity of event queue
-#define APP_QUEUE_LEN   16
+//#define APP_QUEUE_LEN   16
 
 ///> Shared application stack size
-#define APP_STACK_SIZE  (configMINIMAL_STACK_SIZE)
+//#define APP_STACK_SIZE  (configMINIMAL_STACK_SIZE)
 
 ///> Prioriuty of application task
-#define APP_PRIORITY    (tskIDLE_PRIORITY + 1)
+//#define APP_PRIORITY    (tskIDLE_PRIORITY + 1)
 
-xQueueHandle appQueue;
-
-void startMain(application* app) {
-    appQueue = xQueueCreate(APP_QUEUE_LEN, sizeof(struct event));
-    if(!appQueue) {
-        // TODO oops..
-    }
-
-    if(xTaskCreate(app->main, (const signed char*)app->name, APP_STACK_SIZE,
-                   NULL, APP_PRIORITY, NULL) != pdPASS) {
-        // TODO oops..
-    }
-}
+//xQueueHandle appQueue;
+//
+//void startMain(application* app) {
+//    appQueue = xQueueCreate(APP_QUEUE_LEN, sizeof(struct event));
+//    if(!appQueue) {
+//        // TODO oops..
+//    }
+//
+//    if(xTaskCreate(app->main, (const signed char*)app->name, APP_STACK_SIZE,
+//                   NULL, APP_PRIORITY, NULL) != pdPASS) {
+//        // TODO oops..
+//    }
+//}
 

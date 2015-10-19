@@ -8,6 +8,7 @@ MODULESSRC += $(MODULESPATH)/UDC/udc.c
 MODULESSRC += $(MODULESPATH)/UDC/udc_lld.c
 MODULESSRC += $(MODULESPATH)/menu/menu_struct.c
 MODULESSRC += $(MODULESPATH)/menu/menu.c
+MODULESSRC += $(MODULESPATH)/menu/application.c
 
 MODULESINC = $(MODULESPATH)/bubbles
 MODULESINC += $(MODULESPATH)/usb_shell

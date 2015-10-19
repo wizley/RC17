@@ -28,15 +28,18 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
-#include <FreeRTOS.h>
-#include <task.h>
-#include <queue.h>
+//#include <FreeRTOS.h>
+//#include <task.h>
+//#include <queue.h>
+#include "ch.h"
+
+extern THD_WORKING_AREA(waApp, 2048);
 
 ///> Shared application task handle
-extern xTaskHandle appTask;
+//extern xTaskHandle appTask;
 
 ///> Shared application event queue
-extern xQueueHandle appQueue;
+//extern xQueueHandle appQueue;
 
 /**
  * @brief An application entry, used by the menu application.
@@ -57,7 +60,7 @@ typedef struct {
  * After that runs one as the main application.
  * @param app is the application to be run as the main one.
  */
-void startMain(application* app);
+//void startMain(application* app);
 
 #endif /* APPLICATION_H */
 

@@ -29,24 +29,26 @@
 
 #include "application.h"
 
-application motor_test_app = { .name="Motor test", .main=NULL };
-application encoder_test_app = { .name="Encoder test", .main=NULL };
-application servo_test_app = { .name="Servo test", .main=NULL };
-application imu_test_app = { .name="IMU test", .main=NULL };
-application line_sensor_test_app = { .name="Line sensor test", .main=NULL };
-application mainboard_test_app = { .name="Mainboard test", .main=NULL };
+extern application menu;
 
-application set_backlight = { .name="Set backlight", .main=NULL };
-application set_date = { .name="Set Data&Time", .main=NULL };
-application set_buzzer = { .name="Set buzzer", .main=NULL };
-application set_logging = { .name="Set Data logging", .main=NULL };
-application set_usb = { .name="Set USB", .main=NULL };
+extern application motor_test_app;
+extern application encoder_test_app;
+extern application servo_test_app;
+extern application imu_test_app;
+extern application line_sensor_test_app;
+extern application mainboard_test_app;
 
-application start_robot = { .name="Start robot", .main=NULL };
-application motor_tuning = { .name="Motor tuning", .main=NULL };
-application console = { .name="Console", .main=NULL };
-application game = { .name="game", .main=NULL };
-application reset = { .name="reset", .main=NULL };
+extern application set_backlight;
+extern application set_date;
+extern application set_buzzer;
+extern application set_logging;
+extern application set_usb;
+
+extern application start_robot;
+extern application motor_tuning;
+extern application console;
+extern application game;
+extern application reset;
 
 
 #endif /* APP_LIST_H */

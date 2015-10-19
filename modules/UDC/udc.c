@@ -13,7 +13,7 @@ static uint8_t retry_count = 0;
 
 void UDC_Init(UDC_config_t *config){
   udc_lld_init(config->baudrate);
-  retry_count = config->autoretry;
+  //retry_count = config->autoretry;
 }
 
 

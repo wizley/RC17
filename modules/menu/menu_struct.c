@@ -27,6 +27,25 @@
 #include "app_list.h"
 #include "menu_struct.h"
 
+application motor_test_app = { .name="Motor test", .main=NULL };
+application encoder_test_app = { .name="Encoder test", .main=NULL };
+application servo_test_app = { .name="Servo test", .main=NULL };
+application imu_test_app = { .name="IMU test", .main=NULL };
+application line_sensor_test_app = { .name="Line sensor test", .main=NULL };
+application mainboard_test_app = { .name="Mainboard test", .main=NULL };
+
+application set_backlight = { .name="Set backlight", .main=NULL };
+application set_date = { .name="Set Data&Time", .main=NULL };
+application set_buzzer = { .name="Set buzzer", .main=NULL };
+application set_logging = { .name="Set Data logging", .main=NULL };
+application set_usb = { .name="Set USB", .main=NULL };
+
+application start_robot = { .name="Start robot", .main=NULL };
+application motor_tuning = { .name="Motor tuning", .main=NULL };
+application console = { .name="Console", .main=NULL };
+application game = { .name="game", .main=NULL };
+application reset = { .name="reset", .main=NULL };
+
 
 int get_menu_size(const menu_list *menu) {
     int len = 0;

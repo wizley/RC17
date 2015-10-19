@@ -71,7 +71,7 @@ typedef struct{
      *  motor will be in brake state
      */
     //enum { IDLE = 0, BRAKE = 1, VMODE = 2, PMODE = 3 } Mode ;
-  uint8_t Mode;
+  uint16_t Mode;
   float ScaleFactor;				// PID Controller SetPoint = Input SetPoint * ScaleFactor
   uint16_t AccelerationLimit;	// in Encoder count / CommandCycle
   uint16_t SpeedLimit;		// in Encoder count / CommandCycle
