@@ -56,9 +56,7 @@ static void menu_screen_redraw(void)
 
     font_t font1;
     font1 = gdispOpenFont("DejaVuSans32_aa");
-    //font1 = gdispScaleFont(font1, 4, 4);
 
-//    gfx_clear(&w->dc, 0);
     gdispClear(HTML2COLOR(0xEEEEEE));
     for(i = 0; i < menu_limit; ++i)
     {
@@ -66,8 +64,6 @@ static void menu_screen_redraw(void)
 
         // draw a white background for the selected entry
         if(pos == selected_item) {
-//            gfx_box(&w->dc, LEFT_MARGIN, i * LINE_HEIGHT,
-//                    MENU_SCREEN_WIDTH, (i + 1) * LINE_HEIGHT, 1);
           gdispFillArea(LEFT_MARGIN, i * LINE_HEIGHT, MENU_SCREEN_WIDTH, LINE_HEIGHT, HTML2COLOR(0x48BC4D));
         }
 
@@ -81,16 +77,11 @@ static void menu_screen_redraw(void)
         if(ent->type == APP) {
             application *a = ent->data.app;
 
-//            gfx_text(&w->dc, &font_helv17, LEFT_MARGIN,
-//                     i * LINE_HEIGHT, a->name, i != selected_item);
-
             gdispDrawString(LEFT_MARGIN, i * LINE_HEIGHT, a->name, font1, (i == selected_item) ? HTML2COLOR(0x09180A) : HTML2COLOR(0x09180A));
 
         } else if(ent->type == SUBMENU) {
             menu_list *l = ent->data.submenu;
 
-//            gfx_text(&w->dc, &font_helv17, LEFT_MARGIN,
-//                     i * LINE_HEIGHT, l->name, i != selected_item);
             gdispDrawString(LEFT_MARGIN, i * LINE_HEIGHT, l->name, font1, (i == selected_item) ? HTML2COLOR(0x09180A) : HTML2COLOR(0x09180A));
 //        } else if (ent->type == SETTING) {
 //            char s[16];
