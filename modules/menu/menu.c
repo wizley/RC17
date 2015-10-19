@@ -55,10 +55,11 @@ static void menu_screen_redraw(void)
     int menu_limit = (menu_size < MAX_ENTRIES ? menu_size : MAX_ENTRIES);
 
     font_t font1;
-    font1 = gdispOpenFont("DejaVuSans32");
+    font1 = gdispOpenFont("DejaVuSans32_aa");
+    //font1 = gdispScaleFont(font1, 4, 4);
 
 //    gfx_clear(&w->dc, 0);
-    gdispClear(Black);
+    gdispClear(HTML2COLOR(0xEEEEEE));
     for(i = 0; i < menu_limit; ++i)
     {
         int pos = offset + i;
@@ -67,7 +68,7 @@ static void menu_screen_redraw(void)
         if(pos == selected_item) {
 //            gfx_box(&w->dc, LEFT_MARGIN, i * LINE_HEIGHT,
 //                    MENU_SCREEN_WIDTH, (i + 1) * LINE_HEIGHT, 1);
-          gdispFillArea(LEFT_MARGIN, i * LINE_HEIGHT, MENU_SCREEN_WIDTH, (i + 1) * LINE_HEIGHT, Blue);
+          gdispFillArea(LEFT_MARGIN, i * LINE_HEIGHT, MENU_SCREEN_WIDTH, LINE_HEIGHT, HTML2COLOR(0x48BC4D));
         }
 
         menu_entry *ent = &(*current_menu)->entries[pos];
@@ -83,14 +84,14 @@ static void menu_screen_redraw(void)
 //            gfx_text(&w->dc, &font_helv17, LEFT_MARGIN,
 //                     i * LINE_HEIGHT, a->name, i != selected_item);
 
-            gdispDrawString(LEFT_MARGIN, i * LINE_HEIGHT, a->name, font1, (i == selected_item) ? White : Yellow);
+            gdispDrawString(LEFT_MARGIN, i * LINE_HEIGHT, a->name, font1, (i == selected_item) ? HTML2COLOR(0x09180A) : HTML2COLOR(0x09180A));
 
         } else if(ent->type == SUBMENU) {
             menu_list *l = ent->data.submenu;
 
 //            gfx_text(&w->dc, &font_helv17, LEFT_MARGIN,
 //                     i * LINE_HEIGHT, l->name, i != selected_item);
-            gdispDrawString(LEFT_MARGIN, i * LINE_HEIGHT, l->name, font1, (i == selected_item) ? White : Yellow);
+            gdispDrawString(LEFT_MARGIN, i * LINE_HEIGHT, l->name, font1, (i == selected_item) ? HTML2COLOR(0x09180A) : HTML2COLOR(0x09180A));
 //        } else if (ent->type == SETTING) {
 //            char s[16];
 //            setting_t *set = ent->data.setting;
@@ -106,37 +107,41 @@ static void menu_screen_redraw(void)
 //static void menu_screen_event(struct ui_widget *w, const struct event *evt)
 static void menu_screen_event(void)
 {
+  if(palReadPad(GPIOG, GPIOG_BUT3) == PAL_LOW){
     // scroll through the menu if a button was pressed
 //    if(evt->type == BUTTON_PRESSED) {
 //        if(evt->data.button == BUT_BR) {
-//            if(selected_item < menu_size - 1) {
-//                ++selected_item;
-//
-//                if(selected_item >= MAX_ENTRIES)
-//                    offset = selected_item - MAX_ENTRIES + 1;
-//            } else {
-//                selected_item = 0;
-//                offset = 0;
-//            }
+            if(selected_item < menu_size - 1) {
+                ++selected_item;
+
+                if(selected_item >= MAX_ENTRIES)
+                    offset = selected_item - MAX_ENTRIES + 1;
+            } else {
+                selected_item = 0;
+                offset = 0;
+            }
 //
 //            w->flags |= WF_DIRTY;
+            menu_screen_redraw();
+  }else if (palReadPad(GPIOB, GPIOB_BUT2) == PAL_LOW){
 //        } else if(evt->data.button == BUT_BL) {
-//            if(selected_item > 0) {
-//                --selected_item;
-//
-//                if(selected_item < offset)
-//                    offset = selected_item;
-//            } else {
-//                selected_item = menu_size - 1;
-//                if (menu_size < MAX_ENTRIES)
-//                    offset = selected_item - menu_size + 1;
-//                else
-//                    offset = selected_item - MAX_ENTRIES + 1;
-//            }
+            if(selected_item > 0) {
+                --selected_item;
+
+                if(selected_item < offset)
+                    offset = selected_item;
+            } else {
+                selected_item = menu_size - 1;
+                if (menu_size < MAX_ENTRIES)
+                    offset = selected_item - menu_size + 1;
+                else
+                    offset = selected_item - MAX_ENTRIES + 1;
+            }
 //
 //            w->flags |= WF_DIRTY;
+            menu_screen_redraw();
 //        }
-//    }
+    }
 }
 
 //struct ui_widget menu_screen = {
@@ -196,6 +201,7 @@ static void go_back(void) {
 
 void menu_main(void* params) {
     (void)(params);  // suppress unused parameter warning
+    chRegSetThreadName(menu.name);
 //    struct event evt;
 
 //    battery_update();
@@ -225,7 +231,15 @@ void menu_main(void* params) {
 //                    break;
 //            }
 //        }
-      chThdSleepMilliseconds(1000);
+      if(palReadPad(GPIOC, GPIOC_BUT8) == PAL_LOW){
+        go_back();
+      }else if(palReadPad(GPIOB, GPIOB_PB12) == PAL_LOW){
+        run(&(*current_menu)->entries[selected_item]);
+      }else{
+        menu_screen_event();
+
+      }
+      chThdSleepMilliseconds(100);
     }
 }
 

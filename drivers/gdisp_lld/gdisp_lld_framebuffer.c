@@ -269,6 +269,18 @@ LLDSPEC void gdisp_lld_blit_area(GDisplay* g) {
 
 #endif
 
+#if GDISP_HARDWARE_PIXELREAD
+LLDSPEC color_t gdisp_lld_get_pixel_color(GDisplay *g) {
+  unsigned    pos;
+  LLDCOLOR_TYPE color;
+
+  pos = PIXIL_POS(g, g->g.Width-g->p.x-1, g->g.Height-g->p.y-1);
+
+  color = PIXEL_ADDR(g, pos)[0];
+  return gdispNative2Color(color);
+}
+#endif
+
 #if GDISP_HARDWARE_FLUSH
 LLDSPEC void gdisp_lld_flush(GDisplay *g) {
   (void) g;
@@ -333,31 +345,6 @@ LLDSPEC void gdisp_lld_read_stop(GDisplay* g) {
 }
 #endif
 
-#if GDISP_HARDWARE_PIXELREAD
-LLDSPEC color_t gdisp_lld_get_pixel_color(GDisplay *g) {
-	coord_t		x, y;
 
-	switch(g->g.Orientation) {
-	default:
-	case GDISP_ROTATE_0:
-		x = g->p.x;
-		y = g->p.y;
-		break;
-	case GDISP_ROTATE_90:
-		x = g->p.y;
-		y = GDISP_SCREEN_HEIGHT-1 - g->p.x;
-		break;
-	case GDISP_ROTATE_180:
-		x = GDISP_SCREEN_WIDTH-1 - g->p.x;
-		y = GDISP_SCREEN_HEIGHT-1 - g->p.y;
-		break;
-	case GDISP_ROTATE_270:
-		x = GDISP_SCREEN_WIDTH-1 - g->p.y;
-		y = g->p.x;
-		break;
-	}
-	return (RAM(g)[xyaddr(x, y)] & xybit(y)) ? White : Black;
-}
-#endif
 
 #endif /* GFX_USE_GDISP */

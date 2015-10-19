@@ -39,7 +39,7 @@
 //#define GDISP_NEED_ARCSECTORS                        FALSE
 //#define GDISP_NEED_CONVEX_POLYGON                    FALSE
 //#define GDISP_NEED_SCROLL                            FALSE
-//#define GDISP_NEED_PIXELREAD                         FALSE
+#define GDISP_NEED_PIXELREAD                         TRUE
 //#define GDISP_NEED_CONTROL                           FALSE
 //#define GDISP_NEED_QUERY                             FALSE
 #define GDISP_NEED_MULTITHREAD                       TRUE
@@ -47,25 +47,25 @@
 #define GDISP_NEED_TEXT                              TRUE
 #define GDISP_NEED_ANTIALIAS                         TRUE
 //    #define GDISP_NEED_UTF8                          FALSE
-//    #define GDISP_NEED_TEXT_KERNING                  FALSE
+#define GDISP_NEED_TEXT_KERNING                      TRUE
 //    #define GDISP_INCLUDE_FONT_UI1                   FALSE
 #define GDISP_INCLUDE_FONT_UI2                       TRUE		// The smallest preferred font.
 //    #define GDISP_INCLUDE_FONT_LARGENUMBERS          FALSE
-#define GDISP_INCLUDE_FONT_DEJAVUSANS10              TRUE
-#define GDISP_INCLUDE_FONT_DEJAVUSANS12              TRUE
-#define GDISP_INCLUDE_FONT_DEJAVUSANS16              TRUE
-#define GDISP_INCLUDE_FONT_DEJAVUSANS20              TRUE
+//#define GDISP_INCLUDE_FONT_DEJAVUSANS10              TRUE
+//#define GDISP_INCLUDE_FONT_DEJAVUSANS12              TRUE
+//#define GDISP_INCLUDE_FONT_DEJAVUSANS16              TRUE
+//#define GDISP_INCLUDE_FONT_DEJAVUSANS20              TRUE
 //    #define GDISP_INCLUDE_FONT_DEJAVUSANS24          FALSE
 //    #define GDISP_INCLUDE_FONT_DEJAVUSANS32          FALSE
 //    #define GDISP_INCLUDE_FONT_DEJAVUSANSBOLD12      FALSE
 //    #define GDISP_INCLUDE_FONT_FIXED_10X20           FALSE
 //    #define GDISP_INCLUDE_FONT_FIXED_7X14            FALSE
 //    #define GDISP_INCLUDE_FONT_FIXED_5X8             FALSE
-//    #define GDISP_INCLUDE_FONT_DEJAVUSANS12_AA       FALSE
-//    #define GDISP_INCLUDE_FONT_DEJAVUSANS16_AA       FALSE
-//    #define GDISP_INCLUDE_FONT_DEJAVUSANS20_AA       FALSE
-//    #define GDISP_INCLUDE_FONT_DEJAVUSANS24_AA       FALSE
-//    #define GDISP_INCLUDE_FONT_DEJAVUSANS32_AA       FALSE
+#define GDISP_INCLUDE_FONT_DEJAVUSANS12_AA             TRUE
+#define GDISP_INCLUDE_FONT_DEJAVUSANS16_AA             TRUE
+#define GDISP_INCLUDE_FONT_DEJAVUSANS20_AA             TRUE
+#define GDISP_INCLUDE_FONT_DEJAVUSANS24_AA             TRUE
+#define GDISP_INCLUDE_FONT_DEJAVUSANS32_AA             TRUE
 //    #define GDISP_INCLUDE_FONT_DEJAVUSANSBOLD12_AA   FALSE
 //    #define GDISP_INCLUDE_USER_FONTS                 FALSE
 
@@ -106,7 +106,7 @@
         #define GDISP_HARDWARE_FILLS                 TRUE
         #define GDISP_HARDWARE_BITFILLS              TRUE
         #define GDISP_HARDWARE_SCROLL                FALSE
-        #define GDISP_HARDWARE_PIXELREAD             FALSE
+        #define GDISP_HARDWARE_PIXELREAD             TRUE
         #define GDISP_HARDWARE_CONTROL               FALSE
         #define GDISP_HARDWARE_QUERY                 FALSE
         #define GDISP_HARDWARE_CLIP                  FALSE
