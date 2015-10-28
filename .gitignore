@@ -1,0 +1,4 @@
+.dep/**
+.cproject
+.project
+build/**

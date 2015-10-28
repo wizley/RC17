@@ -5,6 +5,34 @@
 
 MotorObj M[8] = {{.id=0},{.id=1},{.id=2},{.id=3},{.id=4},{.id=5},{.id=6},{.id=7}};
 
+const motor_setting_t DefaultIdle = {
+    .Mode = motor_idle,
+    .ScaleFactor = 1.0,
+    .AccelerationLimit = 1,
+    .SpeedLimit = 600,
+    .CommandCycle = 4000,
+    .MotorVoltage = 12000,
+    .CurrentLimit = 1000,
+    .kP = 0,
+    .kI = 0,
+    .kD = 0,
+    .kFF = 0
+};
+
+const motor_setting_t DefaultBrake = {
+    .Mode = motor_brake,
+    .ScaleFactor = 1.0,
+    .AccelerationLimit = 1,
+    .SpeedLimit = 600,
+    .CommandCycle = 4000,
+    .MotorVoltage = 12000,
+    .CurrentLimit = 1000,
+    .kP = 0,
+    .kI = 0,
+    .kD = 0,
+    .kFF = 0
+};
+
 const motor_setting_t DefaultVMode = {
     .Mode = motor_Vmode,
     .ScaleFactor = 1.0,
@@ -66,6 +94,26 @@ udc_rx_state_e motor_send_setting(MotorObj *motor){
   UDC_Obj_t udc_object;
   udc_object.id = CAL_ID_M_SETTING(motor->id);
   udc_object.tx_data = (udc_tx_data_t)&(motor->Setting);
+  udc_object.tx_len = 24;
+  udc_object.rx_len = 0;
+  udc_object.rx_callback = NULL;
+  return UDC_Poll_Single(&udc_object);
+}
+
+udc_rx_state_e motor_setIdle(MotorObj *motor){
+  UDC_Obj_t udc_object;
+  udc_object.id = CAL_ID_M_SETTING(motor->id);
+  udc_object.tx_data = (udc_tx_data_t)&DefaultIdle;
+  udc_object.tx_len = 24;
+  udc_object.rx_len = 0;
+  udc_object.rx_callback = NULL;
+  return UDC_Poll_Single(&udc_object);
+}
+
+udc_rx_state_e motor_setBrake(MotorObj *motor){
+  UDC_Obj_t udc_object;
+  udc_object.id = CAL_ID_M_SETTING(motor->id);
+  udc_object.tx_data = (udc_tx_data_t)&DefaultBrake;
   udc_object.tx_len = 24;
   udc_object.rx_len = 0;
   udc_object.rx_callback = NULL;

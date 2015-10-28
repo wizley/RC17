@@ -27,7 +27,7 @@
 #ifndef MENU_STRUCT_H
 #define MENU_STRUCT_H
 
-#include "application.h"
+#include "app.h"
 
 /**
  * @brief Type of menu entry.

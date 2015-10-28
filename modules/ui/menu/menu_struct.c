@@ -24,6 +24,7 @@
  * Menu structure.
  */
 
+#include "ch.h"
 #include "app_list.h"
 #include "menu_struct.h"
 

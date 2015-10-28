@@ -94,6 +94,8 @@ typedef struct{
 }MotorObj;
 
 extern MotorObj M[8];
+extern const motor_setting_t DefaultIdle;
+extern const motor_setting_t DefaultBrake;
 extern const motor_setting_t DefaultVMode;
 extern const motor_setting_t DefaultPMode;
 
@@ -102,5 +104,7 @@ void motor_init(MotorObj *motor, const motor_setting_t *cfg);
 udc_rx_state_e motor_send_setpoint(MotorObj *motor);
 udc_rx_state_e motor_get_status(MotorObj *motor);
 udc_rx_state_e motor_send_setting(MotorObj *motor);
+udc_rx_state_e motor_setIdle(MotorObj *motor);
+udc_rx_state_e motor_setBrake(MotorObj *motor);
 
 #endif  /* _MOTOR_H_ */

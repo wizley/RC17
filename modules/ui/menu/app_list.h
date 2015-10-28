@@ -1,7 +1,6 @@
 /*
  * Copyright (C) 2014 Julian Lewis
  * @author Maciej Suminski <maciej.suminski@cern.ch>
- * @author Theodor Stana <theodor.stana@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,45 +21,35 @@
  */
 
 /**
- * User application data structures and routines.
+ * List of applications.
  */
 
-#ifndef APPLICATION_H
-#define APPLICATION_H
+#ifndef APP_LIST_H
+#define APP_LIST_H
 
-//#include <FreeRTOS.h>
-//#include <task.h>
-//#include <queue.h>
-#include "ch.h"
+#include "app.h"
 
-extern THD_WORKING_AREA(waApp, 2048);
+extern application menu;
 
-///> Shared application task handle
-//extern xTaskHandle appTask;
+extern application motor_test_app;
+extern application encoder_test_app;
+extern application servo_test_app;
+extern application imu_test_app;
+extern application line_sensor_test_app;
+extern application mainboard_test_app;
 
-///> Shared application event queue
-//extern xQueueHandle appQueue;
+extern application set_backlight;
+extern application set_date;
+extern application set_buzzer;
+extern application set_logging;
+extern application set_usb;
 
-/**
- * @brief An application entry, used by the menu application.
- */
-typedef struct {
-    ///> Application name
-    const char* name;
+extern application start_robot;
+extern application motor_tuning;
+extern application console;
+extern application game;
+extern application reset;
 
-    /**
-     * @brief Main application routine.
-     * @params Optional parameters, dependendent on application.
-     */
-    void (*main)(void* params);
-} application;
 
-/**
- * @brief Initializes the application task and event queue.
- * After that runs one as the main application.
- * @param app is the application to be run as the main one.
- */
-//void startMain(application* app);
-
-#endif /* APPLICATION_H */
+#endif /* APP_LIST_H */
 
