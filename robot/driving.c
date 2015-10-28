@@ -36,6 +36,8 @@ static THD_FUNCTION(RunManualControl, arg) {
 
   chEvtRegister(&CtrlLp_evt, &el, CONTROL_EVENT);
 
+  uint16_t oldcount = qeiGetCount(&QEID4);
+
   while (!chThdShouldTerminateX()) {
     chEvtWaitAny(EVENT_MASK(CONTROL_EVENT));
     chEvtGetAndClearEvents(EVENT_MASK(CONTROL_EVENT));
@@ -44,7 +46,7 @@ static THD_FUNCTION(RunManualControl, arg) {
     //motor_send_setpoint(&M[0]);
 
 
-    M[0].SetPoint = qeiGetCount(&QEID4) * 10;
+    M[0].SetPoint = (qeiGetCount(&QEID4) - oldcount) * 10;
 
   }
   chEvtUnregister(&CtrlLp_evt, &el);

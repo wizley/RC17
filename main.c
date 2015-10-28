@@ -101,13 +101,20 @@ SerialUSBDriver SDU1;
 //  0
 //};
 //
-//static void cmd_debug(BaseSequentialStream *chp, int argc, char *argv[]) {
-//  (void)argv;
-//  (void)argc;
-//
-//  pwmEnableChannel(&PWMD3, 2, PWM_PERCENTAGE_TO_WIDTH(&PWMD3, atoi((char*)argv[0])));
-//
-//}
+static void cmd_debug(BaseSequentialStream *chp, int argc, char *argv[]) {
+  (void)argv;
+  (void)argc;
+
+  uint16_t qei_old_count = qeiGetCount(&QEID4);
+
+  while (chnGetTimeout((BaseChannel *)chp, TIME_IMMEDIATE) == Q_TIMEOUT) {
+    chprintf(chp, "%d %d %d\r\n", qeiGetCount(&QEID4) - qei_old_count, (int16_t)(qeiGetCount(&QEID4) - qei_old_count), qei_old_count);
+    qei_old_count = qeiGetCount(&QEID4);
+    chThdSleepMilliseconds(100);
+  }
+  chprintf(chp, "\r\n\nstopped\r\n");
+
+}
 
 static const ShellCommand commands[] = {
     {"mem", cmd_mem},
@@ -120,7 +127,7 @@ static const ShellCommand commands[] = {
     {"erase", cmd_erase},
     {"selfrefresh", cmd_selfrefresh},
     {"normal", cmd_normal},
-    //{"debug", cmd_debug},
+    {"debug", cmd_debug},
     {"ps4", cmd_ps4},
     {NULL, NULL}
 };

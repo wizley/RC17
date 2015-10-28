@@ -50,6 +50,8 @@ extern application console;
 extern application game;
 extern application reset;
 
+extern application template;
+
 
 #endif /* APP_LIST_H */
 

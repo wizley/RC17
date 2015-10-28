@@ -96,12 +96,11 @@ static void menu_screen_redraw(void)
 }
 
 //static void menu_screen_event(struct ui_widget *w, const struct event *evt)
-static void menu_screen_event(void)
-{
-  if(palReadPad(GPIOG, GPIOG_BUT3) == PAL_LOW){
+static void menu_screen_event(ui_event *evt){
+
     // scroll through the menu if a button was pressed
-//    if(evt->type == BUTTON_PRESSED) {
-//        if(evt->data.button == BUT_BR) {
+    if(evt->type == UI_INPUT_BUTTON) {
+        if(evt->data.button_state == UI_BUTTON_DOWN) {
             if(selected_item < menu_size - 1) {
                 ++selected_item;
 
@@ -111,11 +110,9 @@ static void menu_screen_event(void)
                 selected_item = 0;
                 offset = 0;
             }
-//
-//            w->flags |= WF_DIRTY;
+
             menu_screen_redraw();
-  }else if (palReadPad(GPIOB, GPIOB_BUT2) == PAL_LOW){
-//        } else if(evt->data.button == BUT_BL) {
+        }else if(evt->data.button_state == UI_BUTTON_UP) {
             if(selected_item > 0) {
                 --selected_item;
 
@@ -131,7 +128,7 @@ static void menu_screen_event(void)
 //
 //            w->flags |= WF_DIRTY;
             menu_screen_redraw();
-//        }
+        }
     }
 }
 
@@ -159,16 +156,19 @@ static void menu_ui_init(void) {
 
 static void run(menu_entry *entry) {
     if(entry->type == APP) {
+      if(entry->data.app->main == NULL)
+        template.main(NULL);
+      else
         entry->data.app->main(NULL);
     } else if(entry->type == SUBMENU) {
-        selected_item = 0;
-        offset = 0;
-        menu_size = 0;
-        // keep the operation separate to avoid crashes
-        // when an interrupt goes off between the two following lines
-        *(current_menu + 1) = entry->data.submenu;
-        ++current_menu;
-        menu_size = get_menu_size(*current_menu);
+      selected_item = 0;
+      offset = 0;
+      menu_size = 0;
+      // keep the operation separate to avoid crashes
+      // when an interrupt goes off between the two following lines
+      *(current_menu + 1) = entry->data.submenu;
+      ++current_menu;
+      menu_size = get_menu_size(*current_menu);
     } else if (entry->type == SETTING) {
 //        setting_change(entry->data.setting);
     }
@@ -193,6 +193,8 @@ static void go_back(void) {
 void menu_main(void* params) {
     (void)(params);  // suppress unused parameter warning
     chRegSetThreadName(menu.name);
+
+    ui_event *evt = NULL;
 //    struct event evt;
 
 //    battery_update();
@@ -204,33 +206,24 @@ void menu_main(void* params) {
 
     // Once it is deactivated - display the menu
     while(1) {
-//        if(xQueueReceive(appQueue, &evt, portMAX_DELAY)) {
-//            switch(evt.type) {
-//                case BUTTON_PRESSED:
-//                    if(evt.data.button == BUT_TL) {
-//                        go_back();
-//                    } else if(evt.data.button == BUT_TR) {
-//                        // run the selected application or submenu
-//                        run(&(*current_menu)->entries[selected_item]);
-//                    } else {
-//                        ui_update(&evt);
-//                    }
-//                    break;
-//
-//                default:    // suppress warnings
-//                    ui_update(&evt);
-//                    break;
-//            }
-//        }
-      if(palReadPad(GPIOC, GPIOC_BUT8) == PAL_LOW){
-        go_back();
-      }else if(palReadPad(GPIOB, GPIOB_PB12) == PAL_LOW){
-        run(&(*current_menu)->entries[selected_item]);
-      }else{
-        menu_screen_event();
 
+      if(chMBFetch(&app_mb, (msg_t*)(&evt), TIME_INFINITE) == MSG_OK){
+
+        switch(evt->type){
+          case UI_INPUT_BUTTON:
+            if(evt->data.button_state == UI_BUTTON_BACK){
+              go_back();
+            } else if(evt->data.button_state == UI_BUTTON_ENTER){
+              run(&(*current_menu)->entries[selected_item]);
+            } else {
+              menu_screen_event(evt);
+            }
+            break;
+          default:
+            //ui_update(&evt);
+            break;
+        }
       }
-      chThdSleepMilliseconds(100);
     }
 }
 
