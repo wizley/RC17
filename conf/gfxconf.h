@@ -67,7 +67,7 @@
 #define GDISP_INCLUDE_FONT_DEJAVUSANS24_AA             TRUE
 #define GDISP_INCLUDE_FONT_DEJAVUSANS32_AA             TRUE
 //    #define GDISP_INCLUDE_FONT_DEJAVUSANSBOLD12_AA   FALSE
-//    #define GDISP_INCLUDE_USER_FONTS                 FALSE
+#define GDISP_INCLUDE_USER_FONTS                       TRUE
 
 //#define GDISP_NEED_IMAGE                             FALSE
 //    #define GDISP_NEED_IMAGE_NATIVE                  FALSE

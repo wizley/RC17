@@ -17,7 +17,7 @@ void template_main(void *params){
   font1 = gdispOpenFont("DejaVuSans32_aa");
 
   gdispClear(HTML2COLOR(0xEEEEEE));
-  gdispDrawString(0, 0, "error 404 not found", font1, HTML2COLOR(0x09180A));
+  gdispDrawString(0, 0, "404 Not Found", font1, HTML2COLOR(0x09180A));
 
   ui_event *evt = NULL;
 

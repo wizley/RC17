@@ -55,7 +55,7 @@ static void menu_screen_redraw(void)
     int menu_limit = (menu_size < MAX_ENTRIES ? menu_size : MAX_ENTRIES);
 
     font_t font1;
-    font1 = gdispOpenFont("DejaVuSans32_aa");
+    font1 = gdispOpenFont("DroidSans32");
 
     gdispClear(HTML2COLOR(0xEEEEEE));
     for(i = 0; i < menu_limit; ++i)
