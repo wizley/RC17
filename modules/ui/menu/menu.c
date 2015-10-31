@@ -31,6 +31,8 @@
 #include <stdio.h>
 #include "gfx.h"
 
+static font_t font1;
+
 static int selected_item = 0;
 static int offset = 0;
 static int menu_size = 0;
@@ -53,9 +55,7 @@ static void menu_screen_redraw(void)
 {
     int i;
     int menu_limit = (menu_size < MAX_ENTRIES ? menu_size : MAX_ENTRIES);
-
-    font_t font1;
-    font1 = gdispOpenFont("DroidSans32");
+    uint8_t font_height = 32; //FIXME: get height from font_t struct
 
     gdispClear(HTML2COLOR(0xEEEEEE));
     for(i = 0; i < menu_limit; ++i)
@@ -77,12 +77,12 @@ static void menu_screen_redraw(void)
         if(ent->type == APP) {
             application *a = ent->data.app;
 
-            gdispDrawString(LEFT_MARGIN, i * LINE_HEIGHT, a->name, font1, (i == selected_item) ? HTML2COLOR(0x09180A) : HTML2COLOR(0x09180A));
+            gdispDrawString(LEFT_MARGIN, i * LINE_HEIGHT + (LINE_HEIGHT - font_height)/2, a->name, font1, (i == selected_item) ? HTML2COLOR(0x09180A) : HTML2COLOR(0x09180A));
 
         } else if(ent->type == SUBMENU) {
             menu_list *l = ent->data.submenu;
 
-            gdispDrawString(LEFT_MARGIN, i * LINE_HEIGHT, l->name, font1, (i == selected_item) ? HTML2COLOR(0x09180A) : HTML2COLOR(0x09180A));
+            gdispDrawString(LEFT_MARGIN, i * LINE_HEIGHT + (LINE_HEIGHT - font_height)/2, l->name, font1, (i == selected_item) ? HTML2COLOR(0x09180A) : HTML2COLOR(0x09180A));
 //        } else if (ent->type == SETTING) {
 //            char s[16];
 //            setting_t *set = ent->data.setting;
@@ -95,6 +95,30 @@ static void menu_screen_redraw(void)
     }
 }
 
+static void menu_deselect_item(uint8_t index){
+  menu_entry *ent = &(*current_menu)->entries[offset + index];
+  if(ent->type == APP) {
+    application *a = ent->data.app;
+    gdispFillStringBox(LEFT_MARGIN, index * LINE_HEIGHT, MENU_SCREEN_WIDTH, LINE_HEIGHT, a->name, font1, HTML2COLOR(0x09180A), HTML2COLOR(0xEEEEEE), justifyLeft);
+  } else if(ent->type == SUBMENU) {
+    menu_list *l = ent->data.submenu;
+    gdispFillStringBox(LEFT_MARGIN, index * LINE_HEIGHT, MENU_SCREEN_WIDTH, LINE_HEIGHT, l->name, font1, HTML2COLOR(0x09180A), HTML2COLOR(0xEEEEEE), justifyLeft);
+  }
+
+}
+
+static void menu_select_item(uint8_t index){
+  menu_entry *ent = &(*current_menu)->entries[offset + index];
+  if(ent->type == APP) {
+    application *a = ent->data.app;
+    gdispFillStringBox(LEFT_MARGIN, index * LINE_HEIGHT, MENU_SCREEN_WIDTH, LINE_HEIGHT, a->name, font1, HTML2COLOR(0x09180A), HTML2COLOR(0x48BC4D), justifyLeft);
+  } else if(ent->type == SUBMENU) {
+    menu_list *l = ent->data.submenu;
+    gdispFillStringBox(LEFT_MARGIN, index * LINE_HEIGHT, MENU_SCREEN_WIDTH, LINE_HEIGHT, l->name, font1, HTML2COLOR(0x09180A), HTML2COLOR(0x48BC4D), justifyLeft);
+  }
+
+}
+
 //static void menu_screen_event(struct ui_widget *w, const struct event *evt)
 static void menu_screen_event(ui_event *evt){
 
@@ -104,8 +128,13 @@ static void menu_screen_event(ui_event *evt){
             if(selected_item < menu_size - 1) {
                 ++selected_item;
 
-                if(selected_item >= MAX_ENTRIES)
-                    offset = selected_item - MAX_ENTRIES + 1;
+                if(selected_item >= MAX_ENTRIES){
+                  offset = selected_item - MAX_ENTRIES + 1;
+                } else {
+                  menu_deselect_item(selected_item - offset - 1);
+                  menu_select_item(selected_item - offset);
+                  return;
+                }
             } else {
                 selected_item = 0;
                 offset = 0;
@@ -116,8 +145,13 @@ static void menu_screen_event(ui_event *evt){
             if(selected_item > 0) {
                 --selected_item;
 
-                if(selected_item < offset)
+                if(selected_item < offset){
                     offset = selected_item;
+                } else {
+                  menu_deselect_item(selected_item - offset + 1);
+                  menu_select_item(selected_item - offset);
+                  return;
+                }
             } else {
                 selected_item = menu_size - 1;
                 if (menu_size < MAX_ENTRIES)
@@ -145,6 +179,7 @@ static void menu_ui_init(void) {
 //    ui_clear();
 //
 //    ui_init_widget(&menu_screen);
+  font1 = gdispOpenFont("DroidSans32");
   menu_screen_redraw();
 //    ui_add_widget(&menu_screen);
 //
