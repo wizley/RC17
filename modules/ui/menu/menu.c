@@ -130,38 +130,41 @@ static void menu_screen_event(ui_event *evt){
 
                 if(selected_item >= MAX_ENTRIES){
                   offset = selected_item - MAX_ENTRIES + 1;
+                  menu_screen_redraw();
                 } else {
                   menu_deselect_item(selected_item - offset - 1);
                   menu_select_item(selected_item - offset);
                   return;
                 }
             } else {
-                selected_item = 0;
-                offset = 0;
+//                selected_item = 0;
+//                offset = 0;
+
             }
 
-            menu_screen_redraw();
+//            menu_screen_redraw();
         }else if(evt->data.button_state == UI_BUTTON_UP) {
             if(selected_item > 0) {
                 --selected_item;
 
                 if(selected_item < offset){
                     offset = selected_item;
+                    menu_screen_redraw();
                 } else {
                   menu_deselect_item(selected_item - offset + 1);
                   menu_select_item(selected_item - offset);
                   return;
                 }
             } else {
-                selected_item = menu_size - 1;
-                if (menu_size < MAX_ENTRIES)
-                    offset = selected_item - menu_size + 1;
-                else
-                    offset = selected_item - MAX_ENTRIES + 1;
+//                selected_item = menu_size - 1;
+//                if (menu_size < MAX_ENTRIES)
+//                    offset = selected_item - menu_size + 1;
+//                else
+//                    offset = selected_item - MAX_ENTRIES + 1;
             }
 //
 //            w->flags |= WF_DIRTY;
-            menu_screen_redraw();
+//            menu_screen_redraw();
         }
     }
 }
