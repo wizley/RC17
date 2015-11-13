@@ -206,6 +206,7 @@ static void run(menu_entry *entry) {
       else
         entry->data.app->main(NULL);
     } else if(entry->type == SUBMENU) {
+      //TODO : implement stack to save previous offset
       selected_item = 0;
       offset = 0;
       menu_size = 0;
@@ -225,6 +226,7 @@ static void go_back(void) {
     if(current_menu == menu_stack) {
 //        clock_app.main(NULL);
     } else {
+        //TODO : implement stack to save previous offset
         menu_size = 0;
         selected_item = 0;
         offset = 0;
