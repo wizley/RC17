@@ -129,12 +129,19 @@ static void menu_screen_event(ui_event *evt){
                 ++selected_item;
 
                 if(selected_item >= MAX_ENTRIES){
-                  offset = selected_item - MAX_ENTRIES + 1;
-                  menu_screen_redraw();
+                  if(offset == selected_item - MAX_ENTRIES){
+                    offset = selected_item - MAX_ENTRIES + 1;
+                    menu_screen_redraw();
+                  } else {
+                    offset = selected_item - MAX_ENTRIES + 1;
+                    menu_deselect_item(selected_item - offset - 1);
+                    menu_select_item(selected_item - offset);
+                  }
+//                  menu_screen_redraw();
                 } else {
                   menu_deselect_item(selected_item - offset - 1);
                   menu_select_item(selected_item - offset);
-                  return;
+//                  return;
                 }
             } else {
 //                selected_item = 0;
@@ -153,7 +160,7 @@ static void menu_screen_event(ui_event *evt){
                 } else {
                   menu_deselect_item(selected_item - offset + 1);
                   menu_select_item(selected_item - offset);
-                  return;
+//                  return;
                 }
             } else {
 //                selected_item = menu_size - 1;
