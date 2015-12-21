@@ -7,8 +7,20 @@
 #include "ch.h"
 #include "test.h"
 #include "drivers.h"
+#include "usbcfg.h"
 #include "usb_shell.h"
+#include "shell.h"
 #include "chprintf.h"
+
+#include "ps4.h"
+
+#define SHELL_WA_SIZE   THD_WORKING_AREA_SIZE(2048)
+#define TEST_WA_SIZE    THD_WORKING_AREA_SIZE(256)
+
+static thread_t *shelltp = NULL;
+
+/* Virtual serial port over USB.*/
+SerialUSBDriver SDU1;
 
 void cmd_mem(BaseSequentialStream *chp, int argc, char *argv[]) {
   size_t n, size;
@@ -306,4 +318,65 @@ void cmd_sdram(BaseSequentialStream *chp, int argc, char *argv[]) {
       chprintf(chp, "SDRAM test completed successfully, writing entire memory took %dms, reading it took %dms.\r\n", write_ms, read_ms);
   }
 
+}
+
+void cmd_debug(BaseSequentialStream *chp, int argc, char *argv[]) {
+  (void)argv;
+  (void)argc;
+
+  uint16_t qei_old_count = qeiGetCount(&QEID4);
+
+  while (chnGetTimeout((BaseChannel *)chp, TIME_IMMEDIATE) == Q_TIMEOUT) {
+    chprintf(chp, "%d %d %d\r\n", qeiGetCount(&QEID4) - qei_old_count, (int16_t)(qeiGetCount(&QEID4) - qei_old_count), qei_old_count);
+    qei_old_count = qeiGetCount(&QEID4);
+    chThdSleepMilliseconds(100);
+  }
+  chprintf(chp, "\r\n\nstopped\r\n");
+
+}
+
+static const ShellCommand commands[] = {
+  {"mem", cmd_mem},
+  {"threads", cmd_threads},
+  {"test", cmd_test},
+  {"sdram", cmd_sdram},
+  {"reset", cmd_reset},
+  {"write", cmd_write},
+  {"check", cmd_check},
+  {"erase", cmd_erase},
+  {"selfrefresh", cmd_selfrefresh},
+  {"normal", cmd_normal},
+  {"debug", cmd_debug},
+  {"ps4", cmd_ps4},
+  {NULL, NULL}
+};
+
+static const ShellConfig shell_cfg1 = {
+  (BaseSequentialStream *)&SDU1,
+  commands
+};
+
+void usb_shell_init(void){
+  shellInit();
+  /*
+   * Initializes a serial-over-USB CDC driver.
+   */
+  sduObjectInit(&SDU1);
+}
+
+void usb_shell_start(void){
+  sduStart(&SDU1, &serusbcfg);
+  if(shelltp == NULL)
+    shelltp = shellCreate(&shell_cfg1, SHELL_WA_SIZE, NORMALPRIO);
+}
+
+void usb_shell_stop(void){
+  chThdTerminate(shelltp);
+  chThdRelease(shelltp);    /* Recovers memory of the previous shell.   */
+  shelltp = NULL;           /* Triggers spawning of a new shell.        */
+  shelltp = shellCreate(&shell_cfg1, SHELL_WA_SIZE, NORMALPRIO);
+}
+
+bool usb_shell_is_running(void){
+  return chThdTerminatedX(shelltp);
 }

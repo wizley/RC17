@@ -1,24 +1,10 @@
 #include "ch.h"
 #include "hal.h"
 #include "drivers.h"
-
-#include "chprintf.h"
-#include "shell.h"
-#include "usbcfg.h"
-#include "ps4.h"
-#include "usb_shell.h"
-
 #include "gfx.h"
-//#include <stdio.h>
-//#include <string.h>
-
+#include "usbcfg.h"
+#include "usb_shell.h"
 #include "app.h"
-#include "bubbles.h"
-
-#define QEI_DRIVER              QEID4
-
-//GEventMouse	ev;
-
 
 
 /*
@@ -41,19 +27,15 @@ static THD_FUNCTION(Thread1, arg) {
   (void)arg;
   chRegSetThreadName("blinker1");
   while (TRUE) {
-      //palClearPad(GPIOC, GPIOC_LED_R);
-//	  palClearPad(GPIOB, GPIOB_TIM2_CH4);
-//    gdispFillArea(0, 0, 800, 480, Blue);
-      chThdSleepMilliseconds(400);
-      //palSetPad(GPIOC, GPIOC_LED_R);
-//      palSetPad(GPIOB, GPIOB_TIM2_CH4);
-//      gdispFillArea(0, 0, 800, 480, Red);
-      chThdSleepMilliseconds(400);
+    palClearPad(GPIOC, GPIOC_LED_R);
+    chThdSleepMilliseconds(400);
+    palSetPad(GPIOC, GPIOC_LED_R);
+    chThdSleepMilliseconds(400);
   }
 }
 
 /*
- * Green LED blinker thread, times are in milliseconds.
+ * Blue LED blinker thread, times are in milliseconds.
  */
 static THD_WORKING_AREA(waThread2, 128);
 static THD_FUNCTION(Thread2, arg) {
@@ -61,81 +43,19 @@ static THD_FUNCTION(Thread2, arg) {
   (void)arg;
   chRegSetThreadName("blinker2");
   while (TRUE) {
-      palClearPad(GPIOC, GPIOC_LED_B);
-      chThdSleepMilliseconds(333);
-      palSetPad(GPIOC, GPIOC_LED_B);
-      chThdSleepMilliseconds(800);
-
+    palClearPad(GPIOC, GPIOC_LED_B);
+    chThdSleepMilliseconds(333);
+    palSetPad(GPIOC, GPIOC_LED_B);
+    chThdSleepMilliseconds(800);
   }
 }
-
-/*===========================================================================*/
-/* QEI related.                                                              */
-/*===========================================================================*/
 
 static QEIConfig qeicfg = {
-    QEI_MODE_QUADRATURE,
-    QEI_BOTH_EDGES,
-    QEI_DIRINV_FALSE,
+  QEI_MODE_QUADRATURE,
+  QEI_BOTH_EDGES,
+  QEI_DIRINV_FALSE,
 };
 
-/*===========================================================================*/
-/* Command line related.                                                     */
-/*===========================================================================*/
-
-/* Virtual serial port over USB.*/
-SerialUSBDriver SDU1;
-
-
-//static PWMConfig pwmcfg = {
-//  16000000,                                    /* 60kHz PWM clock frequency.   */
-//  4000,                                    /* Initial PWM period 1S.       */
-//  NULL,
-//  {
-//   {PWM_OUTPUT_DISABLED, NULL},
-//   {PWM_OUTPUT_DISABLED, NULL},
-//   {PWM_OUTPUT_ACTIVE_HIGH, NULL},
-//   {PWM_OUTPUT_DISABLED, NULL}
-//  },
-//  0,
-//  0
-//};
-//
-static void cmd_debug(BaseSequentialStream *chp, int argc, char *argv[]) {
-  (void)argv;
-  (void)argc;
-
-  uint16_t qei_old_count = qeiGetCount(&QEID4);
-
-  while (chnGetTimeout((BaseChannel *)chp, TIME_IMMEDIATE) == Q_TIMEOUT) {
-    chprintf(chp, "%d %d %d\r\n", qeiGetCount(&QEID4) - qei_old_count, (int16_t)(qeiGetCount(&QEID4) - qei_old_count), qei_old_count);
-    qei_old_count = qeiGetCount(&QEID4);
-    chThdSleepMilliseconds(100);
-  }
-  chprintf(chp, "\r\n\nstopped\r\n");
-
-}
-
-static const ShellCommand commands[] = {
-    {"mem", cmd_mem},
-    {"threads", cmd_threads},
-    {"test", cmd_test},
-    {"sdram", cmd_sdram},
-    {"reset", cmd_reset},
-    {"write", cmd_write},
-    {"check", cmd_check},
-    {"erase", cmd_erase},
-    {"selfrefresh", cmd_selfrefresh},
-    {"normal", cmd_normal},
-    {"debug", cmd_debug},
-    {"ps4", cmd_ps4},
-    {NULL, NULL}
-};
-
-static const ShellConfig shell_cfg1 = {
-    (BaseSequentialStream *)&SDU1,
-    commands
-};
 
 /*===========================================================================*/
 /* Initialization and main thread.                                           */
@@ -144,7 +64,6 @@ static const ShellConfig shell_cfg1 = {
  * Application entry point.
  */
 int main(void) {
-  thread_t *shelltp = NULL;
 
   /*
    * System initializations.
@@ -163,36 +82,6 @@ int main(void) {
   sdram_bulk_erase();
 
   /*
-   * Shell manager initialization.
-   */
-  shellInit();
-
-  /*
-   * Activates the ADC1 driver and the temperature sensor.
-   */
-//  adcStart(&ADCD1, NULL);
-//  adcSTM32EnableTSVREFE();
-//  /*
-//   * Starts an ADC continuous conversion.
-//   */
-//  adcStartConversion(&ADCD1, &adcgrpcfg2, samples2, ADC_GRP2_BUF_DEPTH);
-
-
-  //pwmStart(&PWMD3, &pwmcfg);
-  //pwmEnableChannel(&PWMD3, 2, PWM_PERCENTAGE_TO_WIDTH(&PWMD3, 5000));
-
-//  buzzer_init();
-
-  //#if HAL_USE_SERIAL_USB
-  /*
-   * Initializes a serial-over-USB CDC driver.
-   */
-  sduObjectInit(&SDU1);
-  sduStart(&SDU1, &serusbcfg);
-
-
-
-  /*
    * Activates the LCD-related drivers.
    */
   palSetPad(GPIOD, GPIOD_LCD_DISP);
@@ -204,34 +93,26 @@ int main(void) {
   /*
    * Activates the QEI driver.
    */
-  qeiStart(&QEI_DRIVER, &qeicfg);
-  qeiEnable(&QEI_DRIVER);
-
-//  buzzer_init();
-
-//  buzzer_tone_t tone[3] = {
-//    {4000, 150},
-//	{0, 150},
-//	{0, 0}
-//  };
-  //buzzer_play(tone, 3);
-//  chThdSleepMilliseconds(1500);
-//  buzzer_stop();
-//  buzzer_play(tone, 6);
+  qeiStart(&QEID4, &qeicfg);
+  qeiEnable(&QEID4);
 
   gfxInit();
 
   /*
    * Creating the blinker threads.
    */
-  chThdCreateStatic(waThread1, sizeof(waThread1), LOWPRIO,
-                    Thread1, NULL);
+//  chThdCreateStatic(waThread1, sizeof(waThread1), LOWPRIO,
+//                    Thread1, NULL);
   chThdCreateStatic(waThread2, sizeof(waThread2), LOWPRIO,
                     Thread2, NULL);
 
-//  chThdCreateStatic(wabubbles, sizeof(wabubbles), LOWPRIO, bubbles_thread, NULL);
-
   app_init();
+
+  /*
+   * Shell manager initialization.
+   */
+  usb_shell_init();
+  usb_shell_start();
 
   /*
    * Activates the USB driver and then the USB bus pull-up on D+.
@@ -248,20 +129,11 @@ int main(void) {
    * a shell respawn upon its termination.
    */
   while (TRUE) {
-      if (!shelltp) {
-		  if (SDU1.config->usbp->state == USB_ACTIVE) {
-			  /* Spawns a new shell.*/
-			  shelltp = shellCreate(&shell_cfg1, SHELL_WA_SIZE, LOWPRIO);
-		  }
-      }
-      else {
-		  /* If the previous shell exited.*/
-		  if (chThdTerminatedX(shelltp)) {
-			  /* Recovers memory of the previous shell.*/
-			  chThdRelease(shelltp);
-			  shelltp = NULL;
-		  }
-      }
-      chThdSleepMilliseconds(200);
+    if (!usb_shell_is_running())
+      usb_shell_start();
+    else{
+      usb_shell_stop();
+    }
+    chThdSleepMilliseconds(200);
   }
 }

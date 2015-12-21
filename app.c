@@ -10,8 +10,8 @@ THD_WORKING_AREA(waApp, 2048);
 mailbox_t app_mb;
 static msg_t msg_buf[UI_MB_SIZE];
 
-THD_WORKING_AREA(wa_ui_button_worker, 256);
-THD_FUNCTION(ui_button_worker, arg) {
+THD_WORKING_AREA(wa_ui_button_thread, 256);
+THD_FUNCTION(ui_button_thread, arg) {
   (void) arg;
 
   ui_event evt;
@@ -77,7 +77,7 @@ int app_init(void) {
   chMBObjectInit(&app_mb, msg_buf, UI_MB_SIZE);
   chThdCreateStatic(waApp, sizeof(waApp), LOWPRIO, menu.main, NULL);
   InitDriving();
-  chThdCreateStatic(wa_ui_button_worker, sizeof(wa_ui_button_worker), LOWPRIO, ui_button_worker, NULL);
-	return 0;
+  chThdCreateStatic(wa_ui_button_thread, sizeof(wa_ui_button_thread), LOWPRIO, ui_button_thread, NULL);
+  return 0;
 }
 
