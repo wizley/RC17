@@ -6,15 +6,12 @@ MODULESSRC += $(MODULESPATH)/ps4/ps4.c
 MODULESSRC += $(MODULESPATH)/buzzer/buzzer.c
 MODULESSRC += $(MODULESPATH)/UDC/udc.c
 MODULESSRC += $(MODULESPATH)/UDC/udc_lld.c
-MODULESSRC += $(MODULESPATH)/ui/menu/menu_struct.c
-MODULESSRC += $(MODULESPATH)/ui/menu/menu.c
-MODULESSRC += $(MODULESPATH)/ui/template_page/template_page.c
-#MODULESSRC += $(MODULESPATH)/ui/menu/application.c
+
 
 MODULESINC = $(MODULESPATH)/bubbles
 MODULESINC += $(MODULESPATH)/usb_shell
 MODULESINC += $(MODULESPATH)/ps4
 MODULESINC += $(MODULESPATH)/buzzer
 MODULESINC += $(MODULESPATH)/UDC
-MODULESINC += $(MODULESPATH)/ui/menu
-MODULESINC += $(MODULESPATH)/ui/font
+
+include $(MODULESPATH)/ui/ui.mk

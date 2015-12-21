@@ -41,7 +41,7 @@ application set_buzzer = { .name="Set buzzer", .main=NULL };
 application set_logging = { .name="Set Data logging", .main=NULL };
 application set_usb = { .name="Set USB", .main=NULL };
 
-application start_robot = { .name="Start robot", .main=NULL };
+//application start_robot = { .name="Start robot", .main=NULL };
 application motor_tuning = { .name="Motor tuning", .main=NULL };
 application console = { .name="Console", .main=NULL };
 application game = { .name="game", .main=NULL };
