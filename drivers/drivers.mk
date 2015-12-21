@@ -20,4 +20,7 @@ DRIVERINC += $(DRIVERPATH)/usb
 
 # UGFX LLD path
 GFXINC += ./drivers/gdisp_lld
+GFXINC += ./drivers/gmouse_lld
 GFXSRC += ./drivers/gdisp_lld/gdisp_lld_framebuffer.c
+
+include $(GFXLIB)/drivers/ginput/touch/FT5x06/driver.mk
