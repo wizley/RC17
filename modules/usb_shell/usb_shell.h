@@ -8,11 +8,12 @@
 #ifndef MODULES_USB_SHELL_USB_SHELL_H_
 #define MODULES_USB_SHELL_USB_SHELL_H_
 
-#define IS42S16400J_SIZE	0x1000000
+#define SDRAM_SIZE	0x1000000
 
 void usb_shell_init(void);
 void usb_shell_start(void);
-void usb_shell_stop(void);
-bool usb_shell_is_running(void);
+void usb_shell_create(void);
+void usb_shell_wait(void);
+bool usb_is_active(void);
 
 #endif /* MODULES_USB_SHELL_USB_SHELL_H_ */

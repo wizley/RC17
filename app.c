@@ -13,6 +13,7 @@ static msg_t msg_buf[UI_MB_SIZE];
 THD_WORKING_AREA(wa_ui_button_thread, 256);
 THD_FUNCTION(ui_button_thread, arg) {
   (void) arg;
+  chRegSetThreadName("UI button thread");
 
   ui_event evt;
   bool need_post = false;

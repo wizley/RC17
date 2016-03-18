@@ -13,14 +13,26 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+SECTIONS
+{
+    /* Special section for exceptions stack.*/
+    .mstack :
+    {
+        . = ALIGN(8);
+        __main_stack_base__ = .;
+        . += __main_stack_size__;
+        . = ALIGN(8);
+        __main_stack_end__ = .;
+    } > MAIN_STACK_RAM
 
-#ifndef _USBCFG_H_
-#define _USBCFG_H_
-
-extern const USBConfig usbcfg;
-extern SerialUSBConfig serusbcfg;
-extern SerialUSBDriver SDU1;
-
-#endif  /* _USBCFG_H_ */
-
-/** @} */
+    /* Special section for process stack.*/
+    .pstack :
+    {
+        __process_stack_base__ = .;
+        __main_thread_stack_base__ = .;
+        . += __process_stack_size__;
+        . = ALIGN(8);
+        __process_stack_end__ = .;
+        __main_thread_stack_end__ = .;
+    } > PROCESS_STACK_RAM
+}

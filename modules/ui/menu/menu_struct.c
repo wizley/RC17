@@ -44,8 +44,8 @@ application set_usb = { .name="Set USB", .main=NULL };
 //application start_robot = { .name="Start robot", .main=NULL };
 application motor_tuning = { .name="Motor tuning", .main=NULL };
 application console = { .name="Console", .main=NULL };
-application game = { .name="game", .main=NULL };
-application reset = { .name="reset", .main=NULL };
+application game = { .name="Game", .main=NULL };
+application reset = { .name="Reset", .main=NULL };
 
 
 int get_menu_size(const menu_list *menu) {

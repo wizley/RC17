@@ -5,7 +5,7 @@
 
 # Compiler options here.
 ifeq ($(USE_OPT),)
-  USE_OPT = -O2 -ggdb -fomit-frame-pointer -falign-functions=16 -fshort-enums
+  USE_OPT = -O2 -ggdb -fomit-frame-pointer -falign-functions=16 -fshort-enums --specs=nano.specs
 endif
 
 # C specific options here (added to USE_OPT).
@@ -60,7 +60,7 @@ endif
 # Stack size to be allocated to the Cortex-M process stack. This stack is
 # the stack used by the main() thread.
 ifeq ($(USE_PROCESS_STACKSIZE),)
-  USE_PROCESS_STACKSIZE = 0x800
+  USE_PROCESS_STACKSIZE = 0x400
 endif
 
 # Stack size to the allocated to the Cortex-M main/exceptions stack. This
@@ -71,7 +71,7 @@ endif
 
 # Enables the use of FPU on Cortex-M4 (no, softfp, hard).
 ifeq ($(USE_FPU),)
-  USE_FPU = softfp
+  USE_FPU = hard
 endif
 
 #
@@ -89,7 +89,7 @@ PROJECT = ch
 CHIBIOS = ../ChibiOS
 GFXLIB = ../ugfx
 # Startup files.
-include $(CHIBIOS)/os/common/ports/ARMCMx/compilers/GCC/mk/startup_stm32f4xx.mk
+include $(CHIBIOS)/os/common/startup/ARMCMx/compilers/GCC/mk/startup_stm32f4xx.mk
 # HAL-OSAL files (optional).
 include $(CHIBIOS)/os/hal/hal.mk
 include $(CHIBIOS)/os/hal/ports/STM32/STM32F4xx/platform.mk
@@ -97,16 +97,18 @@ include ./board/chibios_board/board.mk
 include $(CHIBIOS)/os/hal/osal/rt/osal.mk
 # RTOS files (optional).
 include $(CHIBIOS)/os/rt/rt.mk
-include $(CHIBIOS)/os/rt/ports/ARMCMx/compilers/GCC/mk/port_v7m.mk
+include $(CHIBIOS)/os/common/ports/ARMCMx/compilers/GCC/mk/port_v7m.mk
 # Other files (optional).
 include $(CHIBIOS)/test/rt/test.mk
+include $(CHIBIOS)/os/hal/lib/streams/streams.mk
+include $(CHIBIOS)/os/various/shell/shell.mk
 #GFXDEFS += -DGFX_USE_OS_CHIBIOS=TRUE
 include $(GFXLIB)/gfx.mk
 include ./drivers/drivers.mk
 include ./modules/modules.mk
 include ./robot/robot.mk
 
-LDSCRIPT= ./STM32F429xI_mod.ld
+LDSCRIPT= ./ld/STM32F429xI.ld
 
 # C sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
@@ -118,13 +120,12 @@ CSRC = $(STARTUPSRC) \
        $(PLATFORMSRC) \
        $(BOARDSRC) \
        $(TESTSRC) \
+       $(STREAMSSRC) \
+       $(SHELLSRC) \
+       $(GFXSRC) \
        $(DRIVERSRC) \
        $(MODULESSRC) \
        $(ROBOTSRC) \
-       $(CHIBIOS)/os/various/shell.c \
-       $(CHIBIOS)/os/hal/lib/streams/memstreams.c \
-       $(CHIBIOS)/os/hal/lib/streams/chprintf.c \
-       $(GFXSRC) \
        main.c \
        app.c exception.c
 
@@ -157,8 +158,8 @@ ASMSRC = $(STARTUPASM) $(PORTASM) $(OSALASM)
 
 INCDIR = $(STARTUPINC) $(KERNINC) $(PORTINC) $(OSALINC) \
          $(HALINC) $(PLATFORMINC) $(BOARDINC) $(TESTINC) \
-         $(CHIBIOS)/os/hal/lib/streams $(CHIBIOS)/os/various \
-         $(DRIVERINC) $(MODULESINC) $(ROBOTINC) $(GFXINC) ./conf
+         $(STREAMSINC) $(SHELLINC) $(GFXINC) \
+         $(DRIVERINC) $(MODULESINC) $(ROBOTINC) ./conf
 
 #
 # Project, sources and paths
@@ -220,11 +221,11 @@ UINCDIR =
 ULIBDIR =
 
 # List all user libraries here
-ULIBS = -lc -lm -lrdimon $(GFXLIBS)
+ULIBS = -lc -lm $(GFXLIBS)
 
 #
 # End of user defines
 ##############################################################################
 
-RULESPATH = $(CHIBIOS)/os/common/ports/ARMCMx/compilers/GCC
+RULESPATH = $(CHIBIOS)/os/common/startup/ARMCMx/compilers/GCC
 include $(RULESPATH)/rules.mk

@@ -13,7 +13,7 @@
 static void sdram_bulk_erase(void) {
 
   volatile uint8_t *p = (volatile uint8_t *)SDRAM_BANK_ADDR;
-  volatile uint8_t *end = p + IS42S16400J_SIZE;
+  volatile uint8_t *end = p + SDRAM_SIZE;
   while (p < end)
     *p++ = 0xff;
 }
@@ -129,11 +129,10 @@ int main(void) {
    * a shell respawn upon its termination.
    */
   while (TRUE) {
-    if (!usb_shell_is_running())
-      usb_shell_start();
-    else{
-      usb_shell_stop();
+    if (SDU1.config->usbp->state == USB_ACTIVE) {
+      usb_shell_create();
+      usb_shell_wait();               /* Waiting termination.             */
     }
-    chThdSleepMilliseconds(200);
+    chThdSleepMilliseconds(1000);
   }
 }

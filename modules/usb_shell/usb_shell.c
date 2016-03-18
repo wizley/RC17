@@ -5,7 +5,6 @@
  *      Author: u564
  */
 #include "ch.h"
-#include "test.h"
 #include "drivers.h"
 #include "usbcfg.h"
 #include "usb_shell.h"
@@ -15,76 +14,8 @@
 #include "ps4.h"
 
 #define SHELL_WA_SIZE   THD_WORKING_AREA_SIZE(2048)
-#define TEST_WA_SIZE    THD_WORKING_AREA_SIZE(256)
 
 static thread_t *shelltp = NULL;
-
-/* Virtual serial port over USB.*/
-SerialUSBDriver SDU1;
-
-void cmd_mem(BaseSequentialStream *chp, int argc, char *argv[]) {
-  size_t n, size;
-
-  (void)argv;
-  if (argc > 0) {
-      chprintf(chp, "Usage: mem\r\n");
-      return;
-  }
-  n = chHeapStatus(NULL, &size);
-  chprintf(chp, "core free memory : %u bytes\r\n", chCoreGetStatusX());
-  chprintf(chp, "heap fragments   : %u\r\n", n);
-  chprintf(chp, "heap free total  : %u bytes\r\n", size);
-}
-
-void cmd_threads(BaseSequentialStream *chp, int argc, char *argv[]) {
-  static const char *states[] = {CH_STATE_NAMES};
-  thread_t *tp;
-
-  (void)argv;
-  if (argc > 0) {
-      chprintf(chp, "Usage: threads\r\n");
-      return;
-  }
-  chprintf(chp, "                     name    addr    stack prio refs     state time\r\n");
-  tp = chRegFirstThread();
-  do {
-      chprintf(chp, "%25s %.8lx %.8lx %4lu %4lu %9s\r\n",
-    		   tp->p_name,
-               (uint32_t)tp, (uint32_t)tp->p_ctx.r13,
-               (uint32_t)tp->p_prio, (uint32_t)(tp->p_refs - 1),
-               states[tp->p_state]);
-      tp = chRegNextThread(tp);
-  } while (tp != NULL);
-}
-
-void cmd_test(BaseSequentialStream *chp, int argc, char *argv[]) {
-  thread_t *tp;
-
-  (void)argv;
-  if (argc > 0) {
-      chprintf(chp, "Usage: test\r\n");
-      return;
-  }
-  tp = chThdCreateFromHeap(NULL, TEST_WA_SIZE, chThdGetPriorityX(),
-                           TestThread, chp);
-  if (tp == NULL) {
-      chprintf(chp, "out of memory\r\n");
-      return;
-  }
-  chThdWait(tp);
-}
-
-void cmd_reset(BaseSequentialStream *chp, int argc, char *argv[]) {
-  (void)argv;
-  if (argc > 0) {
-      chprintf(chp, "Usage: reset\r\n");
-      return;
-  }
-
-  chprintf(chp, "Will reset in 200ms\r\n");
-  chThdSleepMilliseconds(200);
-  NVIC_SystemReset();
-}
 
 void cmd_write(BaseSequentialStream *chp, int argc, char *argv[]) {
   uint32_t counter = 0;
@@ -104,7 +35,7 @@ void cmd_write(BaseSequentialStream *chp, int argc, char *argv[]) {
   chTMStartMeasurementX(&tm);
 
   /* Write data value to all SDRAM memory */
-  for (counter = 0; counter < IS42S16400J_SIZE; counter++)
+  for (counter = 0; counter < SDRAM_SIZE; counter++)
     {
       *(__IO uint8_t*) (SDRAM_BANK_ADDR + counter) = (uint8_t)(ubWritedata_8b + counter);
     }
@@ -136,7 +67,7 @@ void cmd_erase(BaseSequentialStream *chp, int argc, char *argv[]) {
 
   /* Write data value to all SDRAM memory */
   /* Erase SDRAM memory */
-  for (counter = 0; counter < IS42S16400J_SIZE; counter++)
+  for (counter = 0; counter < SDRAM_SIZE; counter++)
     {
       *(__IO uint8_t*) (SDRAM_BANK_ADDR + counter) = (uint8_t)0x0;
     }
@@ -234,7 +165,7 @@ void cmd_check(BaseSequentialStream *chp, int argc, char *argv[]) {
   /* Read back SDRAM memory and check content correctness*/
   counter = 0;
   uwReadwritestatus = 0;
-  while ((counter < IS42S16400J_SIZE) && (uwReadwritestatus == 0))
+  while ((counter < SDRAM_SIZE) && (uwReadwritestatus == 0))
     {
       ubReaddata_8b = *(__IO uint8_t*)(SDRAM_BANK_ADDR + counter);
       if ( ubReaddata_8b != (uint8_t)(ubWritedata_8b + counter))
@@ -273,13 +204,13 @@ void cmd_sdram(BaseSequentialStream *chp, int argc, char *argv[]) {
   chTMStartMeasurementX(&tm);
 
   //  /* Erase SDRAM memory */
-  //  for (counter = 0; counter < IS42S16400J_SIZE; counter++)
+  //  for (counter = 0; counter < SDRAM_SIZE; counter++)
   //  {
   //    *(__IO uint8_t*) (SDRAM_BANK_ADDR + counter) = (uint8_t)0x0;
   //  }
 
   /* Write data value to all SDRAM memory */
-  for (counter = 0; counter < IS42S16400J_SIZE; counter++)
+  for (counter = 0; counter < SDRAM_SIZE; counter++)
     {
       *(__IO uint8_t*) (SDRAM_BANK_ADDR + counter) = (uint8_t)(ubWritedata_8b + counter);
     }
@@ -291,7 +222,7 @@ void cmd_sdram(BaseSequentialStream *chp, int argc, char *argv[]) {
 
   /* Read back SDRAM memory */
   counter = 0;
-  while ((counter < IS42S16400J_SIZE))
+  while ((counter < SDRAM_SIZE))
     {
       ubReaddata_8b = *(__IO uint8_t*)(SDRAM_BANK_ADDR + counter);
       counter++;
@@ -303,7 +234,7 @@ void cmd_sdram(BaseSequentialStream *chp, int argc, char *argv[]) {
   /* Read back SDRAM memory and check content correctness*/
   counter = 0;
   uwReadwritestatus = 0;
-  while ((counter < IS42S16400J_SIZE) && (uwReadwritestatus == 0))
+  while ((counter < SDRAM_SIZE) && (uwReadwritestatus == 0))
     {
       ubReaddata_8b = *(__IO uint8_t*)(SDRAM_BANK_ADDR + counter);
       if ( ubReaddata_8b != (uint8_t)(ubWritedata_8b + counter))
@@ -336,11 +267,6 @@ void cmd_debug(BaseSequentialStream *chp, int argc, char *argv[]) {
 }
 
 static const ShellCommand commands[] = {
-  {"mem", cmd_mem},
-  {"threads", cmd_threads},
-  {"test", cmd_test},
-  {"sdram", cmd_sdram},
-  {"reset", cmd_reset},
   {"write", cmd_write},
   {"check", cmd_check},
   {"erase", cmd_erase},
@@ -366,17 +292,20 @@ void usb_shell_init(void){
 
 void usb_shell_start(void){
   sduStart(&SDU1, &serusbcfg);
+}
+
+void usb_shell_create(void){
   if(shelltp == NULL)
-    shelltp = shellCreate(&shell_cfg1, SHELL_WA_SIZE, NORMALPRIO);
+    shelltp = chThdCreateFromHeap(NULL, SHELL_WA_SIZE,
+                                  "shell", NORMALPRIO + 1,
+                                  shellThread, (void *)&shell_cfg1);
 }
 
-void usb_shell_stop(void){
-  chThdTerminate(shelltp);
-  chThdRelease(shelltp);    /* Recovers memory of the previous shell.   */
-  shelltp = NULL;           /* Triggers spawning of a new shell.        */
-  shelltp = shellCreate(&shell_cfg1, SHELL_WA_SIZE, NORMALPRIO);
+void usb_shell_wait(void){
+  chThdWait(shelltp);
+  shelltp = NULL;
 }
 
-bool usb_shell_is_running(void){
-  return chThdTerminatedX(shelltp);
+bool usb_is_active(void){
+  return SDU1.config->usbp->state == USB_ACTIVE;
 }

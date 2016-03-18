@@ -4,10 +4,12 @@
  *  Created on: Dec 28, 2014
  *      Author: u564
  */
-#include "gfx.h"
+
 #include <math.h>
-#include <bubbles.h>
 #include <string.h>
+#include "ch.h"
+#include "gfx.h"
+#include <bubbles.h>
 /* ---------------------------------------------------------------------- */
 
 #define N 1024			/* Number of dots */

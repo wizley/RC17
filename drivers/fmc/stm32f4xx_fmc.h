@@ -24,18 +24,23 @@
 #ifndef __STM32F4xx_FMC_H
 #define __STM32F4xx_FMC_H
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
 
-//FIXME this should not be needed
-//#define STM32F429xx
-//#define STM32F429_439xx
+// HACKS to fix portability issues.
+#define STM32F429_439xx
 
 /* Includes ------------------------------------------------------------------*/
-//#include "stm32f4xx.h"
-//#include "stm32_rcc.h"
-//#include "stdint.h"
-#include "drivers_conf.h"
-#include "extra_registry.h"
-#include "extra_rcc.h"
+#include "stm32f4xx.h"
+
+// More HACKS to fix portability issues.
+#if !defined(FMC_Bank2) && !defined(FMC_Bank3)
+	#define	FMC_Bank2	FMC_Bank2_3
+	#define	FMC_Bank3	FMC_Bank2_3
+#endif
+
+
 
 /** @addtogroup STM32F4xx_StdPeriph_Driver
   * @{
@@ -1127,6 +1132,9 @@ void       FMC_ClearFlag(uint32_t FMC_Bank, uint32_t FMC_FLAG);
 ITStatus   FMC_GetITStatus(uint32_t FMC_Bank, uint32_t FMC_IT);
 void       FMC_ClearITPendingBit(uint32_t FMC_Bank, uint32_t FMC_IT);
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif /*__STM32F4xx_FMC_H */
 /**
