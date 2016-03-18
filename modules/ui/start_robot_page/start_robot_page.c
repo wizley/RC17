@@ -174,7 +174,7 @@ static void createPagePage0(void)
   ghConsole = gwinConsoleCreate(0, &wi.g);
   gwinSetColor(ghConsole, Silver);
   gwinSetBgColor(ghConsole, Black);
-  gwinSetFont(ghConsole, dejavu_sans_20_anti_aliased);
+  gwinSetFont(ghConsole, dejavu_sans_12_anti_aliased);
   gwinRedraw(ghConsole);
 
   // create button widget: ghButton_EME

@@ -26,7 +26,7 @@
 //#define GDISP_NEED_ARC                               FALSE
 //#define GDISP_NEED_ARCSECTORS                        FALSE
 //#define GDISP_NEED_CONVEX_POLYGON                    FALSE
-//#define GDISP_NEED_SCROLL                            FALSE
+#define GDISP_NEED_SCROLL                            TRUE
 #define GDISP_NEED_PIXELREAD                         TRUE
 //#define GDISP_NEED_CONTROL                           FALSE
 //#define GDISP_NEED_QUERY                             FALSE
