@@ -16,5 +16,13 @@ void driversInit(void) {
   qeiInit();
 #endif
 
+#if defined(DRIVER_USE_CRC) && DRIVER_USE_CRC
+  crcInit();
+#endif
+
+#if defined(DRIVER_USE_USBH) && DRIVER_USE_USBH
+  usbhInit();
+#endif
+
   SDRAM_Init();
 }

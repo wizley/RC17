@@ -6,6 +6,8 @@
 #include "stm32f4xx_fmc.h"
 #include "qei.h"
 #include "sdram_driver.h"
+#include "crc.h"
+#include "usbh.h"
 
 #ifdef __cplusplus
 extern "C" {

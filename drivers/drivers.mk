@@ -8,6 +8,17 @@ DRIVERSRC += $(DRIVERPATH)/qei/qei_lld.c
 DRIVERSRC += $(DRIVERPATH)/qei/qei.c
 DRIVERSRC += $(DRIVERPATH)/sdram/sdram_driver.c
 DRIVERSRC += $(DRIVERPATH)/usb/usbcfg.c
+DRIVERSRC += $(DRIVERPATH)/crc/crc_lld.c
+DRIVERSRC += $(DRIVERPATH)/crc/crcsw.c
+DRIVERSRC += $(DRIVERPATH)/crc/crc.c
+DRIVERSRC += $(DRIVERPATH)/usbhost/usbh_lld.c
+DRIVERSRC += $(DRIVERPATH)/usbhost/usbh.c
+DRIVERSRC += $(DRIVERPATH)/usbhost/usbh/usbh_debug.c
+DRIVERSRC += $(DRIVERPATH)/usbhost/usbh/usbh_desciter.c
+DRIVERSRC += $(DRIVERPATH)/usbhost/usbh/usbh_hub.c
+DRIVERSRC += $(DRIVERPATH)/usbhost/usbh/usbh_msd.c
+DRIVERSRC += $(DRIVERPATH)/usbhost/usbh/usbh_ftdi.c
+DRIVERSRC += $(DRIVERPATH)/usbhost/usbh/usbh_uvc.c
 
 DRIVERINC = $(DRIVERPATH)
 #DRIVERINC += $(DRIVERPATH)/dma2d
@@ -17,6 +28,8 @@ DRIVERINC += $(DRIVERPATH)/fmc
 DRIVERINC += $(DRIVERPATH)/qei
 DRIVERINC += $(DRIVERPATH)/sdram
 DRIVERINC += $(DRIVERPATH)/usb
+DRIVERINC += $(DRIVERPATH)/crc
+DRIVERINC += $(DRIVERPATH)/usbhost
 
 # UGFX LLD path
 GFXINC += ./drivers/gdisp_lld
