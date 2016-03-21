@@ -1278,6 +1278,9 @@ static const usbh_classdriverinfo_t *usbh_classdrivers_lookup[] = {
 #if DRIVER_USBH_USE_HUB
 	&usbhhubClassDriverInfo
 #endif
+#if DRIVER_USBH_USE_DS4
+  &usbhds4ClassDriverInfo
+#endif
 };
 
 static bool _classdriver_load(usbh_device_t *dev, uint8_t class,

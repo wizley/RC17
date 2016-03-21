@@ -40,6 +40,10 @@
 #define DRIVER_USBH_USE_UVC FALSE
 #endif
 
+#ifndef DRIVER_USBH_USE_DS4
+#define DRIVER_USBH_USE_DS4 FALSE
+#endif
+
 #if DRIVER_USE_USBH
 
 #include "osal.h"

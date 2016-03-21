@@ -35,6 +35,9 @@ extern const usbh_classdriverinfo_t usbhmsdClassDriverInfo;
 #if DRIVER_USBH_USE_UVC
 extern const usbh_classdriverinfo_t usbhuvcClassDriverInfo;
 #endif
+#if DRIVER_USBH_USE_DS4
+extern const usbh_classdriverinfo_t usbhds4ClassDriverInfo;
+#endif
 #if DRIVER_USBH_USE_HUB
 extern const usbh_classdriverinfo_t usbhhubClassDriverInfo;
 void _usbhub_port_object_init(usbh_port_t *port, USBHDriver *usbh,

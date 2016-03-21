@@ -19,6 +19,7 @@ DRIVERSRC += $(DRIVERPATH)/usbhost/usbh/usbh_hub.c
 DRIVERSRC += $(DRIVERPATH)/usbhost/usbh/usbh_msd.c
 DRIVERSRC += $(DRIVERPATH)/usbhost/usbh/usbh_ftdi.c
 DRIVERSRC += $(DRIVERPATH)/usbhost/usbh/usbh_uvc.c
+DRIVERSRC += $(DRIVERPATH)/usbhost/usbh/usbh_ds4.c
 
 DRIVERINC = $(DRIVERPATH)
 #DRIVERINC += $(DRIVERPATH)/dma2d

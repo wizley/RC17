@@ -80,7 +80,7 @@
 #define DRIVER_USBHMSD_MAX_LUNS              1
 #define DRIVER_USBHMSD_MAX_INSTANCES         1
 
-/* IAD */
+/* FTDI */
 #define DRIVER_USBH_USE_FTDI                 FALSE
 
 #define DRIVER_USBHFTDI_MAX_PORTS            1
@@ -103,6 +103,9 @@
 #define DRIVER_USBHUVC_WORK_RAM_SIZE         20000
 #define DRIVER_USBHUVC_STATUS_PACKETS_COUNT  10
 
+/* DS4 */
+#define DRIVER_USBH_USE_DS4                  TRUE
+#define DRIVER_USBHDS4_MAX_INSTANCES         1
 
 /* HUB */
 #define DRIVER_USBH_USE_HUB                FALSE
