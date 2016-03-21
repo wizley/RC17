@@ -6,12 +6,12 @@
  */
 #include "ch.h"
 #include "drivers.h"
-#include "usbcfg.h"
+//#include "usbcfg.h"
 #include "usb_shell.h"
 #include "shell.h"
 #include "chprintf.h"
 
-#include "ps4.h"
+//#include "ps4.h"
 
 #define SHELL_WA_SIZE   THD_WORKING_AREA_SIZE(2048)
 
@@ -266,6 +266,28 @@ void cmd_debug(BaseSequentialStream *chp, int argc, char *argv[]) {
 
 }
 
+#include "usbh/dev/ds4.h"
+
+void cmd_ds4(BaseSequentialStream *chp, int argc, char *argv[]) {
+  (void)argv;
+  (void)argc;
+
+  DS4_status_t data;
+
+  USBHDS4Driver *const ds4p = &USBHDS4[0];
+  usbhds4Start(ds4p);
+
+  while (chnGetTimeout((BaseChannel *)chp, TIME_IMMEDIATE) == Q_TIMEOUT) {
+    if(DS4_ReadTimeOut(ds4p, &data, MS2ST(1000)))
+      chprintf(chp, "%d %d\r\n", data.left_hat_x, data.left_hat_y);
+    else
+      chprintf(chp, "RIP\r\n");
+    chThdSleepMilliseconds(100);
+  }
+  chprintf(chp, "\r\n\nstopped\r\n");
+
+}
+
 static const ShellCommand commands[] = {
   {"write", cmd_write},
   {"check", cmd_check},
@@ -273,12 +295,13 @@ static const ShellCommand commands[] = {
   {"selfrefresh", cmd_selfrefresh},
   {"normal", cmd_normal},
   {"debug", cmd_debug},
-  {"ps4", cmd_ps4},
+  //{"ps4", cmd_ps4},
+  {"ds4", cmd_ds4},
   {NULL, NULL}
 };
 
 static const ShellConfig shell_cfg1 = {
-  (BaseSequentialStream *)&SDU1,
+  (BaseSequentialStream *)&SD2,
   commands
 };
 
@@ -287,11 +310,12 @@ void usb_shell_init(void){
   /*
    * Initializes a serial-over-USB CDC driver.
    */
-  sduObjectInit(&SDU1);
+//  sduObjectInit(&SDU1);
 }
 
 void usb_shell_start(void){
-  sduStart(&SDU1, &serusbcfg);
+//  sduStart(&SDU1, &serusbcfg);
+  sdStart(&SD2, NULL);
 }
 
 void usb_shell_create(void){
@@ -307,5 +331,6 @@ void usb_shell_wait(void){
 }
 
 bool usb_is_active(void){
-  return SDU1.config->usbp->state == USB_ACTIVE;
+//  return SDU1.config->usbp->state == USB_ACTIVE;
+  return true;
 }

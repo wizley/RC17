@@ -2,7 +2,7 @@
 #include "hal.h"
 #include "drivers.h"
 #include "gfx.h"
-#include "usbcfg.h"
+//#include "usbcfg.h"
 #include "usb_shell.h"
 #include "app.h"
 
@@ -47,6 +47,46 @@ static THD_FUNCTION(Thread2, arg) {
     chThdSleepMilliseconds(333);
     palSetPad(GPIOC, GPIOC_LED_B);
     chThdSleepMilliseconds(800);
+  }
+}
+
+
+static THD_WORKING_AREA(waUSBHOST, 1024);
+static THD_FUNCTION(USBHOST, arg) {
+
+  (void)arg;
+  chRegSetThreadName("USB Host Thread");
+  while (TRUE) {
+    usbhMainLoop(&USBHD2);
+    chThdSleepMilliseconds(100);
+  }
+}
+
+#include "usbh/dev/ds4.h"
+#include "chprintf.h"
+
+static THD_WORKING_AREA(waDS4, 1024);
+static THD_FUNCTION(DS4, arg) {
+
+  (void)arg;
+  chRegSetThreadName("DS4 Thread");
+
+  DS4_status_t data;
+
+  USBHDS4Driver *const ds4p = &USBHDS4[0];
+
+  while (ds4p->state != USBHDS4_STATE_ACTIVE) {
+    chThdSleepMilliseconds(100);
+  }
+
+  usbhds4Start(ds4p);
+
+  while (TRUE) {
+    if(DS4_ReadTimeOut(ds4p, &data, MS2ST(1000)))
+      chprintf((BaseSequentialStream *)&SD2, "%5d %5d\r", data.left_hat_x, data.left_hat_y);
+    else
+      chprintf((BaseSequentialStream *)&SD2, "RIP\r");
+    chThdSleepMilliseconds(50);
   }
 }
 
@@ -119,17 +159,24 @@ int main(void) {
    * Note, a delay is inserted in order to not have to disconnect the cable
    * after a reset.
    */
-  usbDisconnectBus(serusbcfg.usbp);
-  chThdSleepMilliseconds(1000);
-  usbStart(serusbcfg.usbp, &usbcfg);
-  usbConnectBus(serusbcfg.usbp);
+//  usbDisconnectBus(serusbcfg.usbp);
+//  chThdSleepMilliseconds(1000);
+//  usbStart(serusbcfg.usbp, &usbcfg);
+//  usbConnectBus(serusbcfg.usbp);
+  usbhStart(&USBHD2);
+
+  chThdCreateStatic(waUSBHOST, sizeof(waUSBHOST), NORMALPRIO,
+                      USBHOST, NULL);
+
+  chThdCreateStatic(waDS4, sizeof(waDS4), NORMALPRIO,
+                        DS4, NULL);
 
   /*
    * Normal main() thread activity, in this demo it just performs
    * a shell respawn upon its termination.
    */
   while (TRUE) {
-    if (SDU1.config->usbp->state == USB_ACTIVE) {
+    if (usb_is_active()) {
       usb_shell_create();
       usb_shell_wait();               /* Waiting termination.             */
     }

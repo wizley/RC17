@@ -7,7 +7,7 @@ DRIVERSRC += $(DRIVERPATH)/fmc/stm32f4xx_fmc.c
 DRIVERSRC += $(DRIVERPATH)/qei/qei_lld.c
 DRIVERSRC += $(DRIVERPATH)/qei/qei.c
 DRIVERSRC += $(DRIVERPATH)/sdram/sdram_driver.c
-DRIVERSRC += $(DRIVERPATH)/usb/usbcfg.c
+#DRIVERSRC += $(DRIVERPATH)/usb/usbcfg.c
 DRIVERSRC += $(DRIVERPATH)/crc/crc_lld.c
 DRIVERSRC += $(DRIVERPATH)/crc/crcsw.c
 DRIVERSRC += $(DRIVERPATH)/crc/crc.c
@@ -28,7 +28,7 @@ DRIVERINC += $(DRIVERPATH)/fmc
 #DRIVERINC += $(DRIVERPATH)/ltdc
 DRIVERINC += $(DRIVERPATH)/qei
 DRIVERINC += $(DRIVERPATH)/sdram
-DRIVERINC += $(DRIVERPATH)/usb
+#DRIVERINC += $(DRIVERPATH)/usb
 DRIVERINC += $(DRIVERPATH)/crc
 DRIVERINC += $(DRIVERPATH)/usbhost
 

@@ -136,6 +136,7 @@
 #define GINPUT_NEED_TOGGLE  FALSE
 #define GINPUT_NEED_MOUSE TRUE
 #define GINPUT_TOUCH_USER_CALIBRATION_LOAD FALSE
+#define GINPUT_TOUCH_NOCALIBRATE_GUI       TRUE
 
 
 /********************************************************/

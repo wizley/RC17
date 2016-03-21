@@ -114,8 +114,8 @@
 
 
 /* debug */
-#define USBH_DEBUG_ENABLE               FALSE
-#define USBH_DEBUG_USBHD                USBHD1
+#define USBH_DEBUG_ENABLE               TRUE
+#define USBH_DEBUG_USBHD                USBHD2
 #define USBH_DEBUG_SD                   SD2
 #define USBH_DEBUG_BUFFER               25000
 
@@ -149,6 +149,11 @@
 #define USBHFTDI_DEBUG_ENABLE_WARNINGS  TRUE
 #define USBHFTDI_DEBUG_ENABLE_ERRORS    TRUE
 
+#define USBHDS4_DEBUG_ENABLE_TRACE     FALSE
+#define USBHDS4_DEBUG_ENABLE_INFO      TRUE
+#define USBHDS4_DEBUG_ENABLE_WARNINGS  TRUE
+#define USBHDS4_DEBUG_ENABLE_ERRORS    TRUE
+
 /*
  * USBH driver system settings.
  */
@@ -156,12 +161,12 @@
 #define STM32_OTG1_CHANNELS_NUMBER    8
 #define STM32_OTG2_CHANNELS_NUMBER    12
 
-#define STM32_USBH_USE_OTG1         TRUE
+#define STM32_USBH_USE_OTG1         FALSE
 #define STM32_OTG1_RXFIFO_SIZE      1024
 #define STM32_OTG1_PTXFIFO_SIZE     128
 #define STM32_OTG1_NPTXFIFO_SIZE    128
 
-#define STM32_USBH_USE_OTG2         FALSE
+#define STM32_USBH_USE_OTG2         TRUE
 #define STM32_OTG2_RXFIFO_SIZE      2048
 #define STM32_OTG2_PTXFIFO_SIZE     1024
 #define STM32_OTG2_NPTXFIFO_SIZE    1024
