@@ -279,7 +279,11 @@ void cmd_ds4(BaseSequentialStream *chp, int argc, char *argv[]) {
 
   while (chnGetTimeout((BaseChannel *)chp, TIME_IMMEDIATE) == Q_TIMEOUT) {
     if(DS4_ReadTimeOut(ds4p, &data, MS2ST(1000)))
-      chprintf(chp, "%d %d\r\n", data.left_hat_x, data.left_hat_y);
+      chprintf((BaseSequentialStream *) &SD2, "%5d %5d %5d\r",
+                  data.hat_left_x,
+                  data.r2_trigger,
+                  data.cross
+                  );
     else
       chprintf(chp, "RIP\r\n");
     chThdSleepMilliseconds(100);

@@ -18,6 +18,7 @@
 #include "hal.h"
 #include "usbh.h"
 #include "usbh/internal.h"
+#include "string.h"
 
 #if DRIVER_USBH_USE_HUB
 

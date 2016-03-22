@@ -192,7 +192,7 @@ static usbh_urbstatus_t _getreportdescriptor(USBHDS4Driver *ds4p, uint16_t lengt
 }
 
 static void _submitOutI(USBHDS4Driver *ds4p, uint32_t len) {
-  udbgf("FTDI: Submit OUT %d", len);
+  udbgf("DS4: Submit OUT %d", len);
   ds4p->oq_urb.requestedLength = len;
   usbhURBObjectResetI(&ds4p->oq_urb);
   usbhURBSubmitI(&ds4p->oq_urb);
@@ -234,8 +234,6 @@ static void _in_cb(usbh_urb_t *urb) {
       udbgf("DS4: URB IN data len=%d, Report ID=%02x",
           urb->actualLength,
           ((uint8_t *)urb->buff)[0]);
-//      ds4p->iq_ptr = ds4p->iq_buff + 2;
-//      ds4p->iq_counter = 0;//urb->actualLength - 2;
       ds4p->iq_counter = urb->actualLength;
       chThdDequeueNextI(&ds4p->iq_waiting, Q_OK);
       return;
@@ -259,14 +257,14 @@ static void _in_cb(usbh_urb_t *urb) {
 static void _vt(void *p) {
   USBHDS4Driver *const ds4p = (USBHDS4Driver *)p;
   chSysLockFromISR();
-  uint32_t len = ds4p->oq_ptr - ds4p->oq_buff;
-  if (len && !usbhURBIsBusy(&ds4p->oq_urb)) {
-    _submitOutI(ds4p, len);
-  }
+//  uint32_t len = ds4p->oq_ptr - ds4p->oq_buff;
+//  if (len && !usbhURBIsBusy(&ds4p->oq_urb)) {
+//    _submitOutI(ds4p, len);
+//  }
   if ((ds4p->iq_counter == 0) && !usbhURBIsBusy(&ds4p->iq_urb)) {
     _submitInI(ds4p);
   }
-  chVTSetI(&ds4p->vt, MS2ST(3), _vt, ds4p);
+  chVTSetI(&ds4p->vt, MS2ST(2), _vt, ds4p);
   chSysUnlockFromISR();
 }
 
@@ -291,13 +289,9 @@ void usbhds4Start(USBHDS4Driver *ds4p){
     uerr("Set Idle Error");
   }
 
-//  chThdSleepMilliseconds(20);
-
   // Get report descriptor
   USBH_DEFINE_BUFFER(uint8_t, buff[483]);
-//  usbhEPClose(&ds4p->dev->ctrl);
-//  usbhEPOpen(&ds4p->dev->ctrl);
-  stat = _getreportdescriptor(ds4p, 467, buff);
+  stat = _getreportdescriptor(ds4p, 483, buff);
   if (stat == USBH_URBSTATUS_OK) {
   } else if (stat == USBH_URBSTATUS_STALL) {
     uwarn("GetHIDReportDescriptor Stall");
@@ -322,7 +316,7 @@ void usbhds4Start(USBHDS4Driver *ds4p){
   osalSysUnlock();
 
   chVTObjectInit(&ds4p->vt);
-  chVTSet(&ds4p->vt, MS2ST(3), _vt, ds4p);
+  chVTSet(&ds4p->vt, MS2ST(2), _vt, ds4p);
 
   ds4p->state = USBHDS4_STATE_READY;
 
@@ -347,9 +341,6 @@ void usbhds4Stop(USBHDS4Driver *ds4p){
   osalSysUnlock();
 }
 
-/*===========================================================================*/
-/* Block driver data/functions								 		 	 	 */
-/*===========================================================================*/
 bool DS4_ReadTimeOut(USBHDS4Driver *ds4p, DS4_status_t *data, systime_t timeout) {
 
   chSysLock();
@@ -368,8 +359,7 @@ bool DS4_ReadTimeOut(USBHDS4Driver *ds4p, DS4_status_t *data, systime_t timeout)
   }
 
   if ((ds4p->iq_counter == 64) && (ds4p->iq_ptr[0] == 0x01)) {
-    data->left_hat_x = ds4p->iq_ptr[1];
-    data->left_hat_y = ds4p->iq_ptr[2];
+    memcpy(data, &(ds4p->iq_ptr[1]), sizeof(DS4_status_t));
 
     ds4p->iq_counter = 0;
     _submitInI(ds4p);
@@ -381,6 +371,44 @@ bool DS4_ReadTimeOut(USBHDS4Driver *ds4p, DS4_status_t *data, systime_t timeout)
     return false;
   }
 
+}
+
+bool DS4_WriteTimeOut(USBHDS4Driver *ds4p, DS4_command_t *data, systime_t timeout){
+//  chSysLock();
+  if (ds4p->state != USBHDS4_STATE_READY) {
+//    chSysUnlock();
+    return false;
+  }
+
+//  while (usbhURBIsBusy(&ds4p->oq_urb)) {
+//    msg_t msg = chThdEnqueueTimeoutS(&ds4p->oq_waiting, timeout);
+//    if (msg < Q_OK) {
+//      chSysUnlock();
+//      return false;
+//    }
+//  }
+
+  ds4p->oq_buff[0] = 0x05;
+  ds4p->oq_buff[1] = 0xFF;
+  memcpy(&(ds4p->oq_buff[4]), data, 7);
+  ds4p->oq_counter = 0;
+  ds4p->oq_ptr = ds4p->oq_buff + 64;
+//  _submitOutI(ds4p, 64);
+  udbgf("DS4: Submit OUT %d", 64);
+  ds4p->oq_urb.requestedLength = 64;
+//  usbhURBObjectResetI(&ds4p->oq_urb);
+  osalSysLock();
+  usbhURBSubmitAndWaitS(&ds4p->oq_urb, timeout);
+  osalSysUnlock();
+//  chSchRescheduleS();
+//  chSysUnlock();
+  return true;
+}
+
+void usbhds4ObjectInit(USBHDS4Driver *ds4p) {
+  osalDbgCheck(ds4p != NULL);
+  memset(ds4p, 0, sizeof(*ds4p));
+  ds4p->info = &usbhds4ClassDriverInfo;
 }
 
 #endif

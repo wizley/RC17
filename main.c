@@ -72,21 +72,39 @@ static THD_FUNCTION(DS4, arg) {
   chRegSetThreadName("DS4 Thread");
 
   DS4_status_t data;
+  DS4_command_t cmd;
+  cmd.led_r = 255;
 
   USBHDS4Driver *const ds4p = &USBHDS4[0];
 
-  while (ds4p->state != USBHDS4_STATE_ACTIVE) {
-    chThdSleepMilliseconds(100);
-  }
+  chprintf((BaseSequentialStream *) &SD2, "Waiting for connection...\r\n");
 
-  usbhds4Start(ds4p);
+//  chThdSleepMilliseconds(6000);
 
   while (TRUE) {
-    if(DS4_ReadTimeOut(ds4p, &data, MS2ST(1000)))
-      chprintf((BaseSequentialStream *)&SD2, "%5d %5d\r", data.left_hat_x, data.left_hat_y);
-    else
-      chprintf((BaseSequentialStream *)&SD2, "RIP\r");
-    chThdSleepMilliseconds(50);
+    switch (ds4p->state) {
+    case USBHDS4_STATE_UNINIT:
+    case USBHDS4_STATE_STOP:
+      chprintf((BaseSequentialStream *) &SD2,
+          "DS4 Disconnected or Stopped.\r\n");
+      chThdSleepMilliseconds(500);
+      break;
+    case USBHDS4_STATE_ACTIVE:
+      chprintf((BaseSequentialStream *) &SD2, "DS4 started.\r\n");
+      usbhds4Start(ds4p);
+      chThdSleepMilliseconds(500);
+//      DS4_WriteTimeOut(ds4p, &cmd, MS2ST(10));
+    case USBHDS4_STATE_READY:
+      if (DS4_ReadTimeOut(ds4p, &data, MS2ST(1000)))
+        chprintf((BaseSequentialStream *) &SD2, "%5d %5d %5d\r",
+            data.hat_left_x,
+            data.r2_trigger,
+            data.cross
+            );
+      else
+        chprintf((BaseSequentialStream *) &SD2, "RIP\r");
+      chThdSleepMilliseconds(10);
+    }
   }
 }
 
@@ -168,6 +186,7 @@ int main(void) {
   chThdCreateStatic(waUSBHOST, sizeof(waUSBHOST), NORMALPRIO,
                       USBHOST, NULL);
 
+  usbhds4ObjectInit(&USBHDS4[0]);
   chThdCreateStatic(waDS4, sizeof(waDS4), NORMALPRIO,
                         DS4, NULL);
 

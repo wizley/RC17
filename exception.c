@@ -66,6 +66,30 @@ void HardFault_Handler(void) {
     (void)isFaultOnUnstacking;
     (void)isFaultOnStacking;
     (void)isFaultAddressValid;
+    // Configurable Fault Status Register
+    volatile unsigned long _CFSR = (*((volatile unsigned long *) (0xE000ED28)));
+    volatile unsigned long _HFSR = (*((volatile unsigned long *) (0xE000ED2C)));
+    volatile unsigned long _DFSR = (*((volatile unsigned long *) (0xE000ED30)));
+    volatile unsigned long _AFSR = (*((volatile unsigned long *) (0xE000ED3C)));
+    volatile unsigned long _BFAR = (*((volatile unsigned long *) (0xE000ED38)));
+    volatile unsigned long _MMAR = (*((volatile unsigned long *) (0xE000ED34)));
+    volatile unsigned long _SCB_SHCSR = SCB->SHCSR;
+    // Consists of MMSR, BFSR and UFSR
+    (void) _CFSR;
+    // Hard Fault Status Register
+    (void) _HFSR;
+    // Debug Fault Status Register
+    (void) _DFSR;
+    // Auxiliary Fault Status Register
+    (void) _AFSR;
+    // Read the Fault Address Registers. These may not contain valid values.
+    // Check BFARVALID/MMARVALID to see if they are valid values
+    // MemManage Fault Address Register
+    (void) _MMAR;
+    // Bus Fault Address Register
+    (void) _BFAR;
+    /* When the following line is hit, the variables contain the register values. */
+    (void) _SCB_SHCSR;
     //Cause debugger to stop. Ignored if no debugger is attached
     bkpt();
     NVIC_SystemReset();

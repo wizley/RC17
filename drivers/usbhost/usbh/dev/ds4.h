@@ -60,51 +60,94 @@ typedef struct {
 
 } USBHDS4Driver;
 
-typedef struct __attribute__((packed)){
-  uint8_t left_hat_x;
+typedef enum{
+  DPAD_UP = 0x0,
+  DPAD_UP_RIGHT = 0x1,
+  DPAD_RIGHT = 0x2,
+  DPAD_RIGHT_DOWN = 0x3,
+  DPAD_DOWN = 0x4,
+  DPAD_DOWN_LEFT = 0x5,
+  DPAD_LEFT = 0x6,
+  DPAD_LEFT_UP = 0x7,
+  DPAD_OFF = 0x8
+}ds4_dpad_state_e;
 
-  uint8_t left_hat_y;
+typedef struct __attribute__((packed)) {
+  uint8_t padding;
+  struct {
+    uint8_t counter :7;
+    uint8_t is_touching :1;
+    uint16_t x :12;
+    uint16_t y :12;
+  }__attribute__((packed)) finger[2];
+} ds4_tpad_info_t;
 
-  uint8_t right_hat_x;
+typedef struct __attribute__((packed)) {
+  uint8_t hat_left_x;
 
-  uint8_t right_hat_y;
+  uint8_t hat_left_y;
 
-  uint8_t l2;
+  uint8_t hat_right_x;
 
-  uint8_t r2;
+  uint8_t hat_right_y;
 
-  uint8_t ps:1;
-  uint8_t share:1;
-  uint8_t options:1;
-  uint8_t touchpad:1;
-  uint8_t triangle:1;
-  uint8_t circle:1;
-  uint8_t cross:1;
-  uint8_t square:1;
+  uint8_t dpad_code :4;
+  uint8_t square :1;
+  uint8_t cross :1;
+  uint8_t circle :1;
+  uint8_t triangle :1;
 
-  uint8_t left:1;
-  uint8_t right:1;
-  uint8_t up:1;
-  uint8_t down:1;
-  uint8_t l3:1;
-  uint8_t r3:1;
-  uint8_t l1:1;
-  uint8_t r1:1;
+  uint8_t l1 :1;
+  uint8_t r1 :1;
+  uint8_t l2 :1;
+  uint8_t r2 :1;
+  uint8_t share :1;
+  uint8_t options :1;
+  uint8_t l3 :1;
+  uint8_t r3 :1;
 
-  uint8_t finger0:1;
-  uint8_t finger1:1;
-  uint8_t reserved1:6;
+  uint8_t ps :1;
+  uint8_t tpad_click :1;
+  uint8_t reportCounter :6;
 
-  float pitch;
-  float roll;
+  uint8_t l2_trigger;
+
+  uint8_t r2_trigger;
+
+  uint8_t padding1[2];
 
   uint8_t battery;
 
-  uint16_t finger0_x;
-  uint16_t finger0_y;
-  uint16_t finger1_x;
-  uint16_t finger1_y;
-}DS4_status_t;
+  int16_t gyroY;
+
+  int16_t gyroZ;
+
+  int16_t gyroX;
+
+  int16_t accX;
+
+  int16_t accZ;
+
+  int16_t accY;
+
+  uint8_t padding2[5];
+
+  uint8_t status;
+
+  uint8_t padding3[3];
+
+  ds4_tpad_info_t tpad_info[3];
+} DS4_status_t;
+
+typedef struct __attribute__((packed)){
+  uint8_t rumble_small;
+  uint8_t rumble_big;
+  uint8_t led_r;
+  uint8_t led_g;
+  uint8_t led_b;
+  uint8_t flash_on;
+  uint8_t flash_off;
+}DS4_command_t;
 
 /*===========================================================================*/
 /* Driver macros.                                                            */
@@ -119,10 +162,11 @@ extern USBHDS4Driver USBHDS4[DRIVER_USBHDS4_MAX_INSTANCES];
 #ifdef __cplusplus
 extern "C" {
 #endif
-//  void usbhftdipObjectInit(USBHFTDIPortDriver *ftdipp);
+  void usbhds4ObjectInit(USBHDS4Driver *ds4p);
   void usbhds4Start(USBHDS4Driver *ds4p);
   void usbhds4Stop(USBHDS4Driver *ds4p);
   bool DS4_ReadTimeOut(USBHDS4Driver *ds4p, DS4_status_t *data, systime_t timeout);
+  bool DS4_WriteTimeOut(USBHDS4Driver *ds4p, DS4_command_t *data, systime_t timeout);
 #ifdef __cplusplus
 }
 #endif
