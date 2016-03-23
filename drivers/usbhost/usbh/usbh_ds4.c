@@ -203,7 +203,7 @@ static void _out_cb(usbh_urb_t *urb) {
   switch (urb->status) {
   case USBH_URBSTATUS_OK:
     ds4p->oq_ptr = ds4p->oq_buff;
-    ds4p->oq_counter = 64;
+    ds4p->oq_counter = 32;
     chThdDequeueNextI(&ds4p->oq_waiting, Q_OK);
     return;
   case USBH_URBSTATUS_DISCONNECTED:
@@ -302,7 +302,7 @@ void usbhds4Start(USBHDS4Driver *ds4p){
   /* open the INT IN/OUT endpoints */
   usbhURBObjectInit(&ds4p->oq_urb, &ds4p->epout, _out_cb, ds4p, ds4p->oq_buff, 0);
   chThdQueueObjectInit(&ds4p->oq_waiting);
-  ds4p->oq_counter = 64;
+  ds4p->oq_counter = 32;
   ds4p->oq_ptr = ds4p->oq_buff;
   usbhEPOpen(&ds4p->epout);
 
@@ -374,34 +374,28 @@ bool DS4_ReadTimeOut(USBHDS4Driver *ds4p, DS4_status_t *data, systime_t timeout)
 }
 
 bool DS4_WriteTimeOut(USBHDS4Driver *ds4p, DS4_command_t *data, systime_t timeout){
-//  chSysLock();
-  if (ds4p->state != USBHDS4_STATE_READY) {
-//    chSysUnlock();
-    return false;
-  }
-
-//  while (usbhURBIsBusy(&ds4p->oq_urb)) {
-//    msg_t msg = chThdEnqueueTimeoutS(&ds4p->oq_waiting, timeout);
-//    if (msg < Q_OK) {
-//      chSysUnlock();
-//      return false;
-//    }
-//  }
+  chSysLock();
 
   ds4p->oq_buff[0] = 0x05;
   ds4p->oq_buff[1] = 0xFF;
   memcpy(&(ds4p->oq_buff[4]), data, 7);
+
+  if (ds4p->state != USBHDS4_STATE_READY) {
+    chSysUnlock();
+    return false;
+  }
+  while (usbhURBIsBusy(&ds4p->oq_urb)) {
+    if (chThdEnqueueTimeoutS(&ds4p->oq_waiting, timeout) != Q_OK) {
+      chSysUnlock();
+      return false;
+    }
+  }
+
   ds4p->oq_counter = 0;
-  ds4p->oq_ptr = ds4p->oq_buff + 64;
-//  _submitOutI(ds4p, 64);
-  udbgf("DS4: Submit OUT %d", 64);
-  ds4p->oq_urb.requestedLength = 64;
-//  usbhURBObjectResetI(&ds4p->oq_urb);
-  osalSysLock();
-  usbhURBSubmitAndWaitS(&ds4p->oq_urb, timeout);
-  osalSysUnlock();
-//  chSchRescheduleS();
-//  chSysUnlock();
+
+  _submitOutI(ds4p, 32);
+
+  chSysUnlock();
   return true;
 }
 

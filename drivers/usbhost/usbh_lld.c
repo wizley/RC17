@@ -1068,9 +1068,16 @@ static inline void _nptxfe_int(USBHDriver *host) {
 }
 
 static inline void _ptxfe_int(USBHDriver *host) {
-	//TODO: implement
-	(void)host;
-	uinfo("PTXFE");
+	//INT only
+  uint32_t rem;
+  stm32_otg_t *const otg = host->otg;
+
+  rem = _write_packet(&host->ep_active_lists[USBH_EPTYPE_INT],
+      otg->HPTXSTS & HPTXSTS_PTXFSAVL_MASK);
+
+  if (!rem)
+    host->otg->GINTMSK &= ~GINTMSK_PTXFEM;
+//	uinfo("PTXFE");
 }
 
 static inline void _discint_int(USBHDriver *host) {

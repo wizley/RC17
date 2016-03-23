@@ -72,7 +72,7 @@ static THD_FUNCTION(DS4, arg) {
   chRegSetThreadName("DS4 Thread");
 
   DS4_status_t data;
-  DS4_command_t cmd;
+  DS4_command_t cmd = {0};
   cmd.led_r = 255;
 
   USBHDS4Driver *const ds4p = &USBHDS4[0];
@@ -93,9 +93,9 @@ static THD_FUNCTION(DS4, arg) {
       chprintf((BaseSequentialStream *) &SD2, "DS4 started.\r\n");
       usbhds4Start(ds4p);
       chThdSleepMilliseconds(500);
-//      DS4_WriteTimeOut(ds4p, &cmd, MS2ST(10));
+      //DS4_WriteTimeOut(ds4p, &cmd, MS2ST(10));
     case USBHDS4_STATE_READY:
-      if (DS4_ReadTimeOut(ds4p, &data, MS2ST(1000)))
+      if (DS4_ReadTimeOut(ds4p, &data, MS2ST(50)))
         chprintf((BaseSequentialStream *) &SD2, "%5d %5d %5d\r",
             data.hat_left_x,
             data.r2_trigger,
@@ -103,6 +103,10 @@ static THD_FUNCTION(DS4, arg) {
             );
       else
         chprintf((BaseSequentialStream *) &SD2, "RIP\r");
+      cmd.led_r = data.l2_trigger;
+      cmd.led_g = data.r2_trigger;
+      if(data.cross)
+        DS4_WriteTimeOut(ds4p, &cmd, MS2ST(10));
       chThdSleepMilliseconds(10);
     }
   }
