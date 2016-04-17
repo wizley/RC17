@@ -45,12 +45,6 @@
 #define STM32_QEI_USE_TIM8              FALSE
 
 /*
- * EEPROM driver system settings.
- */
-#define EEPROM_DRV_USE_25XX             TRUE
-#define EEPROM_DRV_USE_24XX             FALSE
-
-/*
  * CRC driver system settings.
  */
 #define STM32_CRC_USE_CRC1              TRUE
@@ -114,7 +108,7 @@
 
 
 /* debug */
-#define USBH_DEBUG_ENABLE               TRUE
+#define USBH_DEBUG_ENABLE               FALSE
 #define USBH_DEBUG_USBHD                USBHD2
 #define USBH_DEBUG_SD                   SD2
 #define USBH_DEBUG_BUFFER               25000

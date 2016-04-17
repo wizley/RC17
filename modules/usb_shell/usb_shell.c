@@ -292,6 +292,60 @@ void cmd_ds4(BaseSequentialStream *chp, int argc, char *argv[]) {
 
 }
 
+#define _24LC02_SIZE_      256
+//#define _24LC02_PAGESIZE_  8
+#define _24LC024H_PAGESIZE_  16
+
+void cmd_eeprom(BaseSequentialStream *chp, int argc, char *argv[]) {
+  (void)argv;
+  (void)argc;
+
+  I2CEepromFileStream file;
+
+  static uint8_t buf[10] = {0};
+
+  static I2CEepromFileConfig eepcfg = {
+    0,
+    _24LC02_SIZE_,
+    _24LC02_SIZE_,
+    _24LC024H_PAGESIZE_,
+    MS2ST(5),
+    &I2CD1,
+    0b1010000,
+    buf
+  };
+
+  I2CEepromFileOpen(&file, &eepcfg, EepromFindDevice("24XX"));
+
+  eepfs_lseek(&file, 0);
+
+  /* write test pattern */
+  chprintf(chp, "Write test pattern to eeprom...\r\n");
+  for(uint16_t i = 0; i < _24LC02_SIZE_; i++){
+    if(EepromWriteByte((EepromFileStream *)&file, i) != 1){
+      chprintf(chp, "WRITE FAILED\r\n");
+    }
+  }
+
+  chThdSleepMilliseconds(100);
+
+  eepfs_lseek(&file, 0);
+
+  /* print stored data value */
+  chprintf(chp, "\r\neeprom data\r\n");
+  chprintf(chp, "ADDR 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F");
+  for (uint16_t i = 0; i < _24LC02_SIZE_; i++) {
+    if (i % 16 == 0)
+      chprintf(chp, "\r\n  %02X ", i);
+    uint8_t buf = EepromReadByte((EepromFileStream *) &file);
+    chprintf(chp, "%02X ", buf);
+  }
+
+  eepfs_close((EepromFileStream *)&file);
+
+  chprintf(chp, "\r\n");
+}
+
 static const ShellCommand commands[] = {
   {"write", cmd_write},
   {"check", cmd_check},
@@ -301,6 +355,7 @@ static const ShellCommand commands[] = {
   {"debug", cmd_debug},
   //{"ps4", cmd_ps4},
   {"ds4", cmd_ds4},
+  {"eeprom", cmd_eeprom},
   {NULL, NULL}
 };
 

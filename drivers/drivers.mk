@@ -20,6 +20,8 @@ DRIVERSRC += $(DRIVERPATH)/usbhost/usbh/usbh_msd.c
 DRIVERSRC += $(DRIVERPATH)/usbhost/usbh/usbh_ftdi.c
 DRIVERSRC += $(DRIVERPATH)/usbhost/usbh/usbh_uvc.c
 DRIVERSRC += $(DRIVERPATH)/usbhost/usbh/usbh_ds4.c
+DRIVERSRC += $(DRIVERPATH)/eeprom/src/eeprom_driver.c
+DRIVERSRC += $(DRIVERPATH)/eeprom/src/24xx_driver.c
 
 DRIVERINC = $(DRIVERPATH)
 #DRIVERINC += $(DRIVERPATH)/dma2d
@@ -31,6 +33,7 @@ DRIVERINC += $(DRIVERPATH)/sdram
 #DRIVERINC += $(DRIVERPATH)/usb
 DRIVERINC += $(DRIVERPATH)/crc
 DRIVERINC += $(DRIVERPATH)/usbhost
+DRIVERINC += $(DRIVERPATH)/eeprom/inc
 
 # UGFX LLD path
 GFXINC += ./drivers/gdisp_lld

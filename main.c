@@ -74,39 +74,50 @@ static THD_FUNCTION(DS4, arg) {
   DS4_status_t data;
   DS4_command_t cmd = {0};
   cmd.led_r = 255;
+  cmd.led_g = 20;
+  cmd.led_b = 147;
 
   USBHDS4Driver *const ds4p = &USBHDS4[0];
 
-  chprintf((BaseSequentialStream *) &SD2, "Waiting for connection...\r\n");
-
-//  chThdSleepMilliseconds(6000);
+#if USBHDS4_DEBUG_ENABLE_INFO
+  chprintf((BaseSequentialStream *) &USBH_DEBUG_SD, "Waiting for connection...\r\n");
+#endif
 
   while (TRUE) {
     switch (ds4p->state) {
     case USBHDS4_STATE_UNINIT:
     case USBHDS4_STATE_STOP:
-      chprintf((BaseSequentialStream *) &SD2,
+#if USBHDS4_DEBUG_ENABLE_INFO
+      chprintf((BaseSequentialStream *) &USBH_DEBUG_SD,
           "DS4 Disconnected or Stopped.\r\n");
+#endif
       chThdSleepMilliseconds(500);
       break;
     case USBHDS4_STATE_ACTIVE:
-      chprintf((BaseSequentialStream *) &SD2, "DS4 started.\r\n");
+#if USBHDS4_DEBUG_ENABLE_INFO
+      chprintf((BaseSequentialStream *) &USBH_DEBUG_SD, "DS4 started.\r\n");
+#endif
       usbhds4Start(ds4p);
+      chThdSleepMilliseconds(20);
+      DS4_WriteTimeOut(ds4p, &cmd, MS2ST(10));
       chThdSleepMilliseconds(500);
-      //DS4_WriteTimeOut(ds4p, &cmd, MS2ST(10));
+      break;
     case USBHDS4_STATE_READY:
-      if (DS4_ReadTimeOut(ds4p, &data, MS2ST(50)))
-        chprintf((BaseSequentialStream *) &SD2, "%5d %5d %5d\r",
-            data.hat_left_x,
-            data.r2_trigger,
-            data.cross
-            );
-      else
-        chprintf((BaseSequentialStream *) &SD2, "RIP\r");
-      cmd.led_r = data.l2_trigger;
-      cmd.led_g = data.r2_trigger;
-      if(data.cross)
-        DS4_WriteTimeOut(ds4p, &cmd, MS2ST(10));
+      if (DS4_ReadTimeOut(ds4p, &data, MS2ST(50))){
+//        chprintf((BaseSequentialStream *) &USBH_DEBUG_SD, "%5d %5d %5d\r",
+//            data.hat_left_x,
+//            data.r2_trigger,
+//            data.cross
+//            );
+      }else{
+#if USBHDS4_DEBUG_ENABLE_INFO
+        chprintf((BaseSequentialStream *) &USBH_DEBUG_SD, "DS4 Read Timeout\r\n");
+#endif
+      }
+//      cmd.led_r = data.l2_trigger;
+//      cmd.led_g = data.r2_trigger;
+//      if(data.cross)
+//        DS4_WriteTimeOut(ds4p, &cmd, MS2ST(10));
       chThdSleepMilliseconds(10);
     }
   }
@@ -116,6 +127,15 @@ static QEIConfig qeicfg = {
   QEI_MODE_QUADRATURE,
   QEI_BOTH_EDGES,
   QEI_DIRINV_FALSE,
+};
+
+/*
+ * I2C1 config.
+ */
+static const I2CConfig i2cfg1 = {
+    OPMODE_I2C,
+    200000,
+    FAST_DUTY_CYCLE_2,
 };
 
 
@@ -157,6 +177,8 @@ int main(void) {
    */
   qeiStart(&QEID4, &qeicfg);
   qeiEnable(&QEID4);
+
+  i2cStart(&I2CD1, &i2cfg1);
 
   gfxInit();
 

@@ -83,7 +83,7 @@ endif
 #
 
 # Define project name here
-PROJECT = ch
+PROJECT = mb2016
 
 # Imported source files and paths
 CHIBIOS = ../ChibiOS
@@ -102,7 +102,6 @@ include $(CHIBIOS)/os/common/ports/ARMCMx/compilers/GCC/mk/port_v7m.mk
 include $(CHIBIOS)/test/rt/test.mk
 include $(CHIBIOS)/os/hal/lib/streams/streams.mk
 include $(CHIBIOS)/os/various/shell/shell.mk
-#GFXDEFS += -DGFX_USE_OS_CHIBIOS=TRUE
 include $(GFXLIB)/gfx.mk
 include ./drivers/drivers.mk
 include ./modules/modules.mk
