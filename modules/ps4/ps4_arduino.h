@@ -5,8 +5,9 @@
  *      Author: u564
  */
 
-#ifndef MODULES_PS4_PS4_H_
-#define MODULES_PS4_PS4_H_
+#ifndef MODULES_PS4_PS4_ARDUINO_H_
+#define MODULES_PS4_PS4_ARDUINO_H_
+
 
 typedef struct __attribute__((packed)){
   uint8_t left_hat_x;
@@ -56,4 +57,4 @@ typedef struct __attribute__((packed)){
 
 void cmd_ps4(BaseSequentialStream *chp, int argc, char *argv[]);
 
-#endif /* MODULES_PS4_PS4_H_ */
+#endif /* MODULES_PS4_PS4_ARDUINO_H_ */

@@ -159,6 +159,9 @@ static void _ltdc_init(void) {
 	#else
 		#error STM32LTDC driver not implemented for your platform
 	#endif
+		 RCC->PLLSAICFGR = STM32_PLLSAIN | STM32_PLLSAIR | STM32_PLLSAIQ;
+		 //RCC->DCKCFGR = (RCC->DCKCFGR & ~RCC_DCKCFGR_PLLSAIDIVR) | STM32_PLLSAIR_POST;
+		 RCC->CR |= RCC_CR_PLLSAION;
 
 	// Enable the peripheral
 	RCC->APB2ENR |= RCC_APB2ENR_LTDCEN;
@@ -294,6 +297,7 @@ LLDSPEC	color_t gdisp_lld_get_pixel_color(GDisplay* g) {
 			break;
 		}
 	#else
+
 		pos = PIXIL_POS(g, g->g.Width-g->p.x-1, g->g.Height-g->p.y-1);//PIXIL_POS(g, g->p.x, g->p.y);
 	#endif
 
@@ -389,7 +393,7 @@ LLDSPEC	color_t gdisp_lld_get_pixel_color(GDisplay* g) {
 
 	// Uses p.x,p.y  p.cx,p.cy  p.color
 	LLDSPEC void gdisp_lld_fill_area(GDisplay* g)
-	{	
+	{
 		uint32_t pos;
 		uint32_t lineadd;
 		uint32_t shape;

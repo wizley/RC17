@@ -28,6 +28,7 @@
 #include "app_list.h"
 #include "menu_struct.h"
 
+//don't put these here it's confusing
 application motor_test_app = { .name="Motor test", .main=NULL };
 application encoder_test_app = { .name="Encoder test", .main=NULL };
 application servo_test_app = { .name="Servo test", .main=NULL };
@@ -61,6 +62,7 @@ int get_menu_size(const menu_list *menu) {
 menu_list board_testing_menu = {
     "Board Testing",
     {
+        { APP,      NULL,        { .app = &ps4_test_app   } },
         { APP,      NULL,        { .app = &motor_test_app } },
         { APP,      NULL,        { .app = &encoder_test_app } },
         { APP,      NULL,        { .app = &servo_test_app } },

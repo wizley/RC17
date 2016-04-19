@@ -43,9 +43,9 @@ static GFXINLINE void init_board(GDisplay* g) {
 	switch(g->controllerdisplay) {
 	case 0:											// Set up for Display 0
 	  /* PLLSAI activation.*/
-    RCC->PLLSAICFGR = STM32_PLLSAIN | STM32_PLLSAIR | STM32_PLLSAIQ;
-    RCC->DCKCFGR = (RCC->DCKCFGR & ~RCC_DCKCFGR_PLLSAIDIVR) | STM32_PLLSAIR_POST;
-    RCC->CR |= RCC_CR_PLLSAION;
+//    RCC->PLLSAICFGR = STM32_PLLSAIN | STM32_PLLSAIR | STM32_PLLSAIQ;
+//    RCC->DCKCFGR = (RCC->DCKCFGR & ~RCC_DCKCFGR_PLLSAIDIVR) | STM32_PLLSAIR_POST;
+//    RCC->CR |= RCC_CR_PLLSAION;
 		break;
 	}
 }

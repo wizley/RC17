@@ -31,6 +31,7 @@
 
 extern application menu;
 
+extern application ps4_test_app;
 extern application motor_test_app;
 extern application encoder_test_app;
 extern application servo_test_app;

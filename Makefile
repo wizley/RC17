@@ -86,8 +86,8 @@ endif
 PROJECT = mb2016
 
 # Imported source files and paths
-CHIBIOS = ../ChibiOS
-GFXLIB = ../ugfx
+CHIBIOS = ../../ChibiOS
+GFXLIB = ../../ugfx-repository
 # Startup files.
 include $(CHIBIOS)/os/common/startup/ARMCMx/compilers/GCC/mk/startup_stm32f4xx.mk
 # HAL-OSAL files (optional).
