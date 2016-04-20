@@ -2,6 +2,16 @@
 #define _APP_H_
 
 #include "ch.h"
+#include "driving.h"
+#if defined(USE_MOTOR_0) || defined(USE_MOTOR_1) || defined(USE_MOTOR_2) || defined(USE_MOTOR_3) || defined(USE_MOTOR_4) || defined(USE_MOTOR_5) || defined(USE_MOTOR_6) || defined(USE_MOTOR_7)
+    #include "motor.h"
+#endif
+#if defined(USE_ENCODER)
+#include "encoder.h"
+#endif
+#if defined(USE_SERVO)
+#include "servo.h"
+#endif
 
 #define UI_MB_SIZE 10
 
@@ -10,7 +20,8 @@ extern mailbox_t app_mb;
 typedef enum{
   UI_INPUT_BUTTON = 0,
   UI_INPUT_TOUCH,
-  UI_STATUSBAR_TICK
+  UI_STATUSBAR_TICK,
+  UI_UDC_UPDATE
 }ui_evt_type_e;
 
 typedef enum{
@@ -57,11 +68,60 @@ typedef struct{
   uint8_t is_touching;
 }ui_touch_type_t;
 
+
+typedef struct{
+#ifdef USE_MOTOR_0
+  MotorObj M0;
+#endif
+#ifdef USE_MOTOR_1
+  MotorObj M1;
+#endif
+#ifdef USE_MOTOR_2
+
+  MotorObj M2;
+#endif
+#ifdef USE_MOTOR_3
+
+  MotorObj M3;
+#endif
+#ifdef USE_MOTOR_4
+
+  MotorObj M4;
+#endif
+#ifdef USE_MOTOR_5
+
+  MotorObj M5;
+#endif
+#ifdef USE_MOTOR_6
+
+  MotorObj M6;
+#endif
+#ifdef USE_MOTOR_7
+
+  MotorObj M7;
+#endif
+#ifdef USE_ENCODER
+#if ENCODER_NUMBER > 0
+  ENCObj_t E1_2;
+#elif ENCODER_NUMBER > 2
+  ENCObj_t E3_4;
+#endif
+#endif
+#ifdef USE_SERVO
+#if SERVO_NUMBER > 0
+  servo_t S1;
+#elif
+  servo_t S2;
+#endif
+#endif
+}ui_udc_update_type_t;
+
 typedef struct {
   ui_evt_type_e type;
   union{
     ui_button_evt_e button_state;
     ui_status_bar_type_t status_bar_info;
+    ui_udc_update_type_t comm_info;
     ui_touch_type_t touchscreen_info[2];
   }data;
 }ui_event;

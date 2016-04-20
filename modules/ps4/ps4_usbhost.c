@@ -13,7 +13,9 @@ DS4_status_t data;
 DS4_status_t old_data;
 DS4_command_t cmd = {0};
 
-uint8_t DS4_status_change(DS4_status_t a, DS4_status_t b){
+//uint8_t getButtonPress()
+
+uint8_t DS4_status_change(DS4_status_t a, DS4_status_t b){//function to determine generating ui_event to update screen
      if (a.circle == b.circle && a.cross == b.cross && abs(a.hat_left_x - b.hat_left_x) < 2
          && abs(a.hat_left_y - b.hat_left_y)<2 && abs(a.hat_right_x - b.hat_right_x) < 2 &&
          abs(a.hat_right_y - b.hat_right_y) < 2 && a.l1 == b.l1 && a.l2_trigger == b.l2_trigger &&
@@ -82,15 +84,15 @@ static THD_FUNCTION(DS4, arg) {
 //            data.r2_trigger,
 //            data.cross
 //            );
-          if ((data.hat_right_y - old_data.hat_right_y) > 1 && data.hat_right_y == 255){
+          if (data.dpad_code == DPAD_DOWN && old_data.dpad_code == DPAD_OFF){
                   evt.type = UI_INPUT_BUTTON;
                   evt.data.button_state = UI_BUTTON_DOWN;
                   need_post = true;
-          }else if ((data.hat_right_y - old_data.hat_right_y) < -1 && data.hat_right_y == 0){
+          }else if (data.dpad_code == DPAD_UP && old_data.dpad_code == DPAD_OFF){
                  evt.type = UI_INPUT_BUTTON;
                  evt.data.button_state = UI_BUTTON_UP;
                  need_post = true;
-          }else if(data.l3 & (1UL << old_data.l3)){
+          }else if(data.circle & (1UL << old_data.circle)){
                  evt.type = UI_INPUT_BUTTON;
                  evt.data.button_state = UI_BUTTON_ENTER;
                  need_post = true;
@@ -114,7 +116,7 @@ static THD_FUNCTION(DS4, arg) {
             need_post = false;
           }
       if (DS4_status_change(data, old_data)){
-            chMBPost(&app_mb, (msg_t)&evt1, TIME_IMMEDIATE);
+            chMBPost(&app_mb, (msg_t)&evt1, TIME_IMMEDIATE);//update the screen
       }
       old_data = data;
       chThdSleepMilliseconds(10);

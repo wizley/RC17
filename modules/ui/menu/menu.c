@@ -266,6 +266,10 @@ void menu_main(void* params) {
               menu_screen_event(evt);
             }
             break;
+          case UI_STATUSBAR_TICK:
+            //update status_bar, try to get it written in statusbar.c and forced everypage to have it...
+            //maybe using macro in every app to force this entry
+            break;
           default:
             //ui_update(&evt);
             break;

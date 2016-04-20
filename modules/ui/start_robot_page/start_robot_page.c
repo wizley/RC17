@@ -488,6 +488,10 @@ void start_robot_main(void *params){
           } else {
 
           }
+        case UI_UDC_UPDATE:
+             gwinPrintf(ghConsole, "abc def %d", evt->data.comm_info.M0.SetPoint);
+             gwinRedraw(ghConsole);
+             gwinSetText(ghLabel_M4, "M4         1000        1000           0000", TRUE);
           break;
         default:
 

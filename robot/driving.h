@@ -59,11 +59,11 @@ extern DRIVING_STATE DrivingState;
 #endif
 
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_MOTOR_6                 TRUE
+#define USE_MOTOR_6                 FALSE
 #endif
 
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_MOTOR_7                 TRUE
+#define USE_MOTOR_7                 FALSE
 #endif
 
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)

@@ -11,6 +11,8 @@
 #include "app.h"
 #include "ps4_usbhost.h"
 
+
+
 GHandle ps4Console;
 
 void ps4_test_main(void *params){
@@ -25,8 +27,8 @@ void ps4_test_main(void *params){
   wi.g.show = TRUE;
   wi.g.x = 0;
   wi.g.y = 30;
-  wi.g.width = 270;
-  wi.g.height = 130;
+  wi.g.width = 800;
+  wi.g.height = 480;
   //wi.g.parent = ghContainerPage0;
   ps4Console = gwinConsoleCreate(0, &wi.g);
   gwinSetColor(ps4Console, Silver);
