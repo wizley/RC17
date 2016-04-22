@@ -119,3 +119,4 @@ udc_rx_state_e motor_setBrake(MotorObj *motor){
   udc_object.rx_callback = NULL;
   return UDC_Poll_Single(&udc_object);
 }
+

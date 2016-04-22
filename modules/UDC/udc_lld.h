@@ -46,10 +46,11 @@ typedef struct{
   mutex_t mutex;
   uint16_t framing_error;
   uint16_t checksum_error;
+  uint16_t timeout_error;
 }UDC_Driver;
 extern UDC_Driver UDCD;
 
-void udc_lld_init(uint32_t baudrate);
+void udc_lld_init();
 void udc_lld_start(void);
 void udc_lld_stop(void);
 udc_rx_state_e udc_lld_send(UDC_Obj_t* udc_object);

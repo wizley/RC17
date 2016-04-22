@@ -11,8 +11,6 @@
 #include "app.h"
 #include "ps4_usbhost.h"
 
-
-
 GHandle ps4Console;
 
 void ps4_test_main(void *params){
@@ -26,7 +24,7 @@ void ps4_test_main(void *params){
 
   wi.g.show = TRUE;
   wi.g.x = 0;
-  wi.g.y = 30;
+  wi.g.y = STATUS_BAR_HEIGHT;
   wi.g.width = 800;
   wi.g.height = 480;
   //wi.g.parent = ghContainerPage0;
@@ -52,9 +50,12 @@ void ps4_test_main(void *params){
           }
           break;
         case UI_STATUSBAR_TICK:
-             gwinClear(ps4Console);
-             gwinPrintf(ps4Console, "%d %d %d %d\r\n", data.hat_left_x, data.hat_left_y, data.hat_right_x, data.hat_right_y);
+          break;
+        case UI_UDC_UPDATE:
+             //gwinClear(ps4Console);
+             gwinPrintf(ps4Console, "\r\n %d \r\n", (data.btns.val) & !(0xFC0));
              gwinRedraw(ps4Console);
+          break;
         default:
 
           break;
@@ -67,5 +68,6 @@ void ps4_test_main(void *params){
 
 application ps4_test_app = {
     .name = "PS4 Test",
-    .main = ps4_test_main
+    .main = ps4_test_main,
+    .syn_flg = sync //TODO: change to no_sync later
 };

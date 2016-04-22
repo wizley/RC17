@@ -15,16 +15,21 @@ typedef enum{
   UDC_STOP
 }udc_state_e;
 
+typedef enum{
+  UDC_CHECKSUM_ERROR,
+  UDC_FRAMING_ERROR,
+  UDC_TIMEOUT
+}udc_error_metrics;
+
 #include "udc_lld.h"
 
 typedef void (*udc_message_cb)(void);
 typedef UDC_Obj_t* UDC_ObjectList;
 
 typedef struct{
-  uint32_t baudrate;
-  UDC_ObjectList udc_object_list;
+  //uint32_t baudrate;//intializer element need to be constant, not a variable
   uint8_t autoretry;
-  udc_message_cb cb;
+  udc_message_cb cb;//to be implemented
 }UDC_config_t;
 
 void UDC_Init(UDC_config_t *config);
@@ -34,7 +39,7 @@ void UDC_RegisterObjectList(void);
 void UDC_RegisterCallback(void);
 void UDC_PollObjectList(UDC_ObjectList object_list);
 udc_rx_state_e UDC_Poll_Single(UDC_Obj_t* udc_object);
-void UDC_GetStatistics(void);
+uint16_t UDC_GetStatistics(udc_error_metrics m);
 
 
 

@@ -47,5 +47,6 @@ void template_main(void *params){
 
 application template = {
     .name = "Template",
-    .main = template_main
+    .main = template_main,
+    .syn_flg = no_sync
 };

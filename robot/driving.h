@@ -1,10 +1,54 @@
 #ifndef _DRIVING_H_
 #define _DRIVING_H_
 
+#if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
+#define USE_MOTOR_0                 TRUE
+#endif
+
+#if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
+#define USE_MOTOR_1                 FALSE
+#endif
+
+#if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
+#define USE_MOTOR_2                 FALSE
+#endif
+
+#if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
+#define USE_MOTOR_3                 FALSE
+#endif
+
+#if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
+#define USE_MOTOR_4                 FALSE
+#endif
+
+#if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
+#define USE_MOTOR_5                 FALSE
+#endif
+
+#if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
+#define USE_MOTOR_6                 FALSE
+#endif
+
+#if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
+#define USE_MOTOR_7                 FALSE
+#endif
+
+#if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
+#define USE_ENCODER                 FALSE
+#define ENCODER_NUMBER              2
+#endif
+
+#if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
+#define USE_SERVO                   FALSE
+#define SERVO_NUMBER                7
+#endif
+
 typedef enum tagDrivingState {
 	ACTIVATED,
 	DEACTIVATED
 } DRIVING_STATE;
+
+
 
 typedef struct _tagWheelPosition {
 	float x;
@@ -15,7 +59,7 @@ typedef struct _tagWheelPosition {
 
 typedef struct _tagWheelOutput {
 	int Speed;
-	int Angle;	
+	int Angle;
 } WHEEL_OUTPUT;
 
 typedef struct
@@ -34,51 +78,12 @@ typedef struct
 
 extern DRIVING_STATE DrivingState;
 
-#if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_MOTOR_0                 TRUE
-#endif
 
-#if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_MOTOR_1                 TRUE
-#endif
-
-#if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_MOTOR_2                 TRUE
-#endif
-
-#if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_MOTOR_3                 TRUE
-#endif
-
-#if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_MOTOR_4                 TRUE
-#endif
-
-#if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_MOTOR_5                 TRUE
-#endif
-
-#if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_MOTOR_6                 FALSE
-#endif
-
-#if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_MOTOR_7                 FALSE
-#endif
-
-#if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_ENCODER                 TRUE
-#define ENCODER_NUMBER              2
-#endif
-
-#if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_SERVO                   TRUE
-#define SERVO_NUMBER                7
-#endif
 
 void ActivateDriving(void);
 void DeactivateDriving(void);
 
 void InitDriving(void);
 
+void ui_update(void);
 #endif

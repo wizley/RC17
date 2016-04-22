@@ -34,7 +34,7 @@
 #define GDISP_NEED_MULTITHREAD                       TRUE
 #define GDISP_DEFAULT_ORIENTATION GDISP_ROTATE_0
 //#define GDISP_LINEBUF_SIZE                           128
-#define GDISP_STARTUP_COLOR                          Blue
+#define GDISP_STARTUP_COLOR                          Black
 #define GDISP_NEED_STARTUP_LOGO                      TRUE
 
 

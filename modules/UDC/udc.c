@@ -12,8 +12,8 @@
 static uint8_t retry_count = 0;
 
 void UDC_Init(UDC_config_t *config){
-  udc_lld_init(config->baudrate);
-  //retry_count = config->autoretry;
+  udc_lld_init();
+  retry_count = config->autoretry;
 }
 
 
@@ -31,7 +31,6 @@ void UDC_RegisterObjectList(void);
 
 
 void UDC_RegisterCallback(void);
-
 
 void UDC_PollObjectList(UDC_ObjectList object_list){
   uint8_t failcount = 0;
@@ -68,4 +67,13 @@ udc_rx_state_e UDC_Poll_Single(UDC_Obj_t* udc_object){
 }
 
 
-void UDC_GetStatistics(void);
+uint16_t UDC_GetStatistics(udc_error_metrics m){
+    if (m == UDC_CHECKSUM_ERROR)
+      return UDCD.checksum_error;
+    else if(m == UDC_FRAMING_ERROR)
+      return UDCD.framing_error;
+    else if(m == UDC_TIMEOUT)
+      return UDCD.timeout_error;
+    else
+      return 0;
+}

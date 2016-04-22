@@ -16,12 +16,10 @@ DS4_command_t cmd = {0};
 //uint8_t getButtonPress()
 
 uint8_t DS4_status_change(DS4_status_t a, DS4_status_t b){//function to determine generating ui_event to update screen
-     if (a.circle == b.circle && a.cross == b.cross && abs(a.hat_left_x - b.hat_left_x) < 2
+     if (abs(a.hat_left_x - b.hat_left_x) < 2
          && abs(a.hat_left_y - b.hat_left_y)<2 && abs(a.hat_right_x - b.hat_right_x) < 2 &&
-         abs(a.hat_right_y - b.hat_right_y) < 2 && a.l1 == b.l1 && a.l2_trigger == b.l2_trigger &&
-         a.r1==b.r1&&a.r2_trigger == b.r2_trigger && a.l3 == b.l3 && a.options == b.options &&
-         a.share == b.share && a.square == b.square && a.triangle == b.triangle && a.dpad_code == DPAD_OFF
-         && b.dpad_code == DPAD_OFF){
+         abs(a.hat_right_y - b.hat_right_y) < 2 && a.l2_trigger == b.l2_trigger &&
+         a.r2_trigger == b.r2_trigger){// && a.btns.val == b.btns.val){
          return 0;
      }
      return 1;
@@ -79,24 +77,26 @@ static THD_FUNCTION(DS4, arg) {
       break;
     case USBHDS4_STATE_READY:
       if (DS4_ReadTimeOut(ds4p, &data, MS2ST(50))){
-//        chprintf((BaseSequentialStream *) &USBH_DEBUG_SD, "%5d %5d %5d\r",
-//            data.hat_left_x,
-//            data.r2_trigger,
-//            data.cross
-//            );
-          if (data.dpad_code == DPAD_DOWN && old_data.dpad_code == DPAD_OFF){
+#if USBHDS4_DEBUG_ENABLE_INFO
+        chprintf((BaseSequentialStream *) &USBH_DEBUG_SD, "%5d %5d %5d\r",
+            data.hat_left_x,
+            data.r2_trigger,
+            data.btns.cross
+            );
+#endif
+          if (data.btns.dpad_code == DPAD_DOWN && old_data.btns.dpad_code == DPAD_OFF){
                   evt.type = UI_INPUT_BUTTON;
                   evt.data.button_state = UI_BUTTON_DOWN;
                   need_post = true;
-          }else if (data.dpad_code == DPAD_UP && old_data.dpad_code == DPAD_OFF){
+          }else if (data.btns.dpad_code == DPAD_UP && old_data.btns.dpad_code == DPAD_OFF){
                  evt.type = UI_INPUT_BUTTON;
                  evt.data.button_state = UI_BUTTON_UP;
                  need_post = true;
-          }else if(data.circle & (1UL << old_data.circle)){
+          }else if(data.btns.circle & (1UL << old_data.btns.circle)){
                  evt.type = UI_INPUT_BUTTON;
                  evt.data.button_state = UI_BUTTON_ENTER;
                  need_post = true;
-          }else if(data.dpad_code == DPAD_LEFT && old_data.dpad_code == DPAD_OFF){
+          }else if(data.btns.dpad_code == DPAD_LEFT && old_data.btns.dpad_code == DPAD_OFF){
                  evt.type = UI_INPUT_BUTTON;
                  evt.data.button_state = UI_BUTTON_BACK;
                  need_post = true;
@@ -116,7 +116,7 @@ static THD_FUNCTION(DS4, arg) {
             need_post = false;
           }
       if (DS4_status_change(data, old_data)){
-            chMBPost(&app_mb, (msg_t)&evt1, TIME_IMMEDIATE);//update the screen
+            //chMBPost(&app_mb, (msg_t)&evt1, TIME_IMMEDIATE);//FIXME: post as status bar tick should be removed
       }
       old_data = data;
       chThdSleepMilliseconds(10);
