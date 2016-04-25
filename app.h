@@ -4,7 +4,7 @@
 #include "ch.h"
 #include "driving.h"
 
-#define STATUS_BAR_HEIGHT   30//not a good place to place this, need to standardised the gui
+
 
 #define UI_UDC_UPDATE_INTERVAL 100
 #define UI_MB_SIZE 10
@@ -76,6 +76,8 @@ typedef enum{
   no_sync
 }sync_update_flag;
 
+extern uint8_t timer_sleep;
+
 /**
  * @brief An application entry, used by the menu application.
  */
@@ -91,6 +93,12 @@ typedef struct {
     sync_update_flag syn_flg;
 } application;
 
+extern int ButtonDown[9];
+extern int Button_state[9];
+extern int Button_edge[9];
+extern int Button_db[9];
+
 int app_init(void);
+void runButton(void);
 
 #endif

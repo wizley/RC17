@@ -84,6 +84,8 @@ typedef struct{
 	int16_t kFF;
 }__attribute__((packed)) motor_setting_t;
 
+typedef void (*setAliveCallback) (void);
+
 typedef struct{
 	int16_t SetPoint;
 	int16_t Feedback;
@@ -91,6 +93,8 @@ typedef struct{
 	board_status_t Board;
 	motor_setting_t Setting;
 	const uint8_t id;
+	uint8_t Alive;
+	setAliveCallback setMotorAlive;
 }MotorObj;
 
 extern MotorObj M[8];

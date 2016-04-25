@@ -78,6 +78,6 @@ int get_menu_size(const menu_list *menu);
  * @brief Stores the main menu structure.
  */
 extern menu_list main_menu;
-
+extern menu_entry* current_running_menu;
 #endif /* MENU_H */
 

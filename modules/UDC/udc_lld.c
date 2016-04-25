@@ -228,7 +228,6 @@ void udc_lld_rxend(UARTDriver *uartp) {
               rx_frame.out_data_ptr[i] = rx_frame.rx_buffer[i];
             }
 
-            //palClearPad(GPIOC, GPIOC_LED_G);
 //          if(rx_frame.checksum == 0xAA){
 //            for(rx_frame.rx_count = 0; rx_frame.rx_count < rx_frame.rx_len - 1; rx_frame.rx_count++){
 //              *rx_frame.out_data_ptr++ = rx_frame.rx_buffer[rx_frame.rx_count];
@@ -260,8 +259,8 @@ void udc_lld_rxend(UARTDriver *uartp) {
 void udc_lld_timer_cb(GPTDriver *gptp) {
   (void) gptp;
   UDCD.timeout_error++;
-  UDCD.udc_rx_state = udc_rx_timout;
+  UDCD.udc_rx_state = udc_rx_timeout;
   chSysLockFromISR();
-  osalEventBroadcastFlagsI(&UDCD.rx_evt, (eventflags_t)udc_rx_timout);
+  osalEventBroadcastFlagsI(&UDCD.rx_evt, (eventflags_t)udc_rx_timeout);
   chSysUnlockFromISR();
 }

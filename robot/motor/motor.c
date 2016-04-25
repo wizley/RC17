@@ -3,7 +3,7 @@
 #include "motor.h"
 
 
-MotorObj M[8] = {{.id=0},{.id=1},{.id=2},{.id=3},{.id=4},{.id=5},{.id=6},{.id=7}};
+MotorObj M[8] = {{.id=0, .setMotorAlive = motor_checkAlive},{.id=1},{.id=2},{.id=3},{.id=4},{.id=5},{.id=6},{.id=7}};
 
 const motor_setting_t DefaultIdle = {
     .Mode = motor_idle,
@@ -118,5 +118,10 @@ udc_rx_state_e motor_setBrake(MotorObj *motor){
   udc_object.rx_len = 0;
   udc_object.rx_callback = NULL;
   return UDC_Poll_Single(&udc_object);
+}
+
+void motor_checkAlive( * arg){
+     MotorObj * motor = (MotorObj *) arg;
+     motor->Alive = 3;
 }
 

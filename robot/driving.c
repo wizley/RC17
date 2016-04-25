@@ -15,6 +15,9 @@
 #endif
 #include "udc_objectlist.h"
 #include "udc.h"
+#include "ps4_usbhost.h"
+#include "menu_struct.h"
+#include "app_list.h"
 
 #define LOOP_TIME 10   /* Control Loop time in ms */
 #define CONTROL_EVENT 0
@@ -48,46 +51,75 @@ static THD_FUNCTION(RunManualControl, arg) {
 
   while (!chThdShouldTerminateX()) {
     chEvtWaitAny(EVENT_MASK(CONTROL_EVENT));
-    //chEvtGetAndClearEvents(EVENT_MASK(CONTROL_EVENT));
+    chEvtGetAndClearEvents(EVENT_MASK(CONTROL_EVENT));
     UDC_PollObjectList(udc_objectlist);
-
-    motor_get_status(&M[0]);
-    //motor_send_setting(&M[0]);
-    //motor_send_setpoint(&M[0]);
-    //Servo1.command[0] = (qeiGetCount(&QEID4) - oldcount) * 10;
-
-    M[0].SetPoint = (qeiGetCount(&QEID4) - oldcount) * 10;
-
+    if (current_running_menu->data.app == &start_robot){
+             motor_get_status(&M[0]);// Miscellaneous Data
+             if (ps4_data.btns.triangle)//brake
+                 motor_setBrake(&M[0]);
+             else if (DS4_ButtonPress(SQUARE))//reactivate after brake
+                 motor_send_setting(&M[0]);//should have set the motor global setting before calling this
+             //motor_send_setpoint(&M[0]);
+             //Servo1.command[0] = (qeiGetCount(&QEID4) - oldcount) * 10;
+             else if (DS4_ButtonPress(CROSS))
+                 DeactivateDriving();
+             M[0].SetPoint = (qeiGetCount(&QEID4) - oldcount) * 10;
+             palSetPad(GPIOC, GPIOC_LED_G);
+    }else if (current_running_menu->data.app == &ps4_test_app){
+             //should not do anything
+           palClearPad(GPIOC, GPIOC_LED_G);
       }
-      chEvtUnregister(&CtrlLp_evt, &el);
+    }
+    chEvtUnregister(&CtrlLp_evt, &el);
 }
 
 void ActivateDriving(void){
   if (DrivingState == DEACTIVATED){
+    M[0].Setting = DefaultVMode;//please initialize the motor with something else, this pid sucks
+#if USE_MOTOR_0
+    motor_send_setting(&M[0]);
+#endif
+#if USE_MOTOR_1
+    motor_send_setting(&M[1]);
+#endif
+#if USE_MOTOR_2
+    motor_send_setting(&M[2]);
+#endif
+#if USE_MOTOR_3
+    motor_send_setting(&M[3]);
+#endif
+#if USE_MOTOR_4
+    motor_send_setting(&M[4]);
+#endif
+#if USE_MOTOR_5
+    motor_send_setting(&M[5]);
+#endif
+#if USE_MOTOR_6
+    motor_send_setting(&M[6]);
+#endif
+#if USE_MOTOR_7
+    motor_send_setting(&M[7]);
+#endif
+
      if(ctrllp == NULL){//should not call it repeatedly
         /* Control Loop Thread */
         ctrllp = chThdCreateStatic(waCtrlLp, sizeof(waCtrlLp), HIGHPRIO, RunManualControl, NULL);
         DrivingState = ACTIVATED;
+
         chSysLock();
         /* Starts the timer.*/
         chVTDoSetI(&CtrlLpVT, MS2ST(LOOP_TIME), control_loop_timer, NULL);
         chSysUnlock();
      }else{
          DrivingState = ACTIVATED;
-         //TODO:change the object list content
+
      }
   }
 }
 
 void DeactivateDriving(void){
-//  if(ctrllp != NULL){
-//      chThdTerminate(ctrllp);
-//    }
-//    chSysLock();
-//    /* Stops the timer.*/
-//    chVTDoResetI(&CtrlLpVT);
-//    chSysUnlock();
   if(DrivingState == ACTIVATED){//avoid doing them repeatedly
+    DrivingState = DEACTIVATED;
 #if USE_MOTOR_0
     motor_setIdle(&M[0]);
 #endif
@@ -112,14 +144,6 @@ void DeactivateDriving(void){
 #if USE_MOTOR_7
     motor_setIdle(&Mx[7]);
 #endif
-
-    //TODO: add changing the objectlist
-//    UDC_Obj_t udc_object;
-//    udc_object.id = CAL_ID_M_SETTING(motor->id);
-//    udc_object.tx_data = (udc_tx_data_t)&DefaultIdle;
-//    udc_object.tx_len = 24;
-//    udc_object.rx_len = 0;
-//    udc_object.rx_callback = NULL;
   }
 }
 
@@ -127,7 +151,6 @@ extern volatile int DebugRun[4];
 
 void InitDriving(void) {
   osalEventObjectInit(&CtrlLp_evt);
-
   UDC_Init(&udc_config);
   UDC_Start();
 }

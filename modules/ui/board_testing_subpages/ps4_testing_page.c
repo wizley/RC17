@@ -9,6 +9,7 @@
 #include "hal.h"
 #include "gfx.h"
 #include "app.h"
+#include "status_bar.h"
 #include "ps4_usbhost.h"
 
 GHandle ps4Console;
@@ -42,6 +43,7 @@ void ps4_test_main(void *params){
       switch(evt->type){
         case UI_INPUT_BUTTON:
           if(evt->data.button_state == UI_BUTTON_BACK){
+            timer_sleep = 1;
             return;
           } else if(evt->data.button_state == UI_BUTTON_ENTER){
 
@@ -50,10 +52,12 @@ void ps4_test_main(void *params){
           }
           break;
         case UI_STATUSBAR_TICK:
+             gwinPrintf(ps4Console, "\r\n 1 \r\n");
+             gwinRedraw(ps4Console);
           break;
         case UI_UDC_UPDATE:
              //gwinClear(ps4Console);
-             gwinPrintf(ps4Console, "\r\n %d \r\n", (data.btns.val) & !(0xFC0));
+             gwinPrintf(ps4Console, "\r\n %d \r\n", (ps4_data.btns.val) & (1UL << PS4_BUTTONS_BITMASK[CROSS]));
              gwinRedraw(ps4Console);
           break;
         default:

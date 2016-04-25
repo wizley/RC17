@@ -85,5 +85,4 @@ void DeactivateDriving(void);
 
 void InitDriving(void);
 
-void ui_update(void);
 #endif

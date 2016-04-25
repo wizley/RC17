@@ -24,7 +24,7 @@
 /**
  * Menu application.
  */
-
+#include"status_bar.h"
 #include "app_list.h"
 #include "menu_struct.h"
 
@@ -41,9 +41,9 @@ static int selected_item = 0;
 static int offset = 0;
 static int menu_size = 0;
 
-#ifndef STATUS_BAR_HEIGHT
-#define STATUS_BAR_HEIGHT   30
-#endif
+//#ifndef STATUS_BAR_HEIGHT
+//#define STATUS_BAR_HEIGHT   30
+//#endif
 #define LINE_HEIGHT         75
 #define LEFT_MARGIN         0
 #define MENU_SCREEN_HEIGHT  (480-STATUS_BAR_HEIGHT)
@@ -53,6 +53,7 @@ static int menu_size = 0;
 // store menu states to navigate between menus
 static menu_list *menu_stack[8] = { &main_menu, NULL, };
 static menu_list **current_menu = &menu_stack[0];
+menu_entry* current_running_menu = NULL;
 
 // init function proto
 static void menu_ui_init(void);
@@ -62,7 +63,7 @@ static void menu_screen_redraw(void)
 {
     int i;
     int menu_limit = (menu_size < MAX_ENTRIES ? menu_size : MAX_ENTRIES);
-    uint8_t font_height = (uint8_t) gdispGetFontMetric(font1, fontHeight);//get height from font_t struct
+    uint8_t font_height = (uint8_t) gdispGetFontMetric(font1, fontHeight);
 
     gdispClear(HTML2COLOR(0xEEEEEE));
     for(i = 0; i < menu_limit; ++i)
@@ -209,6 +210,7 @@ static void menu_ui_init(void) {
 
 static void run(menu_entry *entry) {
     if(entry->type == APP) {
+      current_running_menu = entry;
       if (entry->data.app->syn_flg == sync){
         if (timer_sleep){
           //wake up suspended synchronous screen update thread
@@ -238,13 +240,13 @@ static void run(menu_entry *entry) {
     } else if (entry->type == SETTING) {
 //        setting_change(entry->data.setting);
     }
-
     menu_ui_init();
 }
 
 static void go_back(void) {
   if ((*current_menu) != &main_menu){//prevent go back re-printing the screen in main menu
     if(current_menu == menu_stack ) {
+      current_running_menu = NULL;//control loop won't run on submenu anyway
       timer_sleep = 1;//suspend the synchronous update thread
     } else {
         //TODO : implement stack to save previous offset

@@ -25,6 +25,7 @@ THD_FUNCTION(ui_button_thread, arg) {
   uint8_t but9_old_state = PAL_HIGH;
 
   while(TRUE){
+    runButton();
     /* scan for buttons */
     if((palReadPad(GPIOB, GPIOB_BUT2) == PAL_LOW) && (but2_old_state == PAL_HIGH)){
       evt.type = UI_INPUT_BUTTON;
@@ -73,7 +74,41 @@ THD_FUNCTION(ui_button_thread, arg) {
   }
 }
 
+int ButtonDown[9]={0};
+int Button_db[9]={0};
+int Button_state[9]={0};
+int Button_edge[9]={0};
 
+void runButton(void){
+    uint8_t i = 0;
+    ButtonDown[0] = !palReadPad(GPIOH, GPIOH_BUT1);
+    ButtonDown[1] = !palReadPad(GPIOB, GPIOB_BUT2);
+    ButtonDown[2] = !palReadPad(GPIOG, GPIOG_BUT3);
+    ButtonDown[3] = !palReadPad(GPIOE, GPIOE_BUT4);
+    ButtonDown[4] = !palReadPad(GPIOH, GPIOH_BUT5);
+    ButtonDown[5] = !palReadPad(GPIOE, GPIOE_BUT6);
+    ButtonDown[6] = !palReadPad(GPIOD, GPIOD_BUT7);
+    ButtonDown[7] = !palReadPad(GPIOC, GPIOC_BUT8);
+    ButtonDown[8] = !palReadPad(GPIOB, GPIOB_PB12);
+    for (i=0;i<9;i++){
+      if(ButtonDown[i] == 1 && Button_db[i] == 0){
+        Button_state[i] = Button_state[i] ^ 1;
+        Button_edge[i] = 1;
+      }
+      else
+        Button_edge[i] = 0;
+    }
+    Button_db[0] = ButtonDown[0];
+    Button_db[1] = ButtonDown[1];
+    Button_db[2] = ButtonDown[2];
+    Button_db[3] = ButtonDown[3];
+    Button_db[4] = ButtonDown[4];
+    Button_db[5] = ButtonDown[5];
+    Button_db[6] = ButtonDown[6];
+    Button_db[7] = ButtonDown[7];
+    Button_db[8] = ButtonDown[8];
+  return;
+}
 
 
 int app_init(void) {

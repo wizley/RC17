@@ -38,7 +38,7 @@ static void createPagePage0(void)
   ghContainerPage0 = createContainer(0, 0, 800, 480, FALSE);
 
   // Create console widget: ghConsole
-  ghConsole = createConsole(&ghContainerPage0, 0, 30, 270, 130);
+  ghConsole = createConsole(&ghContainerPage0, 0, 30, 270, 270);
   gwinSetColor(ghConsole, Silver);
   gwinSetBgColor(ghConsole, Black);
   gwinSetFont(ghConsole, dejavu_sans_32_anti_aliased);
@@ -101,7 +101,7 @@ void start_robot_main(void *params){
   ui_event *evt = NULL;
 
   guiCreate();
-
+  ActivateDriving();//lock motor
   while(TRUE){
 
     if(chMBFetch(&app_mb, (msg_t*)(&evt), TIME_INFINITE) == MSG_OK){
@@ -109,9 +109,10 @@ void start_robot_main(void *params){
       switch(evt->type){
         case UI_INPUT_BUTTON:
           if(evt->data.button_state == UI_BUTTON_BACK){
+            timer_sleep = 1;
             return;
           } else if(evt->data.button_state == UI_BUTTON_ENTER){
-            ActivateDriving();
+            //ActivateDriving();
             gwinClear(ghConsole1);
             gwinPrintf(ghConsole1, UIDrivingState[DrivingState]);
           } else {
@@ -119,9 +120,14 @@ void start_robot_main(void *params){
           }
           break;
         case UI_UDC_UPDATE:
+             gwinClear(ghConsole1);
+             gwinPrintf(ghConsole1, UIDrivingState[DrivingState]);
              gwinClear(ghConsole);
              gwinPrintf(ghConsole, "Setpoint: %d\r\n", M[0].SetPoint);
              gwinPrintf(ghConsole, "feedback: %d\r\n", M[0].Feedback);
+             gwinPrintf(ghConsole, "current: %d\r\n",M[0].Board.Current);
+             //gwinPrintf(ghConsole, "voltage: %d\r\n",M[0].Board.Voltage);
+             gwinPrintf(ghConsole, "temperature: %d\r\n",M[0].Board.Temperature);
           break;
         default:
           break;

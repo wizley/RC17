@@ -17,7 +17,7 @@ UDC_Obj_t udc_objectlist[32] =
 {
     {ID_SYNC, NULL, 0, NULL, 0, NULL},
 #if USE_MOTOR_0
-    {ID_M0_VMODE, (udc_tx_data_t)&M[0].SetPoint, 2, (udc_rx_data_t)&M[0].Feedback, 2, &SetMotorAlive},
+    {ID_M0_VMODE, (udc_tx_data_t)&M[0].SetPoint, 2, (udc_rx_data_t)&M[0].Feedback, 2, NULL},
 #endif
 #if USE_MOTOR_1
     {ID_M1_VMODE, (udc_tx_data_t)&M[1].SetPoint, 2, (udc_rx_data_t)&M[1].Feedback, 2, NULL},

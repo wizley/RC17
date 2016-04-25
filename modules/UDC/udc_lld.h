@@ -13,7 +13,7 @@ typedef enum{
   udc_rx_active = 1,
   udc_rx_checksum_error = 2,
   udc_rx_framing_error = 4,
-  udc_rx_timout = 8,
+  udc_rx_timeout = 8,
   udc_rx_retry_failed = 16,
   udc_rx_state_error = 32,
   udc_rx_init = 64

@@ -14,6 +14,7 @@
 typedef struct{
   int16_t command[8];
   int16_t current;
+  uint8_t Alive;
 }servo_t;
 
 extern servo_t Servo1;

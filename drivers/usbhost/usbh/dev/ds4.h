@@ -106,6 +106,30 @@ typedef union  __attribute__((packed)){
   uint32_t val : 24;
 }ds4_buttons;//added for doing debounce
 
+typedef enum{
+        UP = 0,
+        RIGHT = 1,
+        DOWN = 2,
+        LEFT = 3,
+        SHARE = 4,
+        OPTIONS = 5,
+        L3 = 6,
+        R3 = 7,
+        L2 = 8,
+        R2 = 9,
+        L1 = 10,
+        R1 = 11,
+        TRIANGLE = 12,
+        CIRCLE = 13,
+        CROSS = 14,
+        SQUARE = 15,
+        PS = 16,
+        TOUCHPAD = 17,
+}ButtonEnum;
+
+
+
+
 
 typedef struct __attribute__((packed)) {
   uint8_t hat_left_x;
