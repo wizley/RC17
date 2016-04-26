@@ -44,7 +44,7 @@ application set_usb = { .name="Set USB", .main=NULL };
 //application start_robot = { .name="Start robot", .main=NULL };
 application motor_tuning = { .name="Motor tuning", .main=NULL };
 application console = { .name="Console", .main=NULL };
-application game = { .name="Game", .main=NULL };
+//application game = { .name="Game", .main=NULL };
 application reset = { .name="Reset", .main=NULL };
 
 
@@ -91,7 +91,7 @@ menu_list main_menu = {
        { SUBMENU,   NULL,     { .submenu = &board_testing_menu} },
        { SUBMENU,   NULL,     { .submenu = &settings_menu } },
        { APP,       NULL,     { .app = &console} },
-       { APP,       NULL,     { .app = &game} },
+       { APP,       NULL,     { .app = &tetris} },
        { APP,       NULL,     { .app = &reset} },
        { END,       NULL,     { NULL } }
     }

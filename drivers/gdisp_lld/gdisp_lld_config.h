@@ -21,8 +21,21 @@
 
 // Both these pixel formats are supported - pick one.
 // RGB565 obviously is faster and uses less RAM but with lower color resolution than RGB888
+#ifndef GDISP_PIXELFORMAT_RGB565
+
+#ifndef GDISP_COLORSYSTEM_RGB
+#define GDISP_COLORSYSTEM_RGB     0x2000
+#endif
+
+#define GDISP_PIXELFORMAT_RGB565  (GDISP_COLORSYSTEM_RGB|0x0565)
+#endif
+
 #define GDISP_LLD_PIXELFORMAT				GDISP_PIXELFORMAT_RGB565
 //#define GDISP_LLD_PIXELFORMAT				GDISP_PIXELFORMAT_RGB888
+
+#ifndef GDISP_PIXELFORMAT
+#define GDISP_PIXELFORMAT       GDISP_LLD_PIXELFORMAT
+#endif
 
 
 /*===========================================================================*/
@@ -36,7 +49,7 @@
 	// Accelerated bitfills are also possible but only for GDISP_ROTATE_0
 	//	and if no color translation is required (for now)
 	#if !GDISP_NEED_CONTROL && GDISP_PIXELFORMAT == GDISP_LLD_PIXELFORMAT
- 		#define GDISP_HARDWARE_BITFILLS	TRUE
+ 		#define GDISP_HARDWARE_BITFILLS	FALSE
 	#endif
 #endif /* GDISP_USE_DMA2D */
 

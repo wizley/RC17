@@ -5,7 +5,7 @@
 //#include "usbcfg.h"
 #include "usb_shell.h"
 #include "app.h"
-
+#include "driving.h"
 
 /*
  * Erases the whole SDRAM bank.
@@ -134,9 +134,11 @@ static QEIConfig qeicfg = {
  */
 static const I2CConfig i2cfg1 = {
     OPMODE_I2C,
-    200000,
+    400000,
     FAST_DUTY_CYCLE_2,
 };
+
+static gdispImage myImage;
 
 
 /*===========================================================================*/
@@ -182,6 +184,13 @@ int main(void) {
 
   gfxInit();
 
+  gdispImageOpenFile(&myImage, "m2logo.gif");
+  gdispImageCache(&myImage);
+  gdispImageDraw(&myImage, 40, 180, myImage.width, myImage.height, 0, 0);
+  gdispImageClose(&myImage);
+
+  chThdSleepMilliseconds(1000);
+
   /*
    * Creating the blinker threads.
    */
@@ -191,6 +200,8 @@ int main(void) {
                     Thread2, NULL);
 
   app_init();
+
+  ActivateDriving();
 
   /*
    * Shell manager initialization.

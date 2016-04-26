@@ -13,8 +13,8 @@
 
 typedef struct{
   uint16_t count_per_revolution[2];
-  uint16_t count[2];
-  uint16_t delta_count[2];
+  int32_t count[2];
+  int16_t delta_count[2];
 }ENCObj_t;
 
 extern ENCObj_t encoder1_2;
