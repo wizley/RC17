@@ -5,7 +5,8 @@
 
 # Compiler options here.
 ifeq ($(USE_OPT),)
-  USE_OPT = -O2 -ggdb -fomit-frame-pointer -falign-functions=16 -fshort-enums --specs=nano.specs
+  USE_OPT = -O2 -ggdb -fomit-frame-pointer -falign-functions=16 \
+            -fshort-enums --specs=nano.specs
 endif
 
 # C specific options here (added to USE_OPT).
@@ -126,7 +127,7 @@ CSRC = $(STARTUPSRC) \
        $(MODULESSRC) \
        $(ROBOTSRC) \
        main.c \
-       app.c exception.c
+       app.c exception.c $(CHIBIOS)/os/various/syscalls.c
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
@@ -153,12 +154,14 @@ TCSRC =
 TCPPSRC =
 
 # List ASM source files here
-ASMSRC = $(STARTUPASM) $(PORTASM) $(OSALASM)
+ASMSRC =
+ASMXSRC = $(STARTUPASM) $(PORTASM) $(OSALASM)
 
-INCDIR = $(STARTUPINC) $(KERNINC) $(PORTINC) $(OSALINC) \
+INCDIR = $(CHIBIOS)/os/license \
+         $(STARTUPINC) $(KERNINC) $(PORTINC) $(OSALINC) \
          $(HALINC) $(PLATFORMINC) $(BOARDINC) $(TESTINC) \
          $(STREAMSINC) $(SHELLINC) $(GFXINC) \
-         $(DRIVERINC) $(MODULESINC) $(ROBOTINC) ./conf
+         $(DRIVERINC) $(MODULESINC) $(ROBOTINC) ./conf $(CHIBIOS)/os/various
 
 #
 # Project, sources and paths
@@ -194,10 +197,10 @@ AOPT =
 TOPT = -mthumb -DTHUMB
 
 # Define C warning options here
-CWARN = -Wall -Wextra -Wstrict-prototypes
+CWARN = -Wall -Wextra -Wundef -Wstrict-prototypes
 
 # Define C++ warning options here
-CPPWARN = -Wall -Wextra
+CPPWARN = -Wall -Wextra -Wundef
 
 #
 # Compiler settings

@@ -34,9 +34,11 @@
 #define GDISP_NEED_MULTITHREAD                       TRUE
 #define GDISP_DEFAULT_ORIENTATION GDISP_ROTATE_0
 //#define GDISP_LINEBUF_SIZE                           128
-#define GDISP_STARTUP_COLOR                          Black
-#define GDISP_NEED_STARTUP_LOGO                      TRUE
 
+#define GDISP_STARTUP_COLOR                          HTML2COLOR(0x00499C)
+#define GDISP_NEED_STARTUP_LOGO                      FALSE
+#define GFX_USE_GFILE                                TRUE
+#define GFILE_NEED_ROMFS                             TRUE
 
 /********************************************************/
 /* Font stuff                                           */
@@ -66,10 +68,10 @@
 //    #define GDISP_INCLUDE_FONT_DEJAVUSANSBOLD12_AA   FALSE
 #define GDISP_INCLUDE_USER_FONTS                       TRUE
 
-//#define GDISP_NEED_IMAGE                             FALSE
-//    #define GDISP_NEED_IMAGE_NATIVE                  FALSE
-//    #define GDISP_NEED_IMAGE_GIF                     FALSE
-//    #define GDISP_NEED_IMAGE_BMP                     FALSE
+#define GDISP_NEED_IMAGE                               TRUE
+    #define GDISP_NEED_IMAGE_NATIVE                    FALSE
+    #define GDISP_NEED_IMAGE_GIF                       TRUE
+    #define GDISP_NEED_IMAGE_BMP                       FALSE
 //        #define GDISP_NEED_IMAGE_BMP_1               FALSE
 //        #define GDISP_NEED_IMAGE_BMP_4               FALSE
 //        #define GDISP_NEED_IMAGE_BMP_4_RLE           FALSE
@@ -78,8 +80,8 @@
 //        #define GDISP_NEED_IMAGE_BMP_16              FALSE
 //        #define GDISP_NEED_IMAGE_BMP_24              FALSE
 //        #define GDISP_NEED_IMAGE_BMP_32              FALSE
-//    #define GDISP_NEED_IMAGE_JPG                     FALSE
-//    #define GDISP_NEED_IMAGE_PNG                     FALSE
+    #define GDISP_NEED_IMAGE_JPG                       FALSE
+    #define GDISP_NEED_IMAGE_PNG                       FALSE
 //    #define GDISP_NEED_IMAGE_ACCOUNTING              FALSE
 
 #define GDISP_NEED_PIXMAP                            FALSE
