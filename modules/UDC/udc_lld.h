@@ -35,6 +35,7 @@ typedef struct{
   udc_rx_data_t rx_data;
   uint8_t rx_len;
   udc_rx_callback rx_callback;
+  volatile void *arg;
 }UDC_Obj_t;
 
 typedef struct{

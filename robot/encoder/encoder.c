@@ -12,4 +12,7 @@
 ENCObj_t encoder1_2;
 ENCObj_t encoder3_4;
 
-
+void encoder_checkAlive(volatile void * arg){
+     ENCObj_t * e = (ENCObj_t *) arg;
+     e->Alive = 3;
+}

@@ -11,3 +11,8 @@
 
 servo_t Servo1 = {1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500};
 servo_t Servo2 = {1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500};
+
+void servo_checkAlive(volatile void * arg){
+     servo_t * s = (servo_t * ) arg;
+     s->Alive = 3;
+}

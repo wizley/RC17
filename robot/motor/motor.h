@@ -94,7 +94,6 @@ typedef struct{
 	motor_setting_t Setting;
 	const uint8_t id;
 	uint8_t Alive;
-	setAliveCallback setMotorAlive;
 }MotorObj;
 
 extern MotorObj M[8];
@@ -110,5 +109,6 @@ udc_rx_state_e motor_get_status(MotorObj *motor);
 udc_rx_state_e motor_send_setting(MotorObj *motor);
 udc_rx_state_e motor_setIdle(MotorObj *motor);
 udc_rx_state_e motor_setBrake(MotorObj *motor);
+void motor_checkAlive( volatile void * arg);
 
 #endif  /* _MOTOR_H_ */
