@@ -26,21 +26,35 @@
 #define GMOUSE_FT5x06_SELF_CALIBRATE			FALSE
 
 static bool_t init_board(GMouse* m, unsigned driverinstance) {
+  (void)m;
+  (void)driverinstance;
+  return false;
 }
 
 static GFXINLINE void aquire_bus(GMouse* m) {
+  (void)m;
 }
 
 static GFXINLINE void release_bus(GMouse* m) {
+  (void)m;
 }
 
 static void write_reg(GMouse* m, uint8_t reg, uint8_t val) {
+  (void)m;
+  (void)reg;
+  (void)val;
 }
 
 static uint8_t read_byte(GMouse* m, uint8_t reg) {
+  (void)m;
+  (void)reg;
+  return 0;
 }
 
 static uint16_t read_word(GMouse* m, uint8_t reg) {
+  (void)m;
+  (void)reg;
+  return 0;
 }
 
 #endif /* _GINPUT_LLD_MOUSE_BOARD_H */

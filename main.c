@@ -15,7 +15,7 @@ static void sdram_bulk_erase(void) {
   volatile uint8_t *p = (volatile uint8_t *)SDRAM_BANK_ADDR;
   volatile uint8_t *end = p + SDRAM_SIZE;
   while (p < end)
-    *p++ = 0xff;
+    *p++ = 0x0;
 }
 
 /*
@@ -99,7 +99,7 @@ int main(void) {
    * Activates the LCD-related drivers.
    */
   palSetPad(GPIOD, GPIOD_LCD_DISP);
-  palSetPad(GPIOI, GPIOI_LCD_BLCTRL);
+//  palSetPad(GPIOI, GPIOI_LCD_BLCTRL);
 
   palSetPadMode(GPIOB, GPIOB_TIM2_CH4, PAL_MODE_OUTPUT_PUSHPULL);
   palClearPad(GPIOB, GPIOB_TIM2_CH4);

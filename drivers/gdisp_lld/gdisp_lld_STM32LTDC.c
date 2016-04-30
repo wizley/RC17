@@ -20,7 +20,7 @@
 
 #define GDISP_DRIVER_VMT			GDISPVMT_STM32LTDC
 #include "gdisp_lld_config.h"
-#include "../../../src/gdisp/gdisp_driver.h"
+#include "./src/gdisp/gdisp_driver.h"
 
 #include "stm32_ltdc.h"
 
@@ -84,7 +84,7 @@ typedef struct ltdcConfig {
 	#define GDISP_INITIAL_CONTRAST	50
 #endif
 #ifndef GDISP_INITIAL_BACKLIGHT
-	#define GDISP_INITIAL_BACKLIGHT	100
+	#define GDISP_INITIAL_BACKLIGHT	50
 #endif
 
 /*===========================================================================*/
@@ -229,8 +229,8 @@ LLDSPEC bool_t gdisp_lld_init(GDisplay* g) {
 		dma2d_init();
 	#endif
 
-    // Finish Init the board
-    post_init_board(g);
+  // Finish Init the board
+  post_init_board(g);
 
 	// Turn on the back-light
 	set_backlight(g, GDISP_INITIAL_BACKLIGHT);
@@ -375,6 +375,9 @@ LLDSPEC	color_t gdisp_lld_get_pixel_color(GDisplay* g) {
 	static void dma2d_init(void) {
 		// Enable DMA2D clock
 		RCC->AHB1ENR |= RCC_AHB1ENR_DMA2DEN;
+
+		// Set foreground memory address
+		DMA2D->FGMAR = (uint32_t)driverCfg.bglayer.frame;
 	
 		// Output color format
 		#if GDISP_LLD_PIXELFORMAT == GDISP_PIXELFORMAT_RGB565
