@@ -233,7 +233,7 @@ LLDSPEC bool_t gdisp_lld_init(GDisplay* g) {
   post_init_board(g);
 
 	// Turn on the back-light
-	set_backlight(g, GDISP_INITIAL_BACKLIGHT);
+	set_backlight_lld(g, GDISP_INITIAL_BACKLIGHT);
 
 	// Initialise the GDISP structure
 	g->g.Width = driverCfg.bglayer.width;
@@ -358,7 +358,7 @@ LLDSPEC	color_t gdisp_lld_get_pixel_color(GDisplay* g) {
 
 		case GDISP_CONTROL_BACKLIGHT:
 			if ((unsigned)g->p.ptr > 100) g->p.ptr = (void *)100;
-			set_backlight(g, (unsigned)g->p.ptr);
+			set_backlight_lld(g, (unsigned)g->p.ptr);
 			g->g.Backlight = (unsigned)g->p.ptr;
 			return;
 

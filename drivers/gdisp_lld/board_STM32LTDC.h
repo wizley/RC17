@@ -83,7 +83,7 @@ static GFXINLINE void easyscale_sendlow(void)
   chThdSleepMicroseconds(20);
 }
 
-static GFXINLINE void set_backlight(GDisplay* g, uint8_t percent)
+static GFXINLINE void set_backlight_lld(GDisplay* g, uint8_t percent)
 {
 	(void)g;
 	uint8_t data = percent / 3.22f;

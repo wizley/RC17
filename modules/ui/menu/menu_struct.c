@@ -36,7 +36,7 @@ application imu_test_app = { .name="IMU test", .main=NULL };
 application line_sensor_test_app = { .name="Line sensor test", .main=NULL };
 application mainboard_test_app = { .name="Mainboard test", .main=NULL };
 
-application set_backlight = { .name="Set backlight", .main=NULL };
+//application set_backlight = { .name="Set backlight", .main=NULL };
 application set_date = { .name="Set Data&Time", .main=NULL };
 application set_buzzer = { .name="Set buzzer", .main=NULL };
 application set_logging = { .name="Set Data logging", .main=NULL };
