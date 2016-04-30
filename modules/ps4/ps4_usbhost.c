@@ -181,7 +181,6 @@ void ps4_usbhost_init(void){
 
   chThdCreateStatic(waUSBHOST, sizeof(waUSBHOST), NORMALPRIO,
                       USBHOST, NULL);
-
   usbhds4ObjectInit(&USBHDS4[0]);
   chThdCreateStatic(waDS4, sizeof(waDS4), NORMALPRIO,
                         DS4, NULL);

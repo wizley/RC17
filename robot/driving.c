@@ -112,7 +112,6 @@ void ActivateDriving(void){
         chSysUnlock();
      }else{
          DrivingState = ACTIVATED;
-
      }
   }
 }

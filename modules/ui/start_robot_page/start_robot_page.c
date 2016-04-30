@@ -101,7 +101,7 @@ void start_robot_main(void *params){
   ui_event *evt = NULL;
 
   guiCreate();
-  ActivateDriving();//lock motor
+  //ActivateDriving();//lock motor
   while(TRUE){
 
     if(chMBFetch(&app_mb, (msg_t*)(&evt), TIME_INFINITE) == MSG_OK){
@@ -109,14 +109,9 @@ void start_robot_main(void *params){
       switch(evt->type){
         case UI_INPUT_BUTTON:
           if(evt->data.button_state == UI_BUTTON_BACK){
-            timer_sleep = 1;
             return;
           } else if(evt->data.button_state == UI_BUTTON_ENTER){
-            //ActivateDriving();
-            gwinClear(ghConsole1);
-            gwinPrintf(ghConsole1, UIDrivingState[DrivingState]);
           } else {
-
           }
           break;
         case UI_UDC_UPDATE:

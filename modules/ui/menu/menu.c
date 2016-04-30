@@ -226,6 +226,7 @@ static void run(menu_entry *entry) {
         template.main(NULL);
       else{
         entry->data.app->main(NULL);
+        timer_sleep = 1;current_running_menu = NULL;
       }
     } else if(entry->type == SUBMENU) {
       //TODO : implement stack to save previous offset

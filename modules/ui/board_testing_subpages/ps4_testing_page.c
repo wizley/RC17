@@ -43,7 +43,6 @@ void ps4_test_main(void *params){
       switch(evt->type){
         case UI_INPUT_BUTTON:
           if(evt->data.button_state == UI_BUTTON_BACK){
-            timer_sleep = 1;
             return;
           } else if(evt->data.button_state == UI_BUTTON_ENTER){
 

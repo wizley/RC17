@@ -131,8 +131,6 @@ int main(void) {
 
   app_init();
 
-  ActivateDriving();
-
   /*
    * Shell manager initialization.
    */
@@ -149,7 +147,7 @@ int main(void) {
 //  usbStart(serusbcfg.usbp, &usbcfg);
 //  usbConnectBus(serusbcfg.usbp);
   ps4_usbhost_init();
-
+  ActivateDriving();
 
   /*
    * Normal main() thread activity, in this demo it just performs

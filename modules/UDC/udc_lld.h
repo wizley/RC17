@@ -26,7 +26,7 @@ typedef enum{
 
 typedef uint8_t* udc_tx_data_t;
 typedef uint8_t* udc_rx_data_t;
-typedef void (*udc_rx_callback)(void);
+typedef void (*udc_rx_callback)(volatile void *);
 
 typedef struct{
   int16_t id;
