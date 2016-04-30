@@ -216,9 +216,6 @@ void udc_lld_rxend(UARTDriver *uartp) {
         UDCD.udc_rx_state = udc_rx_state_error;
         break;
       case udc_rx_active:
-        //rx_frame.rx_buffer[rx_frame.rx_count++] = c;
-        //if(rx_frame.rx_count <= rx_frame.rx_len) rx_frame.checksum ^= c;
-        //if(rx_frame.rx_count == rx_frame.rx_len){
         for (i = 0; i < rx_frame.rx_len; i++) {
             rx_frame.checksum ^= rx_frame.rx_buffer[i];
           }
@@ -227,19 +224,11 @@ void udc_lld_rxend(UARTDriver *uartp) {
             for (i = 0; i < rx_frame.rx_len-1; i++) {
               rx_frame.out_data_ptr[i] = rx_frame.rx_buffer[i];
             }
-
-//          if(rx_frame.checksum == 0xAA){
-//            for(rx_frame.rx_count = 0; rx_frame.rx_count < rx_frame.rx_len - 1; rx_frame.rx_count++){
-//              *rx_frame.out_data_ptr++ = rx_frame.rx_buffer[rx_frame.rx_count];
-//            }
             UDCD.udc_rx_state = udc_rx_idle;
           }else{
             UDCD.checksum_error++;
             UDCD.udc_rx_state = udc_rx_checksum_error;
           }
-//        chSysLockFromISR();
-//        gptStartOneShotI(&UDC_TIMER, RCV_TIMEOUT15);
-//        chSysUnlockFromISR();
         break;
       case udc_rx_framing_error:
         //palClearPad(GPIOC, GPIOC_LED_R);
