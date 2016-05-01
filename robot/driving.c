@@ -68,7 +68,7 @@ static THD_FUNCTION(RunManualControl, arg) {
     }else if (current_running_menu->data.app == &ps4_test_app){
              //should not do anything
            palClearPad(GPIOC, GPIOC_LED_G);
-      }
+    }
     }
     chEvtUnregister(&CtrlLp_evt, &el);
 }

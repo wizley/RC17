@@ -216,7 +216,7 @@ static void run(menu_entry *entry) {
           //wake up suspended synchronous screen update thread
          chSysLock();
         if (ui_sync_up) {
-          ui_sync_up = NULL;
+          ui_sync_up = NULL; timer_sleep = 0;
           chSchWakeupS(ui_sync_up, MSG_OK);
         }
         chSysUnlock();
@@ -318,10 +318,12 @@ THD_FUNCTION(ui_udcupdate_evt, arg){
   while (true) {
      if (timer_sleep){
        ui_sync_up = chThdGetSelfX();
+       chSysLock();
        chSchGoSleepS(CH_STATE_SUSPENDED);
+       chSysUnlock();
      }else{
-       if (timer_sleep)//woke up
-           timer_sleep = 0;
+//       if (timer_sleep)//woke up
+//           timer_sleep = 0;
       time += MS2ST(UI_UDC_UPDATE_INTERVAL);
       chMBPost(&app_mb, (msg_t)&evt1, TIME_IMMEDIATE);
       chThdSleepUntil(time);
