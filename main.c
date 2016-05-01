@@ -6,6 +6,7 @@
 #include "usb_shell.h"
 #include "app.h"
 #include "driving.h"
+#include "usage.h"
 
 /*
  * Erases the whole SDRAM bank.
@@ -200,6 +201,8 @@ int main(void) {
                     Thread2, NULL);
 
   app_init();
+
+  cpu_usage_init();
 
   ActivateDriving();
 

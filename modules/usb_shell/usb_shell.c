@@ -6,6 +6,7 @@
  */
 #include "ch.h"
 #include "drivers.h"
+#include "usage.h"
 //#include "usbcfg.h"
 #include "usb_shell.h"
 #include "shell.h"
@@ -346,6 +347,16 @@ void cmd_eeprom(BaseSequentialStream *chp, int argc, char *argv[]) {
   chprintf(chp, "\r\n");
 }
 
+void cmd_usage(BaseSequentialStream *chp, int argc, char *argv[]) {
+  (void)argv;
+  (void)argc;
+
+  while (chnGetTimeout((BaseChannel *)chp, TIME_IMMEDIATE) == Q_TIMEOUT) {
+    chprintf(chp, "%.2f\r\n", cpu_usage_get_recent());
+    chThdSleepMilliseconds(300);
+  }
+}
+
 static const ShellCommand commands[] = {
   {"write", cmd_write},
   {"check", cmd_check},
@@ -356,6 +367,7 @@ static const ShellCommand commands[] = {
   //{"ps4", cmd_ps4},
   {"ds4", cmd_ds4},
   {"eeprom", cmd_eeprom},
+  {"usage", cmd_usage},
   {NULL, NULL}
 };
 
