@@ -11,6 +11,7 @@
 #include "app.h"
 #include "status_bar.h"
 #include "ps4_usbhost.h"
+#include "widgets.h"
 
 GHandle ps4Console;
 
@@ -22,14 +23,7 @@ void ps4_test_main(void *params){
   font1 = gdispOpenFont("DejaVuSans32_aa");
 
   gdispClear(HTML2COLOR(0xEEEEEE));
-
-  wi.g.show = TRUE;
-  wi.g.x = 0;
-  wi.g.y = STATUS_BAR_HEIGHT;
-  wi.g.width = 800;
-  wi.g.height = 480;
-  //wi.g.parent = ghContainerPage0;
-  ps4Console = gwinConsoleCreate(0, &wi.g);
+  ps4Console = createConsole(NULL,0,STATUS_BAR_HEIGHT,800,480);
   gwinSetColor(ps4Console, Silver);
   gwinSetBgColor(ps4Console, Black);
   gwinSetFont(ps4Console, font1);
