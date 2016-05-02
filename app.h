@@ -74,8 +74,8 @@ typedef struct {
 }ui_event;
 
 typedef enum{
-  sync=0,
-  no_sync
+  no_sync = 0,
+  sync
 }sync_update_flag;
 
 extern uint8_t timer_sleep;

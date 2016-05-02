@@ -31,7 +31,6 @@
 #include <stdio.h>
 #include "gfx.h"
 
-static thread_t * ui_sync_up = NULL; uint8_t timer_sleep = 0;
 extern THD_WORKING_AREA (wa_ui_udc_event, 64);
 extern THD_FUNCTION(ui_udcupdate_evt, arg);
 
@@ -211,25 +210,14 @@ static void menu_ui_init(void) {
 static void run(menu_entry *entry) {
     if(entry->type == APP) {
       current_running_menu = entry;
-      if (entry->data.app->syn_flg == sync){
-        if (timer_sleep){
-          //wake up suspended synchronous screen update thread
-         chSysLock();
-        if (ui_sync_up) {
-          ui_sync_up = NULL; timer_sleep = 0;
-          chSchWakeupS(ui_sync_up, MSG_OK);
-        }
-        chSysUnlock();
-        }
-      }
-      if(entry->data.app->main == NULL)
+      if(entry->data.app->main == NULL){
         template.main(NULL);
-      else{
+      }else{
         entry->data.app->main(NULL);
-        timer_sleep = 1;current_running_menu = NULL;
       }
-    } else if(entry->type == SUBMENU) {
+    }else if(entry->type == SUBMENU) {
       //TODO : implement stack to save previous offset
+
       selected_item = 0;
       offset = 0;
       menu_size = 0;
@@ -241,6 +229,7 @@ static void run(menu_entry *entry) {
     } else if (entry->type == SETTING) {
 //        setting_change(entry->data.setting);
     }
+    current_running_menu = NULL;
     menu_ui_init();
 }
 
@@ -248,7 +237,7 @@ static void go_back(void) {
   if ((*current_menu) != &main_menu){//prevent go back re-printing the screen in main menu
     if(current_menu == menu_stack ) {
       current_running_menu = NULL;//control loop won't run on submenu anyway
-      timer_sleep = 1;//suspend the synchronous update thread
+      //timer_sleep = 1;//suspend the synchronous update thread
     } else {
         //TODO : implement stack to save previous offset
         menu_size = 0;
@@ -316,18 +305,9 @@ THD_FUNCTION(ui_udcupdate_evt, arg){
   evt1.type = UI_UDC_UPDATE;
   uint32_t time = chVTGetSystemTimeX();
   while (true) {
-     if (timer_sleep){
-       ui_sync_up = chThdGetSelfX();
-       chSysLock();
-       chSchGoSleepS(CH_STATE_SUSPENDED);
-       chSysUnlock();
-     }else{
-//       if (timer_sleep)//woke up
-//           timer_sleep = 0;
       time += MS2ST(UI_UDC_UPDATE_INTERVAL);
       chMBPost(&app_mb, (msg_t)&evt1, TIME_IMMEDIATE);
       chThdSleepUntil(time);
      }
-    }
 }
 

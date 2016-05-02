@@ -32,7 +32,7 @@
 //#define GDISP_NEED_QUERY                             FALSE
 //#define GDISP_NEED_STREAMING                         FALSE
 #define GDISP_NEED_MULTITHREAD                       TRUE
-#define GDISP_DEFAULT_ORIENTATION GDISP_ROTATE_0
+#define GDISP_DEFAULT_ORIENTATION GDISP_ROTATE_180
 //#define GDISP_LINEBUF_SIZE                           128
 
 #define GDISP_STARTUP_COLOR                          HTML2COLOR(0x00499C)

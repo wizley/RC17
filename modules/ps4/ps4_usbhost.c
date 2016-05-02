@@ -172,6 +172,7 @@ static THD_FUNCTION(DS4, arg) {
       }
       old_data = ps4_data;
       chThdSleepMilliseconds(10);
+
     }
   }
 }

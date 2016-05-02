@@ -28,7 +28,7 @@ GHandle  createConsole(GHandle* container, int x, int y, int width, int height){
 GHandle  createProgressBar( const char* text, int x, int y, int width, int height){
    GWidgetInit   wi;
    gwinWidgetClearInit(&wi);
-   wi.g.show = FALSE;
+   wi.g.show = TRUE;
    wi.g.x = x; wi.g.y = y;
    wi.g.width = width; wi.g.height = height;
    wi.text = text;
@@ -38,7 +38,7 @@ GHandle  createProgressBar( const char* text, int x, int y, int width, int heigh
 GHandle  createProgressBarInContainer(GHandle* container, const char* text, int x, int y, int width, int height){
    GWidgetInit   wi;
    gwinWidgetClearInit(&wi);
-   wi.g.show = FALSE;
+   wi.g.show = TRUE;
    wi.g.parent = (*container);
    wi.g.x = x; wi.g.y = y;
    wi.g.width = width; wi.g.height = height;
@@ -103,7 +103,7 @@ GHandle  createContainer(int x, int y, int width, int height, uint8_t needBorder
 GHandle  createButton(const char* text, int x, int y, int width, int height){
   GWidgetInit   wi;
   gwinWidgetClearInit(&wi);
-  wi.g.show = FALSE;
+  wi.g.show = TRUE;
   wi.g.x = x; wi.g.y = y;
   wi.g.width = width; wi.g.height = height;
   wi.text = text;
@@ -112,7 +112,7 @@ GHandle  createButton(const char* text, int x, int y, int width, int height){
 GHandle  createButtonInContainer(GHandle* container, const char* text, int x, int y, int width, int height){
   GWidgetInit   wi;
   gwinWidgetClearInit(&wi);
-  wi.g.show = FALSE;
+  wi.g.show = TRUE;
   wi.g.parent = (*container);
   wi.g.x = x; wi.g.y = y;
   wi.g.width = width; wi.g.height = height;
@@ -135,7 +135,7 @@ GHandle  createLabel(const char* text, int x, int y, int width, int height){
   wi.customDraw = 0;
   wi.customParam = 0;
   wi.customStyle = 0;
-  wi.g.show = FALSE;
+  wi.g.show = TRUE;
   wi.g.x = x; wi.g.y = y;
   wi.g.width = width; wi.g.height = height;
   wi.text = text;
@@ -147,7 +147,7 @@ GHandle  createLabelInContainer(GHandle* container, const char* text, int x, int
       wi.customDraw = 0;
       wi.customParam = 0;
       wi.customStyle = 0;
-      wi.g.show = FALSE;
+      wi.g.show = TRUE;
       wi.g.parent = (*container);
       wi.g.x = x; wi.g.y = y;
       wi.g.width = width; wi.g.height = height;

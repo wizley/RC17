@@ -15,9 +15,11 @@ GHandle brightness_bar;
 void backlight_main(void* params){
   (void) params;
   ui_event *evt = NULL;
+  gdispClear(HTML2COLOR(0xEEEEEE));
   brightness_bar = createProgressBar(NULL, 200, 120, 400, 60);
   gwinProgressbarSetRange(brightness_bar, 0, 100);
   gwinProgressbarSetPosition(brightness_bar, gdispGetBacklight());
+  gwinRedraw(brightness_bar);
     while(TRUE){
 
       if(chMBFetch(&app_mb, (msg_t*)(&evt), TIME_INFINITE) == MSG_OK){
@@ -30,11 +32,13 @@ void backlight_main(void* params){
               uint8_t nbgn = gdispGetBacklight()+5;
               gdispSetBacklight(nbgn);
               gwinProgressbarSetPosition(brightness_bar, gdispGetBacklight());
+              gwinRedraw(brightness_bar);
               //TODO: eeprom to save the brightness
             }else if(evt->data.button_state == UI_BUTTON_DOWN){
               uint8_t nbgn = gdispGetBacklight()-5;
               gdispSetBacklight(nbgn);
               gwinProgressbarSetPosition(brightness_bar, gdispGetBacklight());
+              gwinRedraw(brightness_bar);
               //TODO: eeprom to save the brightness
             }
             break;
