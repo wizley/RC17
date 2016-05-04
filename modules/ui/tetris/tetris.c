@@ -287,7 +287,7 @@ static void printGameOver(void) {
 static bool_t stay(bool_t down) {
   int sk, k;
   bool_t stay;
-  if (down == TRUE) sk = 1; else sk = 0;
+  if (down == TRUE) sk = 2; else sk = 0;
   stay = FALSE;
   for (k = 0; k <= 3; k++) {
     if (tetrisCurrentShape[k][1] == 0) {
