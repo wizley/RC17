@@ -2,3 +2,7 @@
 .cproject
 .project
 build/**
+Makefile
+README.md
+.settings
+.gitignore
