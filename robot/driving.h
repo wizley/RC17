@@ -44,7 +44,7 @@
 #endif
 
 typedef enum tagDrivingState {
-	ACTIVATED,
+	ACTIVATED = 0,
 	DEACTIVATED
 } DRIVING_STATE;
 

@@ -82,53 +82,6 @@ typedef struct __attribute__((packed)) {
   }__attribute__((packed)) finger[2];
 } ds4_tpad_info_t;
 
-typedef union  __attribute__((packed)){
-  struct __attribute__((packed)){
-    uint8_t dpad_code :4;
-    uint8_t square :1;
-    uint8_t cross :1;
-    uint8_t circle :1;
-    uint8_t triangle :1;
-
-    uint8_t l1 :1;
-    uint8_t r1 :1;
-    uint8_t l2 :1;
-    uint8_t r2 :1;
-    uint8_t share :1;
-    uint8_t options :1;
-    uint8_t l3 :1;
-    uint8_t r3 :1;
-
-    uint8_t ps :1;
-    uint8_t tpad_click :1;
-    uint8_t reportCounter :6;
-  };
-  uint32_t val : 24;
-}ds4_buttons;//added for doing debounce
-
-typedef enum{
-        UP = 0,
-        RIGHT = 1,
-        DOWN = 2,
-        LEFT = 3,
-        SHARE = 4,
-        OPTIONS = 5,
-        L3 = 6,
-        R3 = 7,
-        L2 = 8,
-        R2 = 9,
-        L1 = 10,
-        R1 = 11,
-        TRIANGLE = 12,
-        CIRCLE = 13,
-        CROSS = 14,
-        SQUARE = 15,
-        PS = 16,
-        TOUCHPAD = 17,
-}ButtonEnum;
-
-
-
 
 
 typedef struct __attribute__((packed)) {
@@ -140,7 +93,24 @@ typedef struct __attribute__((packed)) {
 
   uint8_t hat_right_y;
 
-  ds4_buttons btns;
+  uint8_t dpad_code :4;
+  uint8_t square :1;
+  uint8_t cross :1;
+  uint8_t circle :1;
+  uint8_t triangle :1;
+
+  uint8_t l1 :1;
+  uint8_t r1 :1;
+  uint8_t l2 :1;
+  uint8_t r2 :1;
+  uint8_t share :1;
+  uint8_t options :1;
+  uint8_t l3 :1;
+  uint8_t r3 :1;
+
+  uint8_t ps :1;
+  uint8_t tpad_click :1;
+  uint8_t reportCounter :6;
 
   uint8_t l2_trigger;
 

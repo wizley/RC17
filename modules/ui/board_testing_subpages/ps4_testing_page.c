@@ -45,12 +45,11 @@ void ps4_test_main(void *params){
           }
           break;
         case UI_STATUSBAR_TICK:
-             gwinPrintf(ps4Console, "\r\n 1 \r\n");
-             gwinRedraw(ps4Console);
+
           break;
         case UI_UDC_UPDATE:
              //gwinClear(ps4Console);
-             gwinPrintf(ps4Console, "\r\n %d \r\n", (ps4_data.btns.val) & (1UL << PS4_BUTTONS_BITMASK[CROSS]));
+             gwinPrintf(ps4Console, "%d\r\n", DS4_ButtonPress(CIRCLE));
              gwinRedraw(ps4Console);
           break;
         default:

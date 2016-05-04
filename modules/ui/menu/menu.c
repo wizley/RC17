@@ -266,6 +266,7 @@ void menu_main(void* params) {
     // Once it is deactivated - display the menu
     //starts the synchronous update
     chThdCreateStatic(wa_ui_udc_event, sizeof(wa_ui_udc_event), LOWPRIO, ui_udcupdate_evt, NULL);
+    status_bar_init();
     while(1) {
 
       if(chMBFetch(&app_mb, (msg_t*)(&evt), TIME_INFINITE) == MSG_OK){
@@ -283,6 +284,7 @@ void menu_main(void* params) {
           case UI_STATUSBAR_TICK:
             //update status_bar, try to get it written in statusbar.c and forced everypage to have it...
             //maybe using macro in every app to force this entry
+            status_bar_redraw();
             break;
           default:
             //ui_update(&evt);

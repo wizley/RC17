@@ -283,7 +283,7 @@ void cmd_ds4(BaseSequentialStream *chp, int argc, char *argv[]) {
       chprintf((BaseSequentialStream *) &SD2, "%5d %5d %5d\r",
                   data.hat_left_x,
                   data.r2_trigger,
-                  data.btns.cross
+                  data.cross
                   );
   }else{
       chprintf(chp, "RIP\r\n");

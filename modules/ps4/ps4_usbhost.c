@@ -9,72 +9,67 @@
 #if USBHDS4_DEBUG_ENABLE_INFO
 #include "chprintf.h"
 #endif
+
 DS4_status_t ps4_data;
 DS4_status_t old_data;
 DS4_command_t cmd = {0};
-
-uint8_t PS4_BUTTONS_BITMASK[] = {
-        UP, // UP
-        RIGHT, // RIGHT
-        DOWN, // DOWN
-        LEFT, // LEFT
-
-        0x0C, // SHARE
-        0x0D, // OPTIONS
-        0x0E, // L3
-        0x0F, // R3
-
-        0x0A, // L2
-        0x0B, // R2
-        0x08, // L1
-        0x09, // R1
-
-        0x07, // TRIANGLE
-        0x06, // CIRCLE
-        0x05, // CROSS
-        0x04, // SQUARE
-
-        0x10, // PS
-        0x11 // TOUCHPAD
-};
-
 
 uint8_t DS4_ButtonPress(ButtonEnum b){
      if (b <= LEFT){
          switch (b) {
              case UP:
-                 return (ps4_data.btns.dpad_code == DPAD_LEFT_UP && old_data.btns.dpad_code == DPAD_OFF)
-                     || (ps4_data.btns.dpad_code == DPAD_UP && old_data.btns.dpad_code == DPAD_OFF)
-                     || (ps4_data.btns.dpad_code == DPAD_UP_RIGHT && old_data.btns.dpad_code == DPAD_OFF);
+                 return (ps4_data.dpad_code == DPAD_LEFT_UP && old_data.dpad_code == DPAD_OFF)
+                     || (ps4_data.dpad_code == DPAD_UP && old_data.dpad_code == DPAD_OFF)
+                     || (ps4_data.dpad_code == DPAD_UP_RIGHT && old_data.dpad_code == DPAD_OFF);
              case RIGHT:
-                 return (ps4_data.btns.dpad_code == DPAD_UP_RIGHT && old_data.btns.dpad_code == DPAD_OFF)
-                     || (ps4_data.btns.dpad_code == DPAD_RIGHT && old_data.btns.dpad_code == DPAD_OFF)
-                     || (ps4_data.btns.dpad_code == DPAD_RIGHT_DOWN && old_data.btns.dpad_code == DPAD_OFF);
+                 return (ps4_data.dpad_code == DPAD_UP_RIGHT && old_data.dpad_code == DPAD_OFF)
+                     || (ps4_data.dpad_code == DPAD_RIGHT && old_data.dpad_code == DPAD_OFF)
+                     || (ps4_data.dpad_code == DPAD_RIGHT_DOWN && old_data.dpad_code == DPAD_OFF);
              case DOWN:
-                 return (ps4_data.btns.dpad_code == DPAD_RIGHT_DOWN && old_data.btns.dpad_code == DPAD_OFF)
-                     || (ps4_data.btns.dpad_code == DPAD_DOWN && old_data.btns.dpad_code == DPAD_OFF)
-                     || (ps4_data.btns.dpad_code == DPAD_DOWN_LEFT && old_data.btns.dpad_code == DPAD_OFF);
+                 return (ps4_data.dpad_code == DPAD_RIGHT_DOWN && old_data.dpad_code == DPAD_OFF)
+                     || (ps4_data.dpad_code == DPAD_DOWN && old_data.dpad_code == DPAD_OFF)
+                     || (ps4_data.dpad_code == DPAD_DOWN_LEFT && old_data.dpad_code == DPAD_OFF);
              case LEFT:
-                 return (ps4_data.btns.dpad_code == DPAD_DOWN_LEFT && old_data.btns.dpad_code == DPAD_OFF)
-                     || (ps4_data.btns.dpad_code == DPAD_LEFT && old_data.btns.dpad_code == DPAD_OFF)
-                     || (ps4_data.btns.dpad_code == DPAD_LEFT_UP && old_data.btns.dpad_code == DPAD_OFF);
+                 return (ps4_data.dpad_code == DPAD_DOWN_LEFT && old_data.dpad_code == DPAD_OFF)
+                     || (ps4_data.dpad_code == DPAD_LEFT && old_data.dpad_code == DPAD_OFF)
+                     || (ps4_data.dpad_code == DPAD_LEFT_UP && old_data.dpad_code == DPAD_OFF);
              default:
-                 return false;
+                 return 0;
          }
      }else{
-         return ((ps4_data.btns.val & (1UL << PS4_BUTTONS_BITMASK[b]))
-             && (!(old_data.btns.val & (1UL << PS4_BUTTONS_BITMASK[b]))));
+       switch (b){
+             case SHARE:
+               return ps4_data.share & !(old_data.share);
+             case OPTIONS:
+               return ps4_data.options & !(old_data.options);
+             case L3:
+               return ps4_data.l3 & !(old_data.l3);
+             case R3:
+               return ps4_data.r3 & !(old_data.r3);
+             case L2:
+               return ps4_data.l2 & !(old_data.l2);
+             case R2:
+               return ps4_data.r2 & !(old_data.r2);
+             case L1:
+               return ps4_data.l1 & !(old_data.l1);
+             case R1:
+               return ps4_data.r1 & !(old_data.r1);
+             case TRIANGLE:
+               return ps4_data.triangle & !(old_data.triangle);
+             case CROSS:
+               return ps4_data.cross & !(old_data.cross);
+             case SQUARE:
+               return ps4_data.square & !(old_data.square);
+             case PS:
+               return ps4_data.ps & !(old_data.ps);
+             case TOUCHPAD:
+                return ps4_data.tpad_click & !(old_data.tpad_click);
+             case CIRCLE:
+                return ps4_data.circle & !(old_data.circle);
+             default:
+                return 0;
+       }
      }
-}
-
-uint8_t DS4_status_change(DS4_status_t a, DS4_status_t b){//function to determine generating ui_event to update screen
-     if (abs(a.hat_left_x - b.hat_left_x) < 2
-         && abs(a.hat_left_y - b.hat_left_y)<2 && abs(a.hat_right_x - b.hat_right_x) < 2 &&
-         abs(a.hat_right_y - b.hat_right_y) < 2 && a.l2_trigger == b.l2_trigger &&
-         a.r2_trigger == b.r2_trigger && ((a.btns.val & !(0xFC0)) == (b.btns.val & !(0xFC0)))){
-         return 0;
-     }
-     return 1;
 }
 
 static THD_WORKING_AREA(waUSBHOST, 1024);
@@ -101,7 +96,7 @@ static THD_FUNCTION(DS4, arg) {
 
   USBHDS4Driver *const ds4p = &USBHDS4[0];
 
-  ui_event evt; ui_event evt1 = {UI_STATUSBAR_TICK};
+  ui_event evt;
   bool need_post = false;
 
 #if USBHDS4_DEBUG_ENABLE_INFO
@@ -116,6 +111,8 @@ static THD_FUNCTION(DS4, arg) {
       chprintf((BaseSequentialStream *) &USBH_DEBUG_SD,
           "DS4 Disconnected or Stopped.\r\n");
 #endif
+      memset(&ps4_data, 0, sizeof(ps4_data));
+      memset(&old_data, 0, sizeof(old_data));
       chThdSleepMilliseconds(500);
       break;
     case USBHDS4_STATE_ACTIVE:
@@ -133,7 +130,7 @@ static THD_FUNCTION(DS4, arg) {
         chprintf((BaseSequentialStream *) &USBH_DEBUG_SD, "%5d %5d %5d\r",
             ps4_data.hat_left_x,
             ps4_data.r2_trigger,
-            ps4_data.btns.cross
+            ps4_data.cross
             );
 #endif
           if (DS4_ButtonPress(DOWN)){
@@ -158,19 +155,15 @@ static THD_FUNCTION(DS4, arg) {
 #if USBHDS4_DEBUG_ENABLE_INFO
         chprintf((BaseSequentialStream *) &USBH_DEBUG_SD, "DS4 Read Timeout\r\n");
 #endif
+          memset(&ps4_data, 0, sizeof(ps4_data));
+          memset(&old_data, 0, sizeof(old_data));
       }
-//      cmd.led_r = ps4_data.l2_trigger;
-//      cmd.led_g = ps4_data.r2_trigger;
-//      if(ps4_data.cross)
-//        DS4_WriteTimeOut(ds4p, &cmd, MS2ST(10));
       if(need_post){
             chMBPost(&app_mb, (msg_t)&evt, TIME_IMMEDIATE);
             need_post = false;
       }
-      if (DS4_status_change(ps4_data, old_data)){
-            //chMBPost(&app_mb, (msg_t)&evt1, TIME_IMMEDIATE);//FIXME: post as status bar tick should be removed
-      }
-      old_data = ps4_data;
+      memcpy(&old_data, &ps4_data, sizeof(old_data));
+      //old_data = ps4_data;
       chThdSleepMilliseconds(10);
 
     }

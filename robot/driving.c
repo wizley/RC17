@@ -55,13 +55,13 @@ static THD_FUNCTION(RunManualControl, arg) {
     UDC_PollObjectList(udc_objectlist);
     if (current_running_menu->data.app == &start_robot){
              motor_get_status(&M[0]);// Miscellaneous Data
-             if (ps4_data.btns.triangle)//brake
+             if (ps4_data.triangle)//brake
                  motor_setBrake(&M[0]);
-             else if (DS4_ButtonPress(SQUARE))//reactivate after brake
+             else if (ps4_data.square)//reactivate after brake
                  motor_send_setting(&M[0]);//should have set the motor global setting before calling this
              //motor_send_setpoint(&M[0]);
              //Servo1.command[0] = (qeiGetCount(&QEID4) - oldcount) * 10;
-             else if (DS4_ButtonPress(CROSS))
+             else if (ps4_data.ps)
                  DeactivateDriving();
              M[0].SetPoint = (qeiGetCount(&QEID4) - oldcount) * 10;
              palSetPad(GPIOC, GPIOC_LED_G);
