@@ -19,6 +19,7 @@
 #include "servo.h"
 #endif
 #include "widgets.h"
+#include "status_bar.h"
 char * UIDrivingState[2] = {"activated","deactivated"}; //for ui
 
 // GHandles
@@ -35,16 +36,16 @@ font_t dejavu_sans_32_anti_aliased;
 static void createPagePage0(void)
 {
   // create container widget: ghContainerPage0
-  ghContainerPage0 = createContainer(0, 0, 800, 480, FALSE);
+  ghContainerPage0 = createContainer(0, STATUS_BAR_HEIGHT, GDISP_SCREEN_WIDTH, GDISP_SCREEN_HEIGHT - STATUS_BAR_HEIGHT, FALSE);
 
   // Create console widget: ghConsole
-  ghConsole = createConsole(&ghContainerPage0, 0, 30, 270, 270);
+  ghConsole = createConsole(&ghContainerPage0, 0, 0, 270, 270);
   gwinSetColor(ghConsole, Silver);
   gwinSetBgColor(ghConsole, Black);
   gwinSetFont(ghConsole, dejavu_sans_32_anti_aliased);
   gwinRedraw(ghConsole);
 
-  ghConsole1 = createConsole(&ghContainerPage0, 270,30,270,130);
+  ghConsole1 = createConsole(&ghContainerPage0, 270,0,270,130);
   gwinSetColor(ghConsole1, Silver);
   gwinSetBgColor(ghConsole1, Black);
   gwinSetFont(ghConsole1, dejavu_sans_32_anti_aliased);
@@ -69,7 +70,7 @@ void guiShowPage(unsigned pageIndex)
 
 void guiCreate(void)
 {
-  GWidgetInit wi;
+  //GWidgetInit wi;
 
   // Prepare fonts
   dejavu_sans_20_anti_aliased = gdispOpenFont("DejaVuSans20_aa");
@@ -80,10 +81,10 @@ void guiCreate(void)
   // Prepare images
 
   // GWIN settings
-  gwinSetDefaultFont(dejavu_sans_32_anti_aliased);
-  gwinSetDefaultStyle(&WhiteWidgetStyle, FALSE);
-  gwinSetDefaultColor(Black);
-  gwinSetDefaultBgColor(White);
+//  gwinSetDefaultFont(dejavu_sans_32_anti_aliased);
+//  gwinSetDefaultStyle(&WhiteWidgetStyle, FALSE);
+//  gwinSetDefaultColor(Black);
+//  gwinSetDefaultBgColor(White);
 
   // Create all the display pages
   createPagePage0();
@@ -123,6 +124,9 @@ void start_robot_main(void *params){
              gwinPrintf(ghConsole, "current: %d\r\n",M[0].Board.Current);
              //gwinPrintf(ghConsole, "voltage: %d\r\n",M[0].Board.Voltage);
              gwinPrintf(ghConsole, "temperature: %d\r\n",M[0].Board.Temperature);
+          break;
+        case UI_STATUSBAR_TICK:
+             status_bar_redraw();
           break;
         default:
           break;

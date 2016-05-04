@@ -10,8 +10,8 @@
 
 #define STATUS_BAR_HEIGHT   30
 
-void status_bar_redraw();
+void status_bar_redraw(void);
 
-void status_bar_init();
+void status_bar_init(void);
 
 #endif /* MODULES_UI_STATUS_BAR_STATUS_BAR_H_ */

@@ -27,14 +27,16 @@
 #include"status_bar.h"
 #include "app_list.h"
 #include "menu_struct.h"
-
-#include <stdio.h>
+#include "widgets.h"
+//#include <stdio.h>
 #include "gfx.h"
-
+uint8_t timer_sleep = 0;
+static semaphore_t timer_sem;
 extern THD_WORKING_AREA (wa_ui_udc_event, 64);
 extern THD_FUNCTION(ui_udcupdate_evt, arg);
 
 static font_t font1;
+static GHandle MenuPage;
 
 static int selected_item = 0;
 static int offset = 0;
@@ -64,7 +66,8 @@ static void menu_screen_redraw(void)
     int menu_limit = (menu_size < MAX_ENTRIES ? menu_size : MAX_ENTRIES);
     uint8_t font_height = (uint8_t) gdispGetFontMetric(font1, fontHeight);
 
-    gdispClear(HTML2COLOR(0xEEEEEE));
+    //gdispClear(HTML2COLOR(0xEEEEEE));
+    gwinClear(MenuPage);
     for(i = 0; i < menu_limit; ++i)
     {
         int pos = offset + i;
@@ -72,6 +75,7 @@ static void menu_screen_redraw(void)
         // draw a green background for the selected entry
         if(pos == selected_item) {
           gdispFillArea(LEFT_MARGIN, (i * LINE_HEIGHT)+ STATUS_BAR_HEIGHT, MENU_SCREEN_WIDTH, LINE_HEIGHT, HTML2COLOR(0x48BC4D));
+          //gwinFillArea(MenuPage ,LEFT_MARGIN, (i * LINE_HEIGHT)+ STATUS_BAR_HEIGHT, MENU_SCREEN_WIDTH, LINE_HEIGHT);
         }
 
         menu_entry *ent = &(*current_menu)->entries[pos];
@@ -85,11 +89,11 @@ static void menu_screen_redraw(void)
             application *a = ent->data.app;
 
             gdispDrawString(LEFT_MARGIN, i * LINE_HEIGHT + (LINE_HEIGHT - font_height)/2 + STATUS_BAR_HEIGHT, a->name, font1, (i == selected_item) ? HTML2COLOR(0x09180A) : HTML2COLOR(0x09180A));
-
+            //gwinDrawString(MenuPage, LEFT_MARGIN, i * LINE_HEIGHT + (LINE_HEIGHT - font_height)/2 + STATUS_BAR_HEIGHT, a->name);
         } else if(ent->type == SUBMENU) {
             menu_list *l = ent->data.submenu;
-
             gdispDrawString(LEFT_MARGIN, i * LINE_HEIGHT + (LINE_HEIGHT - font_height)/2 + STATUS_BAR_HEIGHT, l->name, font1, (i == selected_item) ? HTML2COLOR(0x09180A) : HTML2COLOR(0x09180A));
+            //gwinDrawString(MenuPage, LEFT_MARGIN, i * LINE_HEIGHT + (LINE_HEIGHT - font_height)/2 + STATUS_BAR_HEIGHT, l->name);
 //        } else if (ent->type == SETTING) {
 //            char s[16];
 //            setting_t *set = ent->data.setting;
@@ -107,6 +111,7 @@ static void menu_deselect_item(uint8_t index){
   if(ent->type == APP) {
     application *a = ent->data.app;
     gdispFillStringBox(LEFT_MARGIN, index * LINE_HEIGHT+ STATUS_BAR_HEIGHT, MENU_SCREEN_WIDTH, LINE_HEIGHT, a->name, font1, HTML2COLOR(0x09180A), HTML2COLOR(0xEEEEEE), justifyLeft);
+    //gwinFillStringBox(MenuPage, LEFT_MARGIN, index * LINE_HEIGHT+ STATUS_BAR_HEIGHT, MENU_SCREEN_WIDTH, LINE_HEIGHT, a->name, justifyLeft);
   } else if(ent->type == SUBMENU) {
     menu_list *l = ent->data.submenu;
     gdispFillStringBox(LEFT_MARGIN, index * LINE_HEIGHT+ STATUS_BAR_HEIGHT, MENU_SCREEN_WIDTH, LINE_HEIGHT, l->name, font1, HTML2COLOR(0x09180A), HTML2COLOR(0xEEEEEE), justifyLeft);
@@ -197,8 +202,18 @@ static void menu_ui_init(void) {
 //
 //    ui_init_widget(&menu_screen);
   font1 = gdispOpenFont("SFNS Display Regular 32");
+  gwinSetDefaultFont(font1);
+  gwinSetDefaultStyle(&WhiteWidgetStyle, FALSE);
+  gwinSetDefaultColor(HTML2COLOR(0x09180A));
+  gwinSetDefaultBgColor(HTML2COLOR(0xEEEEEE));
 
+  MenuPage = createContainer(0, STATUS_BAR_HEIGHT, MENU_SCREEN_WIDTH, MENU_SCREEN_HEIGHT, FALSE);
+  gwinSetColor(MenuPage,HTML2COLOR(0x48BC4D));
+  //gwinSetBgColor(MenuPage, HTML2COLOR(0x09180A));
+  gwinSetBgColor(MenuPage, HTML2COLOR(0xEEEEEE));
+  gwinShow(MenuPage);
   menu_screen_redraw();
+  //gwinRedraw(MenuPage);
 //    ui_add_widget(&menu_screen);
 //
 //    ui_init_widget(&status_bar);
@@ -210,10 +225,19 @@ static void menu_ui_init(void) {
 static void run(menu_entry *entry) {
     if(entry->type == APP) {
       current_running_menu = entry;
+      if (entry->data.app->syn_flg == sync){
+          timer_sleep = 0; chSemReset(&timer_sem, 0);
+      }else{
+          timer_sleep = 1;
+      }
       if(entry->data.app->main == NULL){
         template.main(NULL);
       }else{
         entry->data.app->main(NULL);
+        if (entry->data.app->syn_flg == sync){
+             timer_sleep = 1;
+        }
+
       }
     }else if(entry->type == SUBMENU) {
       //TODO : implement stack to save previous offset
@@ -265,6 +289,7 @@ void menu_main(void* params) {
     menu_ui_init();
     // Once it is deactivated - display the menu
     //starts the synchronous update
+    chSemObjectInit(&timer_sem, 0);
     chThdCreateStatic(wa_ui_udc_event, sizeof(wa_ui_udc_event), LOWPRIO, ui_udcupdate_evt, NULL);
     status_bar_init();
     while(1) {
@@ -282,8 +307,6 @@ void menu_main(void* params) {
             }
             break;
           case UI_STATUSBAR_TICK:
-            //update status_bar, try to get it written in statusbar.c and forced everypage to have it...
-            //maybe using macro in every app to force this entry
             status_bar_redraw();
             break;
           default:
@@ -307,9 +330,15 @@ THD_FUNCTION(ui_udcupdate_evt, arg){
   evt1.type = UI_UDC_UPDATE;
   uint32_t time = chVTGetSystemTimeX();
   while (true) {
-      time += MS2ST(UI_UDC_UPDATE_INTERVAL);
-      chMBPost(&app_mb, (msg_t)&evt1, TIME_IMMEDIATE);
-      chThdSleepUntil(time);
+     if (!timer_sleep){
+       time += MS2ST(UI_UDC_UPDATE_INTERVAL);
+       chMBPost(&app_mb, (msg_t)&evt1, TIME_IMMEDIATE);
+       chThdSleepUntil(time);
+     }else{
+       chSemWait(&timer_sem);
+       timer_sleep = 0; time = chVTGetSystemTimeX();
+       continue;
      }
+   }
 }
 

@@ -9,15 +9,20 @@
 #include "hal.h"
 #include "gfx.h"
 #include "app.h"
+#include "status_bar.h"
+
+
 
 void template_main(void *params){
+  GHandle pageContainer;
   (void) params;
 
   font_t font1;
   font1 = gdispOpenFont("DejaVuSans32_aa");
-
-  gdispClear(HTML2COLOR(0xEEEEEE));
-  gdispDrawString(0, 0, "404 Not Found", font1, HTML2COLOR(0x09180A));
+  pageContainer = createContainer(0, STATUS_BAR_HEIGHT, GDISP_SCREEN_WIDTH, GDISP_SCREEN_HEIGHT - STATUS_BAR_HEIGHT, FALSE);
+  gwinShow(pageContainer);
+  gwinClear(pageContainer);
+  gdispDrawString(0, STATUS_BAR_HEIGHT, "404 Not Found", font1, HTML2COLOR(0x09180A));
 
   ui_event *evt = NULL;
 
@@ -34,6 +39,9 @@ void template_main(void *params){
           } else {
 
           }
+          break;
+        case UI_STATUSBAR_TICK:
+           status_bar_redraw();
           break;
         default:
 

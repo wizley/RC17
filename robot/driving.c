@@ -18,6 +18,7 @@
 #include "ps4_usbhost.h"
 #include "menu_struct.h"
 #include "app_list.h"
+#include "analog.h"
 
 #define LOOP_TIME 10   /* Control Loop time in ms */
 #define CONTROL_EVENT 0
@@ -65,6 +66,7 @@ static THD_FUNCTION(RunManualControl, arg) {
                  DeactivateDriving();
              M[0].SetPoint = (qeiGetCount(&QEID4) - oldcount) * 10;
              palSetPad(GPIOC, GPIOC_LED_G);
+             samples2[0];
     }else if (current_running_menu->data.app == &ps4_test_app){
              //should not do anything
            palClearPad(GPIOC, GPIOC_LED_G);

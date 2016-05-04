@@ -14,6 +14,7 @@
 #include "widgets.h"
 
 GHandle ps4Console;
+GHandle pageContainer;
 
 void ps4_test_main(void *params){
   (void) params;
@@ -22,12 +23,16 @@ void ps4_test_main(void *params){
   font_t font1;
   font1 = gdispOpenFont("DejaVuSans32_aa");
 
-  gdispClear(HTML2COLOR(0xEEEEEE));
-  ps4Console = createConsole(NULL,0,STATUS_BAR_HEIGHT,800,480);
-  gwinSetColor(ps4Console, Silver);
-  gwinSetBgColor(ps4Console, Black);
-  gwinSetFont(ps4Console, font1);
 
+  pageContainer = createContainer(0, STATUS_BAR_HEIGHT, GDISP_SCREEN_WIDTH, GDISP_SCREEN_HEIGHT - STATUS_BAR_HEIGHT, FALSE);
+  ps4Console = createConsole(&pageContainer,0,STATUS_BAR_HEIGHT,800,480 - STATUS_BAR_HEIGHT);
+  gwinSetColor(ps4Console, Black);
+  gwinSetBgColor(ps4Console, White);
+  gwinSetFont(ps4Console, font1);
+  gwinShow(pageContainer);
+  gwinClear(pageContainer);
+  gwinPrintf(ps4Console, "PS4 Testing Console\r\n");
+  gwinRedraw(ps4Console);
   ui_event *evt = NULL;
 
   while(TRUE){
@@ -44,16 +49,15 @@ void ps4_test_main(void *params){
 
           }
           break;
-        case UI_STATUSBAR_TICK:
-
-          break;
         case UI_UDC_UPDATE:
              //gwinClear(ps4Console);
              gwinPrintf(ps4Console, "%d\r\n", DS4_ButtonPress(CIRCLE));
              gwinRedraw(ps4Console);
           break;
+        case UI_STATUSBAR_TICK:
+             status_bar_redraw();
+          break;
         default:
-
           break;
       }
     }
@@ -65,5 +69,5 @@ void ps4_test_main(void *params){
 application ps4_test_app = {
     .name = "PS4 Test",
     .main = ps4_test_main,
-    .syn_flg = sync //TODO: change to no_sync later
+    .syn_flg = no_sync //TODO: change to no_sync later
 };

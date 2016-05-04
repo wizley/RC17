@@ -132,9 +132,9 @@ GHandle  createButtonInContainer(GHandle* container, const char* text, int x, in
 GHandle  createLabel(const char* text, int x, int y, int width, int height){
   GWidgetInit     wi;
   // Apply some default values for GWIN
-  wi.customDraw = 0;
+  wi.customDraw = gwinLabelDrawJustifiedLeft;
   wi.customParam = 0;
-  wi.customStyle = 0;
+  wi.customStyle = &WhiteWidgetStyle;
   wi.g.show = TRUE;
   wi.g.x = x; wi.g.y = y;
   wi.g.width = width; wi.g.height = height;

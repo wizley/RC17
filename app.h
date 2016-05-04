@@ -4,6 +4,12 @@
 #include "ch.h"
 #include "driving.h"
 
+#ifndef GDISP_SCREEN_HEIGHT
+#define GDISP_SCREEN_HEIGHT     480
+#endif
+#ifndef GDISP_SCREEN_WIDTH
+#define GDISP_SCREEN_WIDTH      800
+#endif
 
 
 #define UI_UDC_UPDATE_INTERVAL 100

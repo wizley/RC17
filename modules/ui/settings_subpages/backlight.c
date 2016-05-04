@@ -9,14 +9,18 @@
 #include "gfx.h"
 #include "app.h"
 #include "widgets.h"
+#include "status_bar.h"
 
 GHandle brightness_bar;
 
 void backlight_main(void* params){
   (void) params;
   ui_event *evt = NULL;
-  gdispClear(HTML2COLOR(0xEEEEEE));
-  brightness_bar = createProgressBar(NULL, 200, 120, 400, 60);
+  GHandle pageContainer;
+  pageContainer = createContainer(0, STATUS_BAR_HEIGHT, GDISP_SCREEN_WIDTH, GDISP_SCREEN_HEIGHT - STATUS_BAR_HEIGHT, FALSE);
+  gwinShow(pageContainer);
+  gwinClear(pageContainer);
+  brightness_bar = createProgressBarInContainer(&pageContainer,NULL, 200, 120, 400, 60);
   gwinProgressbarSetRange(brightness_bar, 0, 100);
   gwinProgressbarSetPosition(brightness_bar, gdispGetBacklight());
   gwinRedraw(brightness_bar);

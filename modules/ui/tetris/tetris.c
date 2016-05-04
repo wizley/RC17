@@ -481,6 +481,9 @@ static DECLARE_THREAD_FUNCTION(thdTetris, arg) {
             printPaused();
           }
           break;
+        case UI_STATUSBAR_TICK:
+          status_bar_redraw();
+          break;
         default:
 
           break;
