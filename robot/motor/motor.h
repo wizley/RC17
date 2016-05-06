@@ -109,6 +109,6 @@ udc_rx_state_e motor_get_status(MotorObj *motor);
 udc_rx_state_e motor_send_setting(MotorObj *motor);
 udc_rx_state_e motor_setIdle(MotorObj *motor);
 udc_rx_state_e motor_setBrake(MotorObj *motor);
-void motor_checkAlive( volatile void * arg);
+void motor_setAlive( volatile void * arg);
 
 #endif  /* _MOTOR_H_ */

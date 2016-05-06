@@ -106,7 +106,6 @@ static THD_FUNCTION(udc_lld_process, arg) {
       UDCD.udc_rx_state = udc_lld_get_rx_event(&el_rx);
     }else{
       UDCD.udc_rx_state = udc_rx_idle;
-
     }
 
     UDCD.udc_tx_state = udc_lld_get_tx_event(&el_tx);
@@ -235,6 +234,9 @@ void udc_lld_rxend(UARTDriver *uartp) {
         break;
       case udc_rx_state_error:
         break;
+      case udc_rx_timeout:
+        UDCD.timeout_error++;
+        break;
       default:
         UDCD.udc_rx_state = udc_rx_state_error;
         break;
@@ -247,7 +249,7 @@ void udc_lld_rxend(UARTDriver *uartp) {
 
 void udc_lld_timer_cb(GPTDriver *gptp) {
   (void) gptp;
-  UDCD.timeout_error++;
+  //UDCD.timeout_error++;
   UDCD.udc_rx_state = udc_rx_timeout;
   chSysLockFromISR();
   osalEventBroadcastFlagsI(&UDCD.rx_evt, (eventflags_t)udc_rx_timeout);

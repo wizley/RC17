@@ -120,7 +120,7 @@ udc_rx_state_e motor_setBrake(MotorObj *motor){
   return UDC_Poll_Single(&udc_object);
 }
 
-void motor_checkAlive( volatile void * arg){
+void motor_setAlive( volatile void * arg){
      MotorObj * motor = (MotorObj *) arg;
      motor->Alive = 3;
 }

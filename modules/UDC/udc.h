@@ -8,6 +8,13 @@
 #ifndef MODULES_UDC_UDC_H_
 #define MODULES_UDC_UDC_H_
 
+#ifndef ID_SYNC
+#define ID_SYNC 0
+#endif
+#ifndef ID_END
+#define ID_END -1
+#endif
+
 typedef enum{
   UDC_UNINIT = 0,
   UDC_READY,

@@ -1,9 +1,7 @@
 #include "ch.h"
 #include "motor.h"
 #include "drivers.h"
-
 #include "driving.h"
-
 #if  USE_MOTOR_0  ||  USE_MOTOR_1  ||  USE_MOTOR_2  ||  USE_MOTOR_3  ||  USE_MOTOR_4  ||  USE_MOTOR_5  ||  USE_MOTOR_6  ||  USE_MOTOR_7
     #include "motor.h"
 #endif
@@ -12,6 +10,9 @@
 #endif
 #if USE_SERVO
 #include "servo.h"
+#endif
+#if USE_LINESENSOR_0 || USE_LINESENSOR_1 || USE_LINESENSOR_2 || USE_LINESENSOR_3
+#include "linesensor.h"
 #endif
 #include "udc_objectlist.h"
 #include "udc.h"
@@ -22,7 +23,6 @@
 
 #define LOOP_TIME 10   /* Control Loop time in ms */
 #define CONTROL_EVENT 0
-
 
 DRIVING_STATE DrivingState = DEACTIVATED;
 
@@ -66,7 +66,6 @@ static THD_FUNCTION(RunManualControl, arg) {
                  DeactivateDriving();
              M[0].SetPoint = (qeiGetCount(&QEID4) - oldcount) * 10;
              palSetPad(GPIOC, GPIOC_LED_G);
-             samples2[0];
     }else if (current_running_menu->data.app == &ps4_test_app){
              //should not do anything
            palClearPad(GPIOC, GPIOC_LED_G);
@@ -104,6 +103,18 @@ void ActivateDriving(void){
 #endif
 
      if(ctrllp == NULL){//should not call it repeatedly
+#if USE_LINESENSOR_0
+        linesensor_get_data(&LineSensor[0]);
+#endif
+#if USE_LINESENSOR_1
+        linesensor_get_data(&LineSensor[1]);
+#endif
+#if USE_LINESENSOR_2
+        linesensor_get_data(&LineSensor[2]);
+#endif
+#if USE_LINESENSOR_3
+        linesensor_get_data(&LineSensor[3]);
+#endif
         /* Control Loop Thread */
         ctrllp = chThdCreateStatic(waCtrlLp, sizeof(waCtrlLp), HIGHPRIO, RunManualControl, NULL);
         DrivingState = ACTIVATED;
@@ -143,7 +154,7 @@ void DeactivateDriving(void){
     motor_setIdle(&M[6]);
 #endif
 #if USE_MOTOR_7
-    motor_setIdle(&Mx[7]);
+    motor_setIdle(&M[7]);
 #endif
   }
 }

@@ -18,6 +18,9 @@
 #if USE_SERVO
 #include "servo.h"
 #endif
+#if USE_LINESENSOR_0 || USE_LINESENSOR_1 || USE_LINESENSOR_2 || USE_LINESENSOR_3
+#include "linesensor.h"
+#endif
 #include "widgets.h"
 #include "status_bar.h"
 char * UIDrivingState[2] = {"activated","deactivated"}; //for ui

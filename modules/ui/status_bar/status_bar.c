@@ -13,10 +13,7 @@
 #include "widgets.h"
 #include "analog.h"
 
-static GHandle statusbar_label;
 static GHandle statusbar;
-static font_t f1;
-static struct tm *time_timp;
 static RTCDateTime timespec;
 static RTCDateTime starttime = { 0 };
 static uint32_t system_time;
@@ -58,10 +55,8 @@ THD_FUNCTION(ui_rtc_evt, arg){
 void status_bar_init(void){
   //intitialize the rtc driver
   chThdCreateStatic(wa_ui_rtc_event, sizeof(wa_ui_rtc_event), LOWPRIO, ui_rtc_evt, NULL);
-  f1 = gdispOpenFont("DroidSans23");
   statusbar = createContainer(0, 0, GDISP_SCREEN_WIDTH, STATUS_BAR_HEIGHT, FALSE);
   gwinShow(statusbar);
   rtcSetTime(&RTCD1, &starttime);
   status_bar_redraw();
-
 }

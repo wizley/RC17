@@ -5,7 +5,7 @@
 //#include "usbcfg.h"
 #include "usb_shell.h"
 #include "app.h"
-#include "driving.h"
+#include "ps4_usbhost.h"
 
 /*
  * Erases the whole SDRAM bank.
