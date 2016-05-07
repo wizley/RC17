@@ -10,38 +10,49 @@
 #include "gfx.h"
 #include "app.h"
 
+#include "colors.h"
+#include "widgetstyles.h"
+
+// GListeners
+GListener gl;
+
 // GHandles
 GHandle ghContainerPage0;
 GHandle ghContainer1;
-GHandle ghProgressbar3;
-GHandle ghContainer1_copy;
-GHandle ghProgressbar2;
-GHandle ghSlider1;
-GHandle ghContainer1_copy_copy;
 GHandle ghProgressbar1;
-GHandle ghConsole;
-GHandle ghButton_EME;
-GHandle ghLabel_M1;
-GHandle ghButton3;
-GHandle ghButton2;
-GHandle ghButton1;
+GHandle ghContainer2;
+GHandle ghProgressbar2;
+GHandle ghContainer3;
+GHandle ghContainer4;
+GHandle ghLabelm0;
+GHandle ghLabelm1;
+GHandle ghLabelm2;
+GHandle ghLabelm3;
+GHandle ghLabelm4;
+GHandle ghLabelm5;
+GHandle ghLabelm6;
+GHandle ghLabelm7;
+GHandle ghLabele12;
+GHandle ghLabele34;
 GHandle ghLabel2;
-GHandle ghLabel_Enc1_2;
-GHandle ghButton_Back;
-GHandle ghLabel_StatusBar;
-GHandle ghCheckbox1;
-GHandle ghLabel_Timer;
-GHandle ghLabel6;
-GHandle ghLabel_M2;
-GHandle ghLabel_M3;
-GHandle ghLabel_M4;
-GHandle ghLabel_Enc3_4;
-GHandle ghCheckbox2;
+GHandle ghConsole;
+GHandle ghButtonStop;
+GHandle ghButton1;
+GHandle ghButton2;
+GHandle ghButton3;
+GHandle ghCheckboxMotor;
+GHandle ghCheckboxEncoder;
+GHandle ghLabelTimer;
+GHandle ghButtonBack;
+GHandle ghLabelStatus;
+GHandle ghLabel35;
+GHandle ghCheckboxDS4;
 
 // Fonts
-font_t dejavu_sans_20_anti_aliased;
 font_t dejavu_sans_16_anti_aliased;
+font_t dejavu_sans_10;
 font_t dejavu_sans_12_anti_aliased;
+font_t dejavu_sans_24_anti_aliased;
 font_t dejavu_sans_32_anti_aliased;
 
 static void createPagePage0(void)
@@ -63,10 +74,10 @@ static void createPagePage0(void)
   wi.customStyle = 0;
   ghContainerPage0 = gwinContainerCreate(0, &wi, 0);
 
-  // create container widget: ghContainer1_copy
+  // create container widget: ghContainer2
   wi.g.show = TRUE;
   wi.g.x = 440;
-  wi.g.y = 250;
+  wi.g.y = 260;
   wi.g.width = 170;
   wi.g.height = 220;
   wi.g.parent = ghContainerPage0;
@@ -74,12 +85,25 @@ static void createPagePage0(void)
   wi.customDraw = gwinContainerDraw_Std;
   wi.customParam = 0;
   wi.customStyle = 0;
-  ghContainer1_copy = gwinContainerCreate(0, &wi, GWIN_CONTAINER_BORDER);
+  ghContainer2 = gwinContainerCreate(0, &wi, GWIN_CONTAINER_BORDER);
 
-  // create container widget: ghContainer1_copy_copy
+  // create container widget: ghContainer4
   wi.g.show = TRUE;
-  wi.g.x = 260;
-  wi.g.y = 250;
+  wi.g.x = 240;
+  wi.g.y = 20;
+  wi.g.width = 270;
+  wi.g.height = 230;
+  wi.g.parent = ghContainerPage0;
+  wi.text = "Container4";
+  wi.customDraw = gwinContainerDraw_Std;
+  wi.customParam = 0;
+  wi.customStyle = 0;
+  ghContainer4 = gwinContainerCreate(0, &wi, 0);
+
+  // create container widget: ghContainer3
+  wi.g.show = TRUE;
+  wi.g.x = 630;
+  wi.g.y = 260;
   wi.g.width = 170;
   wi.g.height = 220;
   wi.g.parent = ghContainerPage0;
@@ -87,12 +111,12 @@ static void createPagePage0(void)
   wi.customDraw = gwinContainerDraw_Std;
   wi.customParam = 0;
   wi.customStyle = 0;
-  ghContainer1_copy_copy = gwinContainerCreate(0, &wi, GWIN_CONTAINER_BORDER);
+  ghContainer3 = gwinContainerCreate(0, &wi, GWIN_CONTAINER_BORDER);
 
   // create container widget: ghContainer1
   wi.g.show = TRUE;
-  wi.g.x = 620;
-  wi.g.y = 250;
+  wi.g.x = 250;
+  wi.g.y = 260;
   wi.g.width = 170;
   wi.g.height = 220;
   wi.g.parent = ghContainerPage0;
@@ -102,28 +126,30 @@ static void createPagePage0(void)
   wi.customStyle = 0;
   ghContainer1 = gwinContainerCreate(0, &wi, GWIN_CONTAINER_BORDER);
 
-  // Create progressbar widget: ghProgressbar3
+  // Create progressbar widget: ghProgressbar1
   wi.g.show = TRUE;
   wi.g.x = 10;
   wi.g.y = 20;
-  wi.g.width = 140;
-  wi.g.height = 20;
+  wi.g.width = 20;
+  wi.g.height = 170;
   wi.g.parent = ghContainer1;
-  wi.text = "Progressbar3";
+  wi.text = "Progressbar1";
   wi.customDraw = gwinProgressbarDraw_Std;
   wi.customParam = 0;
   wi.customStyle = 0;
-  ghProgressbar3 = gwinProgressbarCreate(0, &wi);
-  gwinProgressbarSetRange(ghProgressbar3, 0, 100);
-  gwinProgressbarSetPosition(ghProgressbar3, 25);
+  ghProgressbar1 = gwinProgressbarCreate(0, &wi);
+  gwinProgressbarSetRange(ghProgressbar1, 0, 100);
+  gwinProgressbarSetPosition(ghProgressbar1, 25);
+  gwinSetFont(ghProgressbar1, dejavu_sans_10);
+  gwinRedraw(ghProgressbar1);
 
   // Create progressbar widget: ghProgressbar2
   wi.g.show = TRUE;
-  wi.g.x = 10;
-  wi.g.y = 20;
-  wi.g.width = 140;
+  wi.g.x = 20;
+  wi.g.y = 90;
+  wi.g.width = 130;
   wi.g.height = 20;
-  wi.g.parent = ghContainer1_copy;
+  wi.g.parent = ghContainer2;
   wi.text = "Progressbar2";
   wi.customDraw = gwinProgressbarDraw_Std;
   wi.customParam = 0;
@@ -132,112 +158,216 @@ static void createPagePage0(void)
   gwinProgressbarSetRange(ghProgressbar2, 0, 100);
   gwinProgressbarSetPosition(ghProgressbar2, 25);
 
-  // create button widget: ghSlider1
+  // Create label widget: ghLabelm0
   wi.g.show = TRUE;
   wi.g.x = 10;
-  wi.g.y = 60;
-  wi.g.width = 140;
+  wi.g.y = 30;
+  wi.g.width = 250;
   wi.g.height = 20;
-  wi.g.parent = ghContainer1_copy;
-  wi.text = "Slider1";
-  wi.customDraw = gwinSliderDraw_Std;
+  wi.g.parent = ghContainer4;
+  wi.text = "M0       +0000      +0000       +1000";
+  wi.customDraw = gwinLabelDrawJustifiedLeft;
   wi.customParam = 0;
   wi.customStyle = 0;
-  ghSlider1 = gwinSliderCreate(0, &wi);
-  gwinSliderSetRange(ghSlider1, 0, 100);
-  gwinSliderSetPosition(ghSlider1, 35);
-  gwinSetColor(ghSlider1, Black);
-  gwinSetBgColor(ghSlider1, White);
+  ghLabelm0 = gwinLabelCreate(0, &wi);
+  gwinLabelSetBorder(ghLabelm0, TRUE);
+  gwinSetFont(ghLabelm0, dejavu_sans_12_anti_aliased);
+  gwinRedraw(ghLabelm0);
 
-  // Create progressbar widget: ghProgressbar1
+  // Create label widget: ghLabelm1
   wi.g.show = TRUE;
   wi.g.x = 10;
-  wi.g.y = 20;
-  wi.g.width = 20;
-  wi.g.height = 180;
-  wi.g.parent = ghContainer1_copy_copy;
-  wi.text = "Progressbar1";
-  wi.customDraw = gwinProgressbarDraw_Std;
+  wi.g.y = 50;
+  wi.g.width = 250;
+  wi.g.height = 20;
+  wi.g.parent = ghContainer4;
+  wi.text = "M1       +0000      +0000       +1000";
+  wi.customDraw = gwinLabelDrawJustifiedLeft;
   wi.customParam = 0;
   wi.customStyle = 0;
-  ghProgressbar1 = gwinProgressbarCreate(0, &wi);
-  gwinProgressbarSetRange(ghProgressbar1, 0, 100);
-  gwinProgressbarSetPosition(ghProgressbar1, 25);
+  ghLabelm1 = gwinLabelCreate(0, &wi);
+  gwinLabelSetBorder(ghLabelm1, TRUE);
+  gwinSetFont(ghLabelm1, dejavu_sans_12_anti_aliased);
+  gwinRedraw(ghLabelm1);
+
+  // Create label widget: ghLabelm2
+  wi.g.show = TRUE;
+  wi.g.x = 10;
+  wi.g.y = 70;
+  wi.g.width = 250;
+  wi.g.height = 20;
+  wi.g.parent = ghContainer4;
+  wi.text = "M2       +0000      +0000       +1000";
+  wi.customDraw = gwinLabelDrawJustifiedLeft;
+  wi.customParam = 0;
+  wi.customStyle = 0;
+  ghLabelm2 = gwinLabelCreate(0, &wi);
+  gwinLabelSetBorder(ghLabelm2, TRUE);
+  gwinSetFont(ghLabelm2, dejavu_sans_12_anti_aliased);
+  gwinRedraw(ghLabelm2);
+
+  // Create label widget: ghLabelm3
+  wi.g.show = TRUE;
+  wi.g.x = 10;
+  wi.g.y = 90;
+  wi.g.width = 250;
+  wi.g.height = 20;
+  wi.g.parent = ghContainer4;
+  wi.text = "M3       +0000      +0000       +1000";
+  wi.customDraw = gwinLabelDrawJustifiedLeft;
+  wi.customParam = 0;
+  wi.customStyle = 0;
+  ghLabelm3 = gwinLabelCreate(0, &wi);
+  gwinLabelSetBorder(ghLabelm3, TRUE);
+  gwinSetFont(ghLabelm3, dejavu_sans_12_anti_aliased);
+  gwinRedraw(ghLabelm3);
+
+  // Create label widget: ghLabelm4
+  wi.g.show = TRUE;
+  wi.g.x = 10;
+  wi.g.y = 110;
+  wi.g.width = 250;
+  wi.g.height = 20;
+  wi.g.parent = ghContainer4;
+  wi.text = "M4       +0000      +0000       +1000";
+  wi.customDraw = gwinLabelDrawJustifiedLeft;
+  wi.customParam = 0;
+  wi.customStyle = 0;
+  ghLabelm4 = gwinLabelCreate(0, &wi);
+  gwinLabelSetBorder(ghLabelm4, TRUE);
+  gwinSetFont(ghLabelm4, dejavu_sans_12_anti_aliased);
+  gwinRedraw(ghLabelm4);
+
+  // Create label widget: ghLabelm5
+  wi.g.show = TRUE;
+  wi.g.x = 10;
+  wi.g.y = 130;
+  wi.g.width = 250;
+  wi.g.height = 20;
+  wi.g.parent = ghContainer4;
+  wi.text = "M5       +0000      +0000       +1000";
+  wi.customDraw = gwinLabelDrawJustifiedLeft;
+  wi.customParam = 0;
+  wi.customStyle = 0;
+  ghLabelm5 = gwinLabelCreate(0, &wi);
+  gwinLabelSetBorder(ghLabelm5, TRUE);
+  gwinSetFont(ghLabelm5, dejavu_sans_12_anti_aliased);
+  gwinRedraw(ghLabelm5);
+
+  // Create label widget: ghLabelm6
+  wi.g.show = TRUE;
+  wi.g.x = 10;
+  wi.g.y = 150;
+  wi.g.width = 250;
+  wi.g.height = 20;
+  wi.g.parent = ghContainer4;
+  wi.text = "M6       +0000      +0000       +1000";
+  wi.customDraw = gwinLabelDrawJustifiedLeft;
+  wi.customParam = 0;
+  wi.customStyle = 0;
+  ghLabelm6 = gwinLabelCreate(0, &wi);
+  gwinLabelSetBorder(ghLabelm6, TRUE);
+  gwinSetFont(ghLabelm6, dejavu_sans_12_anti_aliased);
+  gwinRedraw(ghLabelm6);
+
+  // Create label widget: ghLabelm7
+  wi.g.show = TRUE;
+  wi.g.x = 10;
+  wi.g.y = 170;
+  wi.g.width = 250;
+  wi.g.height = 20;
+  wi.g.parent = ghContainer4;
+  wi.text = "M7       +0000      +0000       +1000";
+  wi.customDraw = gwinLabelDrawJustifiedLeft;
+  wi.customParam = 0;
+  wi.customStyle = 0;
+  ghLabelm7 = gwinLabelCreate(0, &wi);
+  gwinLabelSetBorder(ghLabelm7, TRUE);
+  gwinSetFont(ghLabelm7, dejavu_sans_12_anti_aliased);
+  gwinRedraw(ghLabelm7);
+
+  // Create label widget: ghLabele12
+  wi.g.show = TRUE;
+  wi.g.x = 10;
+  wi.g.y = 190;
+  wi.g.width = 250;
+  wi.g.height = 20;
+  wi.g.parent = ghContainer4;
+  wi.text = "E1 : +00000  E2 : +00000";
+  wi.customDraw = gwinLabelDrawJustifiedLeft;
+  wi.customParam = 0;
+  wi.customStyle = 0;
+  ghLabele12 = gwinLabelCreate(0, &wi);
+  gwinLabelSetBorder(ghLabele12, TRUE);
+  gwinSetFont(ghLabele12, dejavu_sans_12_anti_aliased);
+  gwinRedraw(ghLabele12);
+
+  // Create label widget: ghLabele34
+  wi.g.show = TRUE;
+  wi.g.x = 10;
+  wi.g.y = 210;
+  wi.g.width = 250;
+  wi.g.height = 20;
+  wi.g.parent = ghContainer4;
+  wi.text = "E3 : +00000  E4 : +00000";
+  wi.customDraw = gwinLabelDrawJustifiedLeft;
+  wi.customParam = 0;
+  wi.customStyle = 0;
+  ghLabele34 = gwinLabelCreate(0, &wi);
+  gwinLabelSetBorder(ghLabele34, TRUE);
+  gwinSetFont(ghLabele34, dejavu_sans_12_anti_aliased);
+  gwinRedraw(ghLabele34);
+
+  // Create label widget: ghLabel2
+  wi.g.show = TRUE;
+  wi.g.x = 10;
+  wi.g.y = 10;
+  wi.g.width = 250;
+  wi.g.height = 20;
+  wi.g.parent = ghContainer4;
+  wi.text = "Motor  SetPoint  FeedBack  Current(mA)";
+  wi.customDraw = gwinLabelDrawJustifiedLeft;
+  wi.customParam = 0;
+  wi.customStyle = 0;
+  ghLabel2 = gwinLabelCreate(0, &wi);
+  gwinLabelSetBorder(ghLabel2, FALSE);
+  gwinSetFont(ghLabel2, dejavu_sans_12_anti_aliased);
+  gwinRedraw(ghLabel2);
 
   // Create console widget: ghConsole
   wi.g.show = TRUE;
   wi.g.x = 0;
   wi.g.y = 30;
-  wi.g.width = 270;
-  wi.g.height = 130;
+  wi.g.width = 220;
+  wi.g.height = 140;
   wi.g.parent = ghContainerPage0;
   ghConsole = gwinConsoleCreate(0, &wi.g);
-  gwinSetColor(ghConsole, Silver);
-  gwinSetBgColor(ghConsole, Black);
+  gwinSetColor(ghConsole, silver_studio);
+  gwinSetBgColor(ghConsole, black_studio);
   gwinSetFont(ghConsole, dejavu_sans_12_anti_aliased);
   gwinRedraw(ghConsole);
 
-  // create button widget: ghButton_EME
+  // create button widget: ghButtonStop
   wi.g.show = TRUE;
   wi.g.x = 10;
-  wi.g.y = 420;
-  wi.g.width = 140;
+  wi.g.y = 410;
+  wi.g.width = 110;
   wi.g.height = 60;
   wi.g.parent = ghContainerPage0;
-  wi.text = "STOP";
+  wi.text = "Stop";
   wi.customDraw = gwinButtonDraw_Normal;
   wi.customParam = 0;
   wi.customStyle = 0;
-  ghButton_EME = gwinButtonCreate(0, &wi);
-  gwinSetFont(ghButton_EME, dejavu_sans_32_anti_aliased);
-  gwinRedraw(ghButton_EME);
-
-  // Create label widget: ghLabel_M1
-  wi.g.show = TRUE;
-  wi.g.x = 280;
-  wi.g.y = 60;
-  wi.g.width = 330;
-  wi.g.height = 20;
-  wi.g.parent = ghContainerPage0;
-  wi.text = "M1         0000        0000           1000";
-  wi.customDraw = gwinLabelDrawJustifiedLeft;
-  wi.customParam = 0;
-  wi.customStyle = 0;
-  ghLabel_M1 = gwinLabelCreate(0, &wi);
-  gwinLabelSetBorder(ghLabel_M1, TRUE);
-
-  // create button widget: ghButton3
-  wi.g.show = TRUE;
-  wi.g.x = 10;
-  wi.g.y = 370;
-  wi.g.width = 70;
-  wi.g.height = 40;
-  wi.g.parent = ghContainerPage0;
-  wi.text = "Button3";
-  wi.customDraw = gwinButtonDraw_Normal;
-  wi.customParam = 0;
-  wi.customStyle = 0;
-  ghButton3 = gwinButtonCreate(0, &wi);
-
-  // create button widget: ghButton2
-  wi.g.show = TRUE;
-  wi.g.x = 10;
-  wi.g.y = 320;
-  wi.g.width = 70;
-  wi.g.height = 40;
-  wi.g.parent = ghContainerPage0;
-  wi.text = "Button2";
-  wi.customDraw = gwinButtonDraw_Normal;
-  wi.customParam = 0;
-  wi.customStyle = 0;
-  ghButton2 = gwinButtonCreate(0, &wi);
+  ghButtonStop = gwinButtonCreate(0, &wi);
+  gwinSetFont(ghButtonStop, dejavu_sans_24_anti_aliased);
+  gwinRedraw(ghButtonStop);
 
   // create button widget: ghButton1
   wi.g.show = TRUE;
   wi.g.x = 10;
-  wi.g.y = 270;
-  wi.g.width = 70;
-  wi.g.height = 40;
+  wi.g.y = 260;
+  wi.g.width = 80;
+  wi.g.height = 30;
   wi.g.parent = ghContainerPage0;
   wi.text = "Button1";
   wi.customDraw = gwinButtonDraw_Normal;
@@ -245,37 +375,81 @@ static void createPagePage0(void)
   wi.customStyle = 0;
   ghButton1 = gwinButtonCreate(0, &wi);
 
-  // Create label widget: ghLabel2
+  // create button widget: ghButton2
   wi.g.show = TRUE;
-  wi.g.x = 620;
-  wi.g.y = 30;
-  wi.g.width = 170;
-  wi.g.height = 160;
+  wi.g.x = 10;
+  wi.g.y = 310;
+  wi.g.width = 80;
+  wi.g.height = 30;
   wi.g.parent = ghContainerPage0;
-  wi.text = "Label2";
-  wi.customDraw = gwinLabelDrawJustifiedLeft;
-  wi.customParam = 0;
-  wi.customStyle = &BlackWidgetStyle;
-  ghLabel2 = gwinLabelCreate(0, &wi);
-  gwinLabelSetBorder(ghLabel2, FALSE);
-
-  // Create label widget: ghLabel_Enc1_2
-  wi.g.show = TRUE;
-  wi.g.x = 280;
-  wi.g.y = 140;
-  wi.g.width = 330;
-  wi.g.height = 20;
-  wi.g.parent = ghContainerPage0;
-  wi.text = "Encoder1 : 00000 : Encoder2 : 00000";
-  wi.customDraw = gwinLabelDrawJustifiedLeft;
+  wi.text = "Button2";
+  wi.customDraw = gwinButtonDraw_Normal;
   wi.customParam = 0;
   wi.customStyle = 0;
-  ghLabel_Enc1_2 = gwinLabelCreate(0, &wi);
-  gwinLabelSetBorder(ghLabel_Enc1_2, TRUE);
-  gwinSetFont(ghLabel_Enc1_2, dejavu_sans_16_anti_aliased);
-  gwinRedraw(ghLabel_Enc1_2);
+  ghButton2 = gwinButtonCreate(0, &wi);
 
-  // create button widget: ghButton_Back
+  // create button widget: ghButton3
+  wi.g.show = TRUE;
+  wi.g.x = 10;
+  wi.g.y = 360;
+  wi.g.width = 80;
+  wi.g.height = 30;
+  wi.g.parent = ghContainerPage0;
+  wi.text = "Button3";
+  wi.customDraw = gwinButtonDraw_Normal;
+  wi.customParam = 0;
+  wi.customStyle = 0;
+  ghButton3 = gwinButtonCreate(0, &wi);
+
+  // create checkbox widget: ghCheckboxMotor
+  wi.g.show = TRUE;
+  wi.g.x = 100;
+  wi.g.y = 340;
+  wi.g.width = 130;
+  wi.g.height = 20;
+  wi.g.parent = ghContainerPage0;
+  wi.text = "Motors Online";
+  wi.customDraw = gwinCheckboxDraw_CheckOnRight;
+  wi.customParam = 0;
+  wi.customStyle = 0;
+  ghCheckboxMotor = gwinCheckboxCreate(0, &wi);
+  gwinCheckboxCheck(ghCheckboxMotor, FALSE);
+  gwinSetFont(ghCheckboxMotor, dejavu_sans_12_anti_aliased);
+  gwinRedraw(ghCheckboxMotor);
+
+  // create checkbox widget: ghCheckboxEncoder
+  wi.g.show = TRUE;
+  wi.g.x = 100;
+  wi.g.y = 370;
+  wi.g.width = 130;
+  wi.g.height = 20;
+  wi.g.parent = ghContainerPage0;
+  wi.text = "Encoders Online";
+  wi.customDraw = gwinCheckboxDraw_CheckOnRight;
+  wi.customParam = 0;
+  wi.customStyle = 0;
+  ghCheckboxEncoder = gwinCheckboxCreate(0, &wi);
+  gwinCheckboxCheck(ghCheckboxEncoder, FALSE);
+  gwinSetFont(ghCheckboxEncoder, dejavu_sans_12_anti_aliased);
+  gwinRedraw(ghCheckboxEncoder);
+
+  // Create label widget: ghLabelTimer
+  wi.g.show = TRUE;
+  wi.g.x = 50;
+  wi.g.y = 190;
+  wi.g.width = 120;
+  wi.g.height = 40;
+  wi.g.parent = ghContainerPage0;
+  wi.text = "00:00";
+  wi.customDraw = gwinLabelDrawJustifiedCenter;
+  wi.customParam = 0;
+  wi.customStyle = 0;
+  ghLabelTimer = gwinLabelCreate(0, &wi);
+  gwinLabelSetBorder(ghLabelTimer, FALSE);
+  gwinSetFont(ghLabelTimer, dejavu_sans_32_anti_aliased);
+  gwinRedraw(ghLabelTimer);
+
+  // create button widget: ghButtonBack
   wi.g.show = TRUE;
   wi.g.x = 0;
   wi.g.y = 0;
@@ -285,142 +459,54 @@ static void createPagePage0(void)
   wi.text = "Back";
   wi.customDraw = gwinButtonDraw_Normal;
   wi.customParam = 0;
-  wi.customStyle = &BlackWidgetStyle;
-  ghButton_Back = gwinButtonCreate(0, &wi);
+  wi.customStyle = &black;
+  ghButtonBack = gwinButtonCreate(0, &wi);
 
-  // Create label widget: ghLabel_StatusBar
+  // Create label widget: ghLabelStatus
   wi.g.show = TRUE;
   wi.g.x = 100;
   wi.g.y = 0;
-  wi.g.width = 570;
+  wi.g.width = 500;
   wi.g.height = 30;
   wi.g.parent = ghContainerPage0;
-  wi.text = "CPU 50%  Motor Voltage 24.0V  MainBoard Voltage 7.4V";
+  wi.text = "CPU 50% Motor Voltage 24.0V MainBoard Voltage 7.4V";
   wi.customDraw = gwinLabelDrawJustifiedLeft;
   wi.customParam = 0;
   wi.customStyle = 0;
-  ghLabel_StatusBar = gwinLabelCreate(0, &wi);
-  gwinLabelSetBorder(ghLabel_StatusBar, FALSE);
-  gwinSetFont(ghLabel_StatusBar, dejavu_sans_20_anti_aliased);
-  gwinRedraw(ghLabel_StatusBar);
+  ghLabelStatus = gwinLabelCreate(0, &wi);
+  gwinLabelSetBorder(ghLabelStatus, FALSE);
+  gwinSetFont(ghLabelStatus, dejavu_sans_16_anti_aliased);
+  gwinRedraw(ghLabelStatus);
 
-  // create checkbox widget: ghCheckbox1
+  // Create label widget: ghLabel35
+  wi.g.show = TRUE;
+  wi.g.x = 560;
+  wi.g.y = 0;
+  wi.g.width = 240;
+  wi.g.height = 240;
+  wi.g.parent = ghContainerPage0;
+  wi.text = "Label35";
+  wi.customDraw = gwinLabelDrawJustifiedLeft;
+  wi.customParam = 0;
+  wi.customStyle = &black;
+  ghLabel35 = gwinLabelCreate(0, &wi);
+  gwinLabelSetBorder(ghLabel35, FALSE);
+
+  // create checkbox widget: ghCheckboxDS4
   wi.g.show = TRUE;
   wi.g.x = 100;
-  wi.g.y = 350;
-  wi.g.width = 140;
-  wi.g.height = 20;
-  wi.g.parent = ghContainerPage0;
-  wi.text = "Motors Online";
-  wi.customDraw = gwinCheckboxDraw_CheckOnRight;
-  wi.customParam = 0;
-  wi.customStyle = 0;
-  ghCheckbox1 = gwinCheckboxCreate(0, &wi);
-  gwinCheckboxCheck(ghCheckbox1, FALSE);
-  gwinSetFont(ghCheckbox1, dejavu_sans_12_anti_aliased);
-  gwinRedraw(ghCheckbox1);
-
-  // Create label widget: ghLabel_Timer
-  wi.g.show = TRUE;
-  wi.g.x = 40;
-  wi.g.y = 170;
+  wi.g.y = 310;
   wi.g.width = 130;
-  wi.g.height = 70;
-  wi.g.parent = ghContainerPage0;
-  wi.text = "00:00";
-  wi.customDraw = gwinLabelDrawJustifiedLeft;
-  wi.customParam = 0;
-  wi.customStyle = &WhiteWidgetStyle;
-  ghLabel_Timer = gwinLabelCreate(0, &wi);
-  gwinLabelSetBorder(ghLabel_Timer, FALSE);
-  gwinSetFont(ghLabel_Timer, dejavu_sans_32_anti_aliased);
-  gwinRedraw(ghLabel_Timer);
-
-  // Create label widget: ghLabel6
-  wi.g.show = TRUE;
-  wi.g.x = 280;
-  wi.g.y = 40;
-  wi.g.width = 330;
   wi.g.height = 20;
   wi.g.parent = ghContainerPage0;
-  wi.text = "Motor  SetPoint  FeedBack  Current(mA)";
-  wi.customDraw = gwinLabelDrawJustifiedLeft;
-  wi.customParam = 0;
-  wi.customStyle = 0;
-  ghLabel6 = gwinLabelCreate(0, &wi);
-  gwinLabelSetBorder(ghLabel6, FALSE);
-
-  // Create label widget: ghLabel_M2
-  wi.g.show = TRUE;
-  wi.g.x = 280;
-  wi.g.y = 80;
-  wi.g.width = 330;
-  wi.g.height = 20;
-  wi.g.parent = ghContainerPage0;
-  wi.text = "M2         0000        0000           1000";
-  wi.customDraw = gwinLabelDrawJustifiedLeft;
-  wi.customParam = 0;
-  wi.customStyle = 0;
-  ghLabel_M2 = gwinLabelCreate(0, &wi);
-  gwinLabelSetBorder(ghLabel_M2, TRUE);
-
-  // Create label widget: ghLabel_M3
-  wi.g.show = TRUE;
-  wi.g.x = 280;
-  wi.g.y = 100;
-  wi.g.width = 330;
-  wi.g.height = 20;
-  wi.g.parent = ghContainerPage0;
-  wi.text = "M3         0000        0000           1000";
-  wi.customDraw = gwinLabelDrawJustifiedLeft;
-  wi.customParam = 0;
-  wi.customStyle = 0;
-  ghLabel_M3 = gwinLabelCreate(0, &wi);
-  gwinLabelSetBorder(ghLabel_M3, TRUE);
-
-  // Create label widget: ghLabel_M4
-  wi.g.show = TRUE;
-  wi.g.x = 280;
-  wi.g.y = 120;
-  wi.g.width = 330;
-  wi.g.height = 20;
-  wi.g.parent = ghContainerPage0;
-  wi.text = "M4         0000        0000           1000";
-  wi.customDraw = gwinLabelDrawJustifiedLeft;
-  wi.customParam = 0;
-  wi.customStyle = 0;
-  ghLabel_M4 = gwinLabelCreate(0, &wi);
-  gwinLabelSetBorder(ghLabel_M4, TRUE);
-
-  // Create label widget: ghLabel_Enc3_4
-  wi.g.show = TRUE;
-  wi.g.x = 280;
-  wi.g.y = 160;
-  wi.g.width = 330;
-  wi.g.height = 20;
-  wi.g.parent = ghContainerPage0;
-  wi.text = "Encoder3 : 00000 : Encoder4 : 00000";
-  wi.customDraw = gwinLabelDrawJustifiedLeft;
-  wi.customParam = 0;
-  wi.customStyle = 0;
-  ghLabel_Enc3_4 = gwinLabelCreate(0, &wi);
-  gwinLabelSetBorder(ghLabel_Enc3_4, TRUE);
-
-  // create checkbox widget: ghCheckbox2
-  wi.g.show = TRUE;
-  wi.g.x = 100;
-  wi.g.y = 380;
-  wi.g.width = 140;
-  wi.g.height = 20;
-  wi.g.parent = ghContainerPage0;
-  wi.text = "Encoders Online";
+  wi.text = "DS4 Online";
   wi.customDraw = gwinCheckboxDraw_CheckOnRight;
   wi.customParam = 0;
   wi.customStyle = 0;
-  ghCheckbox2 = gwinCheckboxCreate(0, &wi);
-  gwinCheckboxCheck(ghCheckbox2, FALSE);
-  gwinSetFont(ghCheckbox2, dejavu_sans_12_anti_aliased);
-  gwinRedraw(ghCheckbox2);
+  ghCheckboxDS4 = gwinCheckboxCreate(0, &wi);
+  gwinCheckboxCheck(ghCheckboxDS4, FALSE);
+  gwinSetFont(ghCheckboxDS4, dejavu_sans_12_anti_aliased);
+  gwinRedraw(ghCheckboxDS4);
 }
 
 void guiShowPage(unsigned pageIndex)
@@ -444,9 +530,10 @@ void guiCreate(void)
   GWidgetInit wi;
 
   // Prepare fonts
-  dejavu_sans_20_anti_aliased = gdispOpenFont("DejaVuSans20_aa");
   dejavu_sans_16_anti_aliased = gdispOpenFont("DejaVuSans16_aa");
+  dejavu_sans_10 = gdispOpenFont("DejaVuSans10");
   dejavu_sans_12_anti_aliased = gdispOpenFont("DejaVuSans12_aa");
+  dejavu_sans_24_anti_aliased = gdispOpenFont("DejaVuSans24_aa");
   dejavu_sans_32_anti_aliased = gdispOpenFont("DejaVuSans32_aa");
 
   // Prepare images
@@ -454,9 +541,9 @@ void guiCreate(void)
   // GWIN settings
   gwinWidgetClearInit(&wi);
   gwinSetDefaultFont(dejavu_sans_16_anti_aliased);
-  gwinSetDefaultStyle(&WhiteWidgetStyle, FALSE);
-  gwinSetDefaultColor(Black);
-  gwinSetDefaultBgColor(White);
+  gwinSetDefaultStyle(&white, FALSE);
+  gwinSetDefaultColor(black_studio);
+  gwinSetDefaultBgColor(white_studio);
 
   // Create all the display pages
   createPagePage0();

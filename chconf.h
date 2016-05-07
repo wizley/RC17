@@ -461,7 +461,9 @@
  *          should be invoked from here.
  * @note    This macro can be used to activate a power saving mode.
  */
+#if !defined(_FROM_ASM_)
 extern uint32_t idle_enter_systime;
+#endif
 #define CH_CFG_IDLE_ENTER_HOOK() {                                          \
   /* Idle-enter code here.*/                                                \
   idle_enter_systime = chVTGetSystemTimeX();                                \
@@ -473,7 +475,9 @@ extern uint32_t idle_enter_systime;
  *          should be invoked from here.
  * @note    This macro can be used to deactivate a power saving mode.
  */
+#if !defined(_FROM_ASM_)
 extern uint32_t idle_ticks;
+#endif
 #define CH_CFG_IDLE_LEAVE_HOOK() {                                          \
   /* Idle-leave code here.*/                                                \
   idle_ticks += chVTGetSystemTimeX() - idle_enter_systime;                  \

@@ -183,5 +183,7 @@
 //
 //        #define GDISP_PIXELFORMAT                    GDISP_PIXELFORMAT_RGB565
 //    #endif
+#define GOS_NEED_X_THREADS                             FALSE
+#define GOS_NEED_X_HEAP                                FALSE
 
 #endif /* _GFXCONF_H */
