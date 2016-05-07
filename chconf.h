@@ -30,6 +30,9 @@
 
 #define _CHIBIOS_RT_CONF_
 
+void set_idle_time();
+void get_idle_time();
+
 /*===========================================================================*/
 /**
  * @name System timers settings
@@ -461,8 +464,9 @@
  *          should be invoked from here.
  * @note    This macro can be used to activate a power saving mode.
  */
-#define CH_CFG_IDLE_ENTER_HOOK() {                                          \
-  /* Idle-enter code here.*/                                                \
+#define CH_CFG_IDLE_ENTER_HOOK() {                                         \
+  /* Idle-enter code here.*/                                               \
+  set_idle_time();                                                         \
 }
 
 /**
@@ -471,8 +475,9 @@
  *          should be invoked from here.
  * @note    This macro can be used to deactivate a power saving mode.
  */
-#define CH_CFG_IDLE_LEAVE_HOOK() {                                          \
-  /* Idle-leave code here.*/                                                \
+#define CH_CFG_IDLE_LEAVE_HOOK() {                                         \
+  /* Idle-leave code here.*/                                               \
+  get_idle_time();                                                         \
 }
 
 /**
