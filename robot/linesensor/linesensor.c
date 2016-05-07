@@ -62,11 +62,18 @@ void linesensor_get_data(LINE_SENSOR *line){
     udc_object.rx_data = (udc_rx_data_t)&(line->Data[0]);
     udc_object.rx_len = 12;
     udc_object.rx_callback = NULL;
-    return UDC_Poll_Single(&udc_object);
+    UDC_Poll_Single(&udc_object);
+    return;
   }
 }
 
 void linesensor_setAlive(volatile void * arg){
   LINE_SENSOR * l = (LINE_SENSOR *) arg;
   l->Alive = 3;
+}
+
+void linesensor_decAlive(volatile void * arg){
+  LINE_SENSOR * l = (LINE_SENSOR * )arg;
+  if ((l->Alive) > 0)
+    (l->Alive)--;
 }

@@ -19,19 +19,24 @@ static RTCDateTime starttime = { 0 };
 static uint32_t system_time;
 static char buffer[100] = {0};
 
+void get_time(int * hour, int * min, int * sec){
+    rtcGetTime(&RTCD1, &timespec);
+    //(*sec) = (int)timespec.millisecond / 1000;
+    *hour = ((int)timespec.millisecond / 1000) / 3600;
+//    *sec %= 3600;
+    *min = (((int)timespec.millisecond / 1000)%3600) / 60;
+    *sec = (((int)timespec.millisecond / 1000)%3600) % 60;
+    system_time = ((*hour << 12) & 0x0003F000) || ((*min<<6) & 0x00000FC0) || (*sec & 0x0000003F);
+}
+
 void status_bar_redraw(void){
+  //get cpu usage
   //get the online status of all board
    //check voltage
    //get the rtc
+  int hour, min, sec;
+  get_time(&hour, &min, &sec);
   gwinClear(statusbar);
-  rtcGetTime(&RTCD1, &timespec);
-  static int sec, min ,hour;
-  sec = (int)timespec.millisecond / 1000;
-  hour = sec / 3600;
-  sec %= 3600;
-  min = sec / 60;
-  sec = sec % 60;
-  system_time = ((hour << 12) & 0x0003F000) || ((min<<6) & 0x00000FC0) || (sec & 0x0000003F);
   chsnprintf(buffer, (sizeof(buffer)/sizeof(buffer[0])),"cks:%d frm:%d tmo:%d %02d:%02d:%02d mb:%uV",
              UDC_GetStatistics(UDC_CHECKSUM_ERROR),UDC_GetStatistics(UDC_FRAMING_ERROR),UDC_GetStatistics(UDC_TIMEOUT),
              hour, min, sec, mb_voltage);

@@ -125,3 +125,9 @@ void motor_setAlive( volatile void * arg){
      motor->Alive = 3;
 }
 
+void motor_decAlive(volatile void * arg){
+     MotorObj * motor = (MotorObj *) arg;
+     if ((motor->Alive) >0)
+         (motor->Alive)--;
+}
+

@@ -39,6 +39,7 @@ typedef struct tagLineSensor {
 
 extern LINE_SENSOR LineSensor[4];
 
+void linesensor_decAlive(volatile void * arg);
 void linesensor_setAlive(volatile void * arg);
 udc_rx_state_e linesensor_send_command(LINE_SENSOR *line, int command);
 void linesensor_get_data(LINE_SENSOR *line);

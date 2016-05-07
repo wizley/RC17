@@ -16,3 +16,9 @@ void servo_setAlive(volatile void * arg){
      servo_t * s = (servo_t * ) arg;
      s->Alive = 3;
 }
+
+void servo_decAlive(volatile void * arg){
+     servo_t * s = (servo_t *) arg;
+     if ((s->Alive)> 0)
+         (s->Alive)--;
+}

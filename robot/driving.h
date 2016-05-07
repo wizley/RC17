@@ -98,7 +98,7 @@ typedef struct
 
 extern DRIVING_STATE DrivingState;
 
-
+void decAllAlive(void);
 
 void ActivateDriving(void);
 void DeactivateDriving(void);

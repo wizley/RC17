@@ -109,8 +109,9 @@ void runButton(void){
         Button_state[i] = Button_state[i] ^ 1;
         Button_edge[i] = 1;
       }
-      else
+      else{
         Button_edge[i] = 0;
+      }
     }
     Button_db[0] = ButtonDown[0];
     Button_db[1] = ButtonDown[1];

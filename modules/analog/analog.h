@@ -18,4 +18,6 @@ static adcsample_t samples1[ADC_GRP1_NUM_CHANNELS * ADC_GRP1_BUF_DEPTH];
 
 static uint16_t mb_voltage;
 
+void adc_init(void);
+
 #endif /* MODULES_ANALOG_ANALOG_H_ */

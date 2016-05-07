@@ -131,6 +131,8 @@ int main(void) {
 
   app_init();
 
+
+
   /*
    * Shell manager initialization.
    */
@@ -146,6 +148,7 @@ int main(void) {
 //  chThdSleepMilliseconds(1000);
 //  usbStart(serusbcfg.usbp, &usbcfg);
 //  usbConnectBus(serusbcfg.usbp);
+  adc_init();
   ps4_usbhost_init();
   ActivateDriving();
 

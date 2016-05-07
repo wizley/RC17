@@ -67,8 +67,8 @@ static const ADCConversionGroup adcgrpcfg2 = {
 
 /*
  * ADC conversion group.
- * Mode:        Linear buffer, 8 samples of 1 channel, SW triggered.
- * Channels:    IN11.
+ * Mode:        Continuous, 8 samples of 1 channel, SW triggered.
+ * Channels:    IN10.
  */
 static const ADCConversionGroup adcgrpcfg1 = {
   TRUE,
@@ -84,7 +84,7 @@ static const ADCConversionGroup adcgrpcfg1 = {
   ADC_SQR3_SQ1_N(ADC_CHANNEL_IN10)
 };
 
-void adc_init(){
+void adc_init(void){
 /*
  * Activates the ADC1 driver and the temperature sensor.
  */

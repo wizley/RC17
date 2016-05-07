@@ -21,5 +21,5 @@ typedef struct{
 extern ENCObj_t encoder1_2;
 extern ENCObj_t encoder3_4;
 void encoder_setAlive(volatile void * arg);
-
+void encoder_decAlive(volatile void * arg);
 #endif /* ROBOT_ENCODER_ENCODER_H_ */
