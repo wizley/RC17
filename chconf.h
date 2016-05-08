@@ -30,9 +30,6 @@
 
 #define _CHIBIOS_RT_CONF_
 
-void set_idle_time();
-void get_idle_time();
-
 /*===========================================================================*/
 /**
  * @name System timers settings

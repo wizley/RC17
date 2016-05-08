@@ -28,6 +28,8 @@
 #include "app_list.h"
 #include "menu_struct.h"
 #include "widgets.h"
+#include "../start_robot_page/colors.h"
+#include "../start_robot_page/widgetstyles.h"
 //#include <stdio.h>
 #include "gfx.h"
 uint8_t timer_sleep = 0;

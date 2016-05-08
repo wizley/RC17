@@ -25,9 +25,6 @@
 #include "status_bar.h"
 char * UIDrivingState[2] = {"activated","deactivated"}; //for ui
 
-#include "colors.h"
-#include "widgetstyles.h"
-
 // GListeners
 GListener gl;
 

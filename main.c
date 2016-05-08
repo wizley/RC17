@@ -136,7 +136,7 @@ int main(void) {
   app_init();
   cpu_usage_init();
 
-  ActivateDriving();  /*
+  /*
    * Shell manager initialization.
    */
   rtt_shell_init();

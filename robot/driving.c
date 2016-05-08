@@ -86,7 +86,7 @@ static THD_FUNCTION(ControlLoop, arg) {
              M[0].SetPoint = (qeiGetCount(&QEID4) - oldcount) * 10;
              palSetPad(GPIOC, GPIOC_LED_G);
     }else if (current_running_menu->data.app == &ps4_test_app){
-             //should not do anything
+             //should not do anything at all --> TODO: to be removed
            palClearPad(GPIOC, GPIOC_LED_G);
     }
     cycle_count++;
@@ -145,7 +145,7 @@ void ActivateDriving(void){
         linesensor_get_data(&LineSensor[3]);
 #endif
         /* Control Loop Thread */
-        ctrllp = chThdCreateStatic(waCtrlLp, sizeof(waCtrlLp), HIGHPRIO, RunManualControl, NULL);
+        ctrllp = chThdCreateStatic(waCtrlLp, sizeof(waCtrlLp), HIGHPRIO, ControlLoop, NULL);
         DrivingState = ACTIVATED;
 
         chSysLock();
