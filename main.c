@@ -1,15 +1,16 @@
+
 #include "ch.h"
 #include "hal.h"
 #include "drivers.h"
 #include "gfx.h"
-//#include "usbcfg.h"
-#include "usb_shell.h"
+#include "rtt_shell.h"
 #include "app.h"
 #include "analog.h"
 #include "ps4_usbhost.h"
+#include "driving.h"
+#include "usage.h"
 
-
-
+#define SDRAM_SIZE  0x1000000
 /*
  * Erases the whole SDRAM bank.
  */
@@ -133,14 +134,13 @@ int main(void) {
                     Thread2, NULL);
 
   app_init();
+  cpu_usage_init();
 
-
-
-  /*
+  ActivateDriving();  /*
    * Shell manager initialization.
    */
-  usb_shell_init();
-  usb_shell_start();
+  rtt_shell_init();
+  rtt_shell_start();
 
   /*
    * Activates the USB driver and then the USB bus pull-up on D+.
@@ -160,9 +160,9 @@ int main(void) {
    * a shell respawn upon its termination.
    */
   while (TRUE) {
-    if (usb_is_active()) {
-      usb_shell_create();
-      usb_shell_wait();               /* Waiting termination.             */
+    if (rtt_is_active()) {
+      rtt_shell_create();
+      rtt_shell_wait();               /* Waiting termination.             */
     }
     chThdSleepMilliseconds(1000);
   }

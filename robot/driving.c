@@ -2,6 +2,8 @@
 #include "motor.h"
 #include "drivers.h"
 #include "driving.h"
+#include "string.h"
+#include "loop_stats.h"
 #if  USE_MOTOR_0  ||  USE_MOTOR_1  ||  USE_MOTOR_2  ||  USE_MOTOR_3  ||  USE_MOTOR_4  ||  USE_MOTOR_5  ||  USE_MOTOR_6  ||  USE_MOTOR_7
     #include "motor.h"
 #endif
@@ -21,7 +23,8 @@
 #include "app_list.h"
 #include "analog.h"
 
-#define LOOP_TIME 10   /* Control Loop time in ms */
+#define LOOP_TIME 10                      /* Control Loop time in ms */
+#define CTRL_LOOP_FREQ (1000 / LOOP_TIME) /* Control Loop frequency  */
 #define CONTROL_EVENT 0
 
 DRIVING_STATE DrivingState = DEACTIVATED;
@@ -30,6 +33,8 @@ static thread_t *ctrllp = NULL;
 static event_source_t CtrlLp_evt;
 static virtual_timer_t CtrlLpVT;
 static UDC_config_t udc_config = {0};
+
+loop_stats_t loop_stats;
 
 void control_loop_timer(void *p) {
   /* Restarts the timer.*/
@@ -40,11 +45,14 @@ void control_loop_timer(void *p) {
 }
 
 static THD_WORKING_AREA(waCtrlLp, 2048);
-static THD_FUNCTION(RunManualControl, arg) {
+static THD_FUNCTION(ControlLoop, arg) {
   (void) arg;
-  chRegSetThreadName("RunManualControl");
+  chRegSetThreadName("Robot Control Loop");
 
   event_listener_t el;
+  volatile systime_t last_loop_start = chVTGetSystemTimeX();
+  volatile systime_t last_monitor_time = chVTGetSystemTimeX();
+  volatile uint32_t cycle_count = 0;
 
   chEvtRegister(&CtrlLp_evt, &el, CONTROL_EVENT);
 
@@ -53,6 +61,16 @@ static THD_FUNCTION(RunManualControl, arg) {
   while (!chThdShouldTerminateX()) {
     chEvtWaitAny(EVENT_MASK(CONTROL_EVENT));
     chEvtGetAndClearEvents(EVENT_MASK(CONTROL_EVENT));
+    // control loop roundtrip stat
+    systime_t loop_start = chVTGetSystemTimeX();
+    loop_stat_sample(ST2US(loop_start - last_loop_start));
+    last_loop_start = chVTGetSystemTimeX();
+    // communication roundtrip stat
+    systime_t start = chVTGetSystemTimeX();
+    UDC_PollObjectList(udc_objectlist);
+    systime_t after_comm = chVTGetSystemTimeX();
+    comm_stat_sample(ST2US(after_comm - start));
+    //
     decAllAlive();
     UDC_PollObjectList(udc_objectlist);
     if (current_running_menu->data.app == &start_robot){
@@ -71,6 +89,16 @@ static THD_FUNCTION(RunManualControl, arg) {
              //should not do anything
            palClearPad(GPIOC, GPIOC_LED_G);
     }
+    cycle_count++;
+    if(start - last_monitor_time > MS2ST(LOOP_STAT_MONITOR_PERIOD_MS)){
+         loop_stats.loop_frequency = (float) cycle_count / LOOP_STAT_MONITOR_PERIOD_MS * 1000.0;
+         loop_stat_mean_update();
+         comm_stat_mean_update();
+         if(loop_stats.loop_frequency < 0.75 * CTRL_LOOP_FREQ)
+             loop_stats.overruns++;
+         cycle_count = 0;
+         last_monitor_time = start;
+         }
     }
     chEvtUnregister(&CtrlLp_evt, &el);
 }
@@ -215,6 +243,7 @@ void decAllAlive(void){
 
 void InitDriving(void) {
   osalEventObjectInit(&CtrlLp_evt);
+  memset(&loop_stats, 0, sizeof(loop_stats));
   UDC_Init(&udc_config);
   UDC_Start();
 }

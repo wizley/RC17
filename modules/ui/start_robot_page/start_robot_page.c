@@ -25,15 +25,22 @@
 #include "status_bar.h"
 char * UIDrivingState[2] = {"activated","deactivated"}; //for ui
 
+#include "colors.h"
+#include "widgetstyles.h"
+
+// GListeners
+GListener gl;
+
 // GHandles
 GHandle ghContainerPage0;
 GHandle ghConsole;
 GHandle ghConsole1;
 
 // Fonts
-font_t dejavu_sans_20_anti_aliased;
 font_t dejavu_sans_16_anti_aliased;
+font_t dejavu_sans_10;
 font_t dejavu_sans_12_anti_aliased;
+font_t dejavu_sans_24_anti_aliased;
 font_t dejavu_sans_32_anti_aliased;
 
 static void createPagePage0(void)
@@ -76,9 +83,10 @@ void guiCreate(void)
   //GWidgetInit wi;
 
   // Prepare fonts
-  dejavu_sans_20_anti_aliased = gdispOpenFont("DejaVuSans20_aa");
   dejavu_sans_16_anti_aliased = gdispOpenFont("DejaVuSans16_aa");
+  dejavu_sans_10 = gdispOpenFont("DejaVuSans10");
   dejavu_sans_12_anti_aliased = gdispOpenFont("DejaVuSans12_aa");
+  dejavu_sans_24_anti_aliased = gdispOpenFont("DejaVuSans24_aa");
   dejavu_sans_32_anti_aliased = gdispOpenFont("DejaVuSans32_aa");
 
   // Prepare images

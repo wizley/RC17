@@ -203,9 +203,13 @@ static void menu_ui_init(void) {
 //    ui_init_widget(&menu_screen);
   font1 = gdispOpenFont("SFNS Display Regular 32");
   gwinSetDefaultFont(font1);
-  gwinSetDefaultStyle(&WhiteWidgetStyle, FALSE);
-  gwinSetDefaultColor(HTML2COLOR(0x09180A));
-  gwinSetDefaultBgColor(HTML2COLOR(0xEEEEEE));
+  //gwinSetDefaultStyle(&WhiteWidgetStyle, FALSE);
+  //gwinSetDefaultColor(HTML2COLOR(0x09180A));
+  //gwinSetDefaultBgColor(HTML2COLOR(0xEEEEEE));
+  gwinSetDefaultStyle(&white, FALSE);
+  gwinSetDefaultColor(black_studio);
+  gwinSetDefaultBgColor(white_studio);
+
 
   MenuPage = createContainer(0, STATUS_BAR_HEIGHT, MENU_SCREEN_WIDTH, MENU_SCREEN_HEIGHT, FALSE);
   gwinSetColor(MenuPage,HTML2COLOR(0x48BC4D));
