@@ -95,5 +95,5 @@ adcSTM32EnableTSVREFE();
  * Starts an ADC continuous conversion.
  */
 adcStartConversion(&ADCD1, &adcgrpcfg2, samples2, ADC_GRP2_BUF_DEPTH);
-adcConvert(&ADCD3, &adcgrpcfg1, samples1, ADC_GRP1_BUF_DEPTH);
+adcStartConversion(&ADCD3, &adcgrpcfg1, samples1, ADC_GRP1_BUF_DEPTH);
 }

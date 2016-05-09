@@ -61,6 +61,7 @@ static THD_FUNCTION(ControlLoop, arg) {
   while (!chThdShouldTerminateX()) {
     chEvtWaitAny(EVENT_MASK(CONTROL_EVENT));
     chEvtGetAndClearEvents(EVENT_MASK(CONTROL_EVENT));
+    decAllAlive();
     // control loop roundtrip stat
     systime_t loop_start = chVTGetSystemTimeX();
     loop_stat_sample(ST2US(loop_start - last_loop_start));
@@ -71,10 +72,9 @@ static THD_FUNCTION(ControlLoop, arg) {
     systime_t after_comm = chVTGetSystemTimeX();
     comm_stat_sample(ST2US(after_comm - start));
     //
-    decAllAlive();
-    UDC_PollObjectList(udc_objectlist);
     if (current_running_menu->data.app == &start_robot){
              motor_get_status(&M[0]);// Miscellaneous Data
+             motor_send_setting(&M[5]);
              if (ps4_data.triangle)//brake
                  motor_setBrake(&M[0]);
              else if (ps4_data.square)//reactivate after brake
@@ -84,6 +84,8 @@ static THD_FUNCTION(ControlLoop, arg) {
              else if (ps4_data.ps)
                  DeactivateDriving();
              M[0].SetPoint = (qeiGetCount(&QEID4) - oldcount) * 10;
+             M[5].SetPoint = (qeiGetCount(&QEID4) - oldcount) * 10;
+             M[6].SetPoint = (qeiGetCount(&QEID4) - oldcount) * 10;
              palSetPad(GPIOC, GPIOC_LED_G);
     }else if (current_running_menu->data.app == &ps4_test_app){
              //should not do anything at all --> TODO: to be removed
@@ -106,6 +108,13 @@ static THD_FUNCTION(ControlLoop, arg) {
 void ActivateDriving(void){
   if (DrivingState == DEACTIVATED){
     M[0].Setting = DefaultVMode;//please initialize the motor with something else, this pid sucks
+    M[1].Setting = DefaultVMode;
+    M[2].Setting = DefaultVMode;
+    M[3].Setting = DefaultVMode;
+    M[4].Setting = DefaultVMode;
+    M[5].Setting = DefaultPMode;
+    M[6].Setting = DefaultPMode;
+    M[7].Setting = DefaultVMode;
 #if USE_MOTOR_0
     motor_send_setting(&M[0]);
 #endif
@@ -147,7 +156,6 @@ void ActivateDriving(void){
         /* Control Loop Thread */
         ctrllp = chThdCreateStatic(waCtrlLp, sizeof(waCtrlLp), HIGHPRIO, ControlLoop, NULL);
         DrivingState = ACTIVATED;
-
         chSysLock();
         /* Starts the timer.*/
         chVTDoSetI(&CtrlLpVT, MS2ST(LOOP_TIME), control_loop_timer, NULL);
