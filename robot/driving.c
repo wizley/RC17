@@ -73,8 +73,8 @@ static THD_FUNCTION(ControlLoop, arg) {
     comm_stat_sample(ST2US(after_comm - start));
     //
     if (current_running_menu->data.app == &start_robot){
-             motor_get_status(&M[0]);// Miscellaneous Data
-             motor_send_setting(&M[5]);
+             //motor_get_status(&M[0]);// Miscellaneous Data
+             //motor_send_setting(&M[5]);
              if (ps4_data.triangle)//brake
                  motor_setBrake(&M[0]);
              else if (ps4_data.square)//reactivate after brake
@@ -103,6 +103,66 @@ static THD_FUNCTION(ControlLoop, arg) {
          }
     }
     chEvtUnregister(&CtrlLp_evt, &el);
+}
+
+static THD_WORKING_AREA(wa_aux, 1024);
+static THD_FUNCTION(auxiliary_comm, arg){
+  (void) arg;
+  chRegSetThreadName("auxiliary communication thread");
+  while (!chThdShouldTerminateX()) {
+#if USE_MOTOR_0
+    motor_get_status(&M[0]);
+    chThdSleepMilliseconds(50);
+#endif
+#if USE_MOTOR_1
+    motor_get_status(&M[1]);
+    chThdSleepMilliseconds(50);
+#endif
+#if USE_MOTOR_2
+    motor_get_status(&M[2]);
+    chThdSleepMilliseconds(50);
+#endif
+#if USE_MOTOR_3
+    motor_get_status(&M[3]);
+    chThdSleepMilliseconds(50);
+#endif
+#if USE_MOTOR_4
+    motor_get_status(&M[4]);
+    chThdSleepMilliseconds(50);
+#endif
+#if USE_MOTOR_5
+    motor_get_status(&M[5]);
+    chThdSleepMilliseconds(50);
+#endif
+#if USE_MOTOR_6
+    motor_get_status(&M[6]);
+    chThdSleepMilliseconds(50);
+#endif
+#if USE_MOTOR_7
+    motor_get_status(&M[7]);
+    chThdSleepMilliseconds(50);
+#endif
+     if (current_running_menu->data.app == &line_sensor_test_app){
+#if USE_LINESENSOR_0
+        linesensor_get_data(&LineSensor[0]);
+        chThdSleepMilliseconds(50);
+#endif
+#if USE_LINESENSOR_1
+        linesensor_get_data(&LineSensor[1]);
+        chThdSleepMilliseconds(50);
+#endif
+#if USE_LINESENSOR_2
+        linesensor_get_data(&LineSensor[2]);
+        chThdSleepMilliseconds(50);
+#endif
+#if USE_LINESENSOR_3
+        linesensor_get_data(&LineSensor[3]);
+        chThdSleepMilliseconds(50);
+#endif
+     }else{
+          continue;
+     }
+   }
 }
 
 void ActivateDriving(void){
@@ -155,6 +215,7 @@ void ActivateDriving(void){
 #endif
         /* Control Loop Thread */
         ctrllp = chThdCreateStatic(waCtrlLp, sizeof(waCtrlLp), HIGHPRIO, ControlLoop, NULL);
+        chThdCreateStatic(wa_aux, sizeof(wa_aux), NORMALPRIO, auxiliary_comm, NULL);
         DrivingState = ACTIVATED;
         chSysLock();
         /* Starts the timer.*/

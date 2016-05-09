@@ -33,7 +33,7 @@ application motor_test_app = { .name="Motor test", .main=NULL };
 application encoder_test_app = { .name="Encoder test", .main=NULL };
 application servo_test_app = { .name="Servo test", .main=NULL };
 application imu_test_app = { .name="IMU test", .main=NULL };
-application line_sensor_test_app = { .name="Line sensor test", .main=NULL };
+//application line_sensor_test_app = { .name="Line sensor test", .main=NULL };
 application mainboard_test_app = { .name="Mainboard test", .main=NULL };
 
 //application set_backlight = { .name="Set backlight", .main=NULL };

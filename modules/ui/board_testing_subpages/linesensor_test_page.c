@@ -14,16 +14,14 @@
 
 
 
-void template_main(void *params){
+void linesensor_test_main(void *params){
   GHandle pageContainer;
   (void) params;
-
-  font_t font1;
-  font1 = gdispOpenFont("DejaVuSans32_aa");
+   font_t font1 = gdispOpenFont("DejaVuSans32_aa");
   pageContainer = createContainer(0, STATUS_BAR_HEIGHT, GDISP_SCREEN_WIDTH, GDISP_SCREEN_HEIGHT - STATUS_BAR_HEIGHT, FALSE);
   gwinShow(pageContainer);
   gwinClear(pageContainer);
-  gdispDrawString(0, STATUS_BAR_HEIGHT, "404 Not Found", font1, HTML2COLOR(0x09180A));
+  //gdispDrawString(0, STATUS_BAR_HEIGHT, "404 Not Found", font1, HTML2COLOR(0x09180A));
 
   ui_event *evt = NULL;
 
@@ -41,6 +39,13 @@ void template_main(void *params){
 
           }
           break;
+        case UI_UDC_UPDATE:
+//          //draw some bars like the old blueboard
+//          for(i=0; i<LineSensor[0].size; i++){
+//              gdispFillArea(0+i*(132/LineSensor[0].size),gdisplineheight*3+1+(gdisplineheight-(((LineSensor[0].Data[i])/15.0)*gdisplineheight)),132/LineSensor[0].size,((LineSensor[0].Data[i])/15.0)*gdisplineheight,White);
+//              gdispFillArea(0+i*(132/LineSensor[1].size),gdisplineheight*4+1+(gdisplineheight-(((LineSensor[1].Data[i])/15.0)*gdisplineheight)),132/LineSensor[1].size,((LineSensor[1].Data[i])/15.0)*gdisplineheight,White);
+//          }
+          break;
         case UI_STATUSBAR_TICK:
            status_bar_redraw();
           break;
@@ -54,8 +59,8 @@ void template_main(void *params){
 }
 
 
-application template = {
-    .name = "Template",
-    .main = template_main,
-    .syn_flg = no_sync
+application line_sensor_test_app = {
+     .name="Line sensor test",
+     .main=linesensor_test_main,
+     .syn_flg = sync
 };
