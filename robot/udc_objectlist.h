@@ -32,16 +32,16 @@ UDC_Obj_t udc_objectlist[32] =
     {ID_M3_VMODE, (udc_tx_data_t)&M[3].SetPoint, 2, (udc_rx_data_t)&M[3].Feedback, 2, motor_setAlive, &M[3]},
 #endif
 #if USE_MOTOR_4
-    {ID_M4_VMODE, (udc_tx_data_t)&M[4].SetPoint, 2, (udc_rx_data_t)&M[3].Feedback, 2, motor_setAlive, &M[4]},
+    {ID_M4_VMODE, (udc_tx_data_t)&M[4].SetPoint, 2, (udc_rx_data_t)&M[4].Feedback, 2, motor_setAlive, &M[4]},
 #endif
 #if USE_MOTOR_5
-    {ID_M5_VMODE, (udc_tx_data_t)&M[5].SetPoint, 2, (udc_rx_data_t)&M[3].Feedback, 2, motor_setAlive, &M[5]},
+    {ID_M5_VMODE, (udc_tx_data_t)&M[5].SetPoint, 2, (udc_rx_data_t)&M[5].Feedback, 2, motor_setAlive, &M[5]},
 #endif
 #if USE_MOTOR_6
-    {ID_M6_VMODE, (udc_tx_data_t)&M[6].SetPoint, 2, (udc_rx_data_t)&M[3].Feedback, 2, motor_setAlive, &M[6]},
+    {ID_M6_VMODE, (udc_tx_data_t)&M[6].SetPoint, 2, (udc_rx_data_t)&M[6].Feedback, 2, motor_setAlive, &M[6]},
 #endif
 #if USE_MOTOR_7
-    {ID_M7_VMODE, (udc_tx_data_t)&M[7].SetPoint, 2, (udc_rx_data_t)&M[3].Feedback, 2, motor_setAlive, &M[7]},
+    {ID_M7_VMODE, (udc_tx_data_t)&M[7].SetPoint, 2, (udc_rx_data_t)&M[7].Feedback, 2, motor_setAlive, &M[7]},
 #endif
 #if USE_SERVO && SERVO_NUMBER > 0
     {ID_SERVO1, (udc_tx_data_t)&Servo1.command, 16, (udc_rx_data_t)&Servo1.current, 2, servo_setAlive, &Servo1},
