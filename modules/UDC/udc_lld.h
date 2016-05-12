@@ -51,7 +51,7 @@ typedef struct{
 }UDC_Driver;
 extern UDC_Driver UDCD;
 
-void udc_lld_init();
+void udc_lld_init(void);
 void udc_lld_start(void);
 void udc_lld_stop(void);
 udc_rx_state_e udc_lld_send(UDC_Obj_t* udc_object);

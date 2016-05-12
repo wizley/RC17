@@ -118,7 +118,7 @@ static THD_FUNCTION(udc_lld_process, arg) {
 
 }
 
-void udc_lld_init(){
+void udc_lld_init(void){
   //(void) baudrate;
   udc_lld_timer_init();
   udc_lld_event_init();

@@ -17,22 +17,11 @@
     #include "motor.h"
 #endif
 
-//systime_t p_time, i_time, pre_i_time = 0;
-
 static GHandle statusbar;
 static RTCDateTime timespec;
 static RTCDateTime starttime = { 0 };
 static uint32_t system_time;
 static char buffer[100] = {0};
-
-//void set_idle_time(){
-//    p_time = chVTGetSystemTimeX();
-//}
-//
-//void get_idle_time(){
-//  if (chVTGetSystemTimeX() >= p_time)
-//    i_time = i_time + (chVTGetSystemTimeX() - p_time);
-//}
 
 #if  USE_MOTOR_0  ||  USE_MOTOR_1  ||  USE_MOTOR_2  ||  USE_MOTOR_3  ||  USE_MOTOR_4  ||  USE_MOTOR_5  ||  USE_MOTOR_6  ||  USE_MOTOR_7
 float UpdateVoltage(void){
@@ -52,29 +41,10 @@ float UpdateVoltage(void){
 
 void get_time(int * hour, int * min, int * sec){
     rtcGetTime(&RTCD1, &timespec);
-    //(*sec) = (int)timespec.millisecond / 1000;
     *hour = ((int)timespec.millisecond / 1000) / 3600;
-//    *sec %= 3600;
     *min = (((int)timespec.millisecond / 1000)%3600) / 60;
     *sec = (((int)timespec.millisecond / 1000)%3600) % 60;
     system_time = ((*hour << 12) & 0x0003F000) || ((*min<<6) & 0x00000FC0) || (*sec & 0x0000003F);
-}
-
-float get_cpu_usage(void){
-//  if (chVTGetSystemTimeX() > 0){
-//
-//  if (chVTGetSystemTimeX() > i_time){
-//      pre_i_time = i_time;
-//      return (int) 100-(((float) i_time / (float) chVTGetSystemTimeX()) * 100);
-//  }else{
-//      i_time = i_time - pre_i_time;
-//      pre_i_time = i_time;
-//      return (int) 100-(((float) i_time / (float) chVTGetSystemTimeX()) * 100);
-//  }
-//  }else{
-//    return -1;
-//  }
-  return cpu_usage_get_recent();
 }
 
 void status_bar_redraw(void){
@@ -88,7 +58,7 @@ void status_bar_redraw(void){
   chsnprintf(buffer, (sizeof(buffer)/sizeof(buffer[0])),"cks:%d frm:%d tmo:%d %02d:%02d:%02d mb:%uV cpu:%.2f",
              UDC_GetStatistics(UDC_CHECKSUM_ERROR),UDC_GetStatistics(UDC_FRAMING_ERROR),UDC_GetStatistics(UDC_TIMEOUT),
              hour, min, sec, mb_voltage, cpu_usage_get_recent());
-  gdispDrawStringBox(0,0,GDISP_SCREEN_WIDTH, STATUS_BAR_HEIGHT, buffer, gdispOpenFont("DejaVuSans20_aa"), Black, justifyCenter);
+  gdispDrawStringBox(0,0,GDISP_SCREEN_WIDTH, STATUS_BAR_HEIGHT, buffer, gdispOpenFont("SFNS Display UltraLight 20"), Black, justifyCenter);
 }
 
 THD_WORKING_AREA (wa_ui_rtc_event, 64);

@@ -199,7 +199,6 @@ void ActivateDriving(void){
 #if USE_MOTOR_7
     motor_send_setting(&M[7]);
 #endif
-
      if(ctrllp == NULL){//should not call it repeatedly
 #if USE_LINESENSOR_0
         linesensor_get_data(&LineSensor[0]);
@@ -256,8 +255,6 @@ void DeactivateDriving(void){
 #endif
   }
 }
-
-extern volatile int DebugRun[4];
 
 void decAllAlive(void){
 #if USE_MOTOR_0
