@@ -1,6 +1,6 @@
 
-#ifndef _RTTSTREAMS_H_
-#define _RTTSTREAMS_H_
+#ifndef _RTTCHANNEL_H_
+#define _RTTCHANNEL_H_
 
 /*===========================================================================*/
 /* Driver constants.                                                         */
@@ -19,28 +19,28 @@
 /*===========================================================================*/
 
 /**
- * @brief   @p RTTStream specific data.
+ * @brief   @p RTTChannel specific data.
  */
-#define _rtt_stream_data                                                   \
-  _base_sequential_stream_data
+#define _rtt_channel_data                                                   \
+  _base_channel_data
 
 /**
- * @brief   @p RTTStream virtual methods table.
+ * @brief   @p RTTChannel virtual methods table.
  */
-struct RTTStreamVMT {
-  _base_sequential_stream_methods
+struct RTTChannelVMT {
+  _base_channel_methods
 };
 
 /**
  * @extends BaseSequentialStream
  *
- * @brief   RTT stream object.
+ * @brief   RTT channel object.
  */
 typedef struct {
   /** @brief Virtual Methods Table.*/
-  const struct RTTStreamVMT *vmt;
-  _rtt_stream_data
-} RTTStream;
+  const struct RTTChannelVMT *vmt;
+  _rtt_channel_data
+} RTTChannel;
 
 /*===========================================================================*/
 /* Driver macros.                                                            */
@@ -50,16 +50,16 @@ typedef struct {
 /* External declarations.                                                    */
 /*===========================================================================*/
 
-extern RTTStream RTT_S0;
+extern RTTChannel RTT_S0;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-  void RTTstreamObjectInit(RTTStream *rsp);
+  void RTTchannelObjectInit(RTTChannel *rcp);
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* _RTTSTREAMS_H_ */
+#endif /* _RTTCHANNEL_H_ */
 
 /** @} */
