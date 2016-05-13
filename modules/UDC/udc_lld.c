@@ -100,6 +100,7 @@ static THD_FUNCTION(udc_lld_process, arg) {
 
     if(udc_object->rx_len > 1){
       UDCD.udc_rx_state = udc_rx_active;
+      gptStopTimer(&UDC_TIMER);
       gptStartOneShot(&UDC_TIMER, RCV_TIMEOUT25);
       UDCD.udc_rx_state = udc_lld_get_rx_event(&el_rx);
     }else{

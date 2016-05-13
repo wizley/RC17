@@ -13,7 +13,7 @@
 
 static const ltdcConfig driverCfg = {
 	800, 480,								// Width, Height (pixels)
-	256, 45,									// Horizontal, Vertical sync (pixels)
+	300, 100,									// Horizontal, Vertical sync (pixels)
 	0, 0,									// Horizontal, Vertical back porch (pixels)
 	0, 0,									// Horizontal, Vertical front porch (pixels)
 	0,										// Sync flags

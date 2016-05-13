@@ -19,8 +19,8 @@ UDC_Obj_t udc_objectlist[32] =
     {ID_M2_VMODE, (udc_tx_data_t)&M[2].SetPoint, 2, (udc_rx_data_t)&M[2].Feedback, 2, NULL},
     {ID_M3_VMODE, (udc_tx_data_t)&M[3].SetPoint, 2, (udc_rx_data_t)&M[3].Feedback, 2, NULL},
     {ID_SERVO1, (udc_tx_data_t)&Servo1.command, 16, (udc_rx_data_t)&Servo1.current, 2, NULL},
-    {ID_ENCODER1_2, NULL, 0, (udc_rx_data_t)&encoder1_2.count, 4, NULL},
-    {ID_ENCODER3_4, NULL, 0, (udc_rx_data_t)&encoder3_4.count, 4, NULL},
+    {ID_ENCODER1_2, NULL, 0, (udc_rx_data_t)&encoder1_2.delta_count, 4, NULL},
+    {ID_ENCODER3_4, NULL, 0, (udc_rx_data_t)&encoder3_4.delta_count, 4, NULL},
     {ID_END, NULL, 0, NULL, 0, NULL}
 };
 
