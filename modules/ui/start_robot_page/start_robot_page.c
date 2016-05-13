@@ -102,6 +102,8 @@ void guiCreate(void)
 
   // Console sample text
   //gwinPrintf(ghConsole, "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet");
+}
+
 void guiUpdate(){
      gwinClear(ghConsole1);
      gwinPrintf(ghConsole1, UIDrivingState[DrivingState]);
@@ -112,6 +114,7 @@ void guiUpdate(){
      //gwinPrintf(ghConsole, "voltage: %d\r\n",M[0].Board.Voltage);
      gwinPrintf(ghConsole, "temperature: %d\r\n",M[0].Board.Temperature);
 }
+
 void start_robot_main(void *params){
   (void) params;
 
@@ -131,18 +134,15 @@ void start_robot_main(void *params){
           } else {
           }
           break;
-        case UI_UDC_UPDATE:
-
-          break;
-        case UI_STATUSBAR_TICK:
-             status_bar_redraw();
-          break;
+//        case UI_STATUSBAR_TICK:
+//             status_bar_redraw();
+//          break;
         default:
           break;
       }
     }
     guiUpdate();
-    chThdSleepMilliseconds(60);
+    chThdSleepMilliseconds(100);
   }
 
 }
@@ -150,6 +150,5 @@ void start_robot_main(void *params){
 
 application start_robot = {
     .name = "Start robot",
-    .main = start_robot_main,
-    .syn_flg = sync
+    .main = start_robot_main
 };

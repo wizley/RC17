@@ -37,7 +37,7 @@ void ps4_test_main(void *params){
 
   while(TRUE){
 
-    if(chMBFetch(&app_mb, (msg_t*)(&evt), TIME_INFINITE) == MSG_OK){
+    if(chMBFetch(&app_mb, (msg_t*)(&evt), TIME_IMMEDIATE) == MSG_OK){
 
       switch(evt->type){
         case UI_INPUT_BUTTON:
@@ -49,14 +49,9 @@ void ps4_test_main(void *params){
 
           }
           break;
-        case UI_UDC_UPDATE:
-             //gwinClear(ps4Console);
-             gwinPrintf(ps4Console, "%d\r\n", DS4_ButtonPress(CIRCLE));
-             gwinRedraw(ps4Console);
-          break;
-        case UI_STATUSBAR_TICK:
-             status_bar_redraw();
-          break;
+//        case UI_STATUSBAR_TICK:
+//             status_bar_redraw();
+//          break;
         default:
           break;
       }
@@ -68,6 +63,5 @@ void ps4_test_main(void *params){
 
 application ps4_test_app = {
     .name = "PS4 Test",
-    .main = ps4_test_main,
-    .syn_flg = no_sync //TODO: change to no_sync later
+    .main = ps4_test_main
 };

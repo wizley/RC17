@@ -64,13 +64,14 @@ void status_bar_redraw(void){
 THD_WORKING_AREA (wa_ui_rtc_event, 64);
 THD_FUNCTION(ui_rtc_evt, arg){
   (void) arg;
-  ui_event evt;
-  evt.type = UI_STATUSBAR_TICK;
+//  ui_event evt;
+//  evt.type = UI_STATUSBAR_TICK;
   uint32_t time = chVTGetSystemTimeX();
   while (true) {
-      evt.data.status_bar_info.system_time = system_time;
+//      evt.data.status_bar_info.system_time = system_time;
       time += S2ST(1);
-      chMBPost(&app_mb, (msg_t)&evt, TIME_IMMEDIATE);
+//      chMBPost(&app_mb, (msg_t)&evt, TIME_IMMEDIATE);
+      status_bar_redraw();
       chThdSleepUntil(time);
      }
 }

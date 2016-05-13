@@ -54,5 +54,5 @@ void backlight_main(void* params){
 
 }
 
-application set_backlight = { .name="Set backlight", .main=backlight_main, .syn_flg = no_sync };
+application set_backlight = { .name="Set backlight", .main=backlight_main};
 

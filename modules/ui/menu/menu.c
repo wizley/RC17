@@ -231,19 +231,10 @@ static void menu_ui_init(void) {
 static void run(menu_entry *entry) {
     if(entry->type == APP) {
       current_running_menu = entry;
-      if (entry->data.app->syn_flg == sync){
-          timer_sleep = 0; chSemReset(&timer_sem, 0);
-      }else{
-          timer_sleep = 1;
-      }
       if(entry->data.app->main == NULL){
         template.main(NULL);
       }else{
         entry->data.app->main(NULL);
-        if (entry->data.app->syn_flg == sync){
-             timer_sleep = 1;
-        }
-
       }
     }else if(entry->type == SUBMENU) {
       //TODO : implement stack to save previous offset
@@ -295,8 +286,6 @@ void menu_main(void* params) {
     menu_ui_init();
     // Once it is deactivated - display the menu
     //starts the synchronous update
-    chSemObjectInit(&timer_sem, 0);
-    chThdCreateStatic(wa_ui_udc_event, sizeof(wa_ui_udc_event), LOWPRIO, ui_udcupdate_evt, NULL);
     status_bar_init();
     while(1) {
 
@@ -312,9 +301,9 @@ void menu_main(void* params) {
               menu_screen_event(evt);
             }
             break;
-          case UI_STATUSBAR_TICK:
-            status_bar_redraw();
-            break;
+//          case UI_STATUSBAR_TICK:
+//            status_bar_redraw();
+//            break;
           default:
             //ui_update(&evt);
             break;
@@ -326,25 +315,6 @@ void menu_main(void* params) {
 application menu = {
     .name = "Menu",
     .main = menu_main,
-    .syn_flg = no_sync
 };
 
-THD_WORKING_AREA (wa_ui_udc_event, 64);
-THD_FUNCTION(ui_udcupdate_evt, arg){
-  (void) arg;
-  ui_event evt1;
-  evt1.type = UI_UDC_UPDATE;
-  uint32_t time = chVTGetSystemTimeX();
-  while (true) {
-     if (!timer_sleep){
-       time += MS2ST(UI_UDC_UPDATE_INTERVAL);
-       chMBPost(&app_mb, (msg_t)&evt1, TIME_IMMEDIATE);
-       chThdSleepUntil(time);
-     }else{
-       chSemWait(&timer_sem);
-       timer_sleep = 0; time = chVTGetSystemTimeX();
-       continue;
-     }
-   }
-}
 

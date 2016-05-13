@@ -27,7 +27,7 @@ void linesensor_test_main(void *params){
 
   while(TRUE){
 
-    if(chMBFetch(&app_mb, (msg_t*)(&evt), TIME_INFINITE) == MSG_OK){
+    if(chMBFetch(&app_mb, (msg_t*)(&evt), TIME_IMMEDIATE) == MSG_OK){
 
       switch(evt->type){
         case UI_INPUT_BUTTON:
@@ -39,21 +39,20 @@ void linesensor_test_main(void *params){
 
           }
           break;
-        case UI_UDC_UPDATE:
-//          //draw some bars like the old blueboard
-//          for(i=0; i<LineSensor[0].size; i++){
-//              gdispFillArea(0+i*(132/LineSensor[0].size),gdisplineheight*3+1+(gdisplineheight-(((LineSensor[0].Data[i])/15.0)*gdisplineheight)),132/LineSensor[0].size,((LineSensor[0].Data[i])/15.0)*gdisplineheight,White);
-//              gdispFillArea(0+i*(132/LineSensor[1].size),gdisplineheight*4+1+(gdisplineheight-(((LineSensor[1].Data[i])/15.0)*gdisplineheight)),132/LineSensor[1].size,((LineSensor[1].Data[i])/15.0)*gdisplineheight,White);
-//          }
-          break;
-        case UI_STATUSBAR_TICK:
-           status_bar_redraw();
-          break;
+//        case UI_STATUSBAR_TICK:
+//           status_bar_redraw();
+//          break;
         default:
 
           break;
       }
     }
+    //          //draw some bars like the old blueboard
+    //          for(i=0; i<LineSensor[0].size; i++){
+    //              gdispFillArea(0+i*(132/LineSensor[0].size),gdisplineheight*3+1+(gdisplineheight-(((LineSensor[0].Data[i])/15.0)*gdisplineheight)),132/LineSensor[0].size,((LineSensor[0].Data[i])/15.0)*gdisplineheight,White);
+    //              gdispFillArea(0+i*(132/LineSensor[1].size),gdisplineheight*4+1+(gdisplineheight-(((LineSensor[1].Data[i])/15.0)*gdisplineheight)),132/LineSensor[1].size,((LineSensor[1].Data[i])/15.0)*gdisplineheight,White);
+    //          }
+    chThdSleepMilliseconds(100);
   }
 
 }
@@ -61,6 +60,5 @@ void linesensor_test_main(void *params){
 
 application line_sensor_test_app = {
      .name="Line sensor test",
-     .main=linesensor_test_main,
-     .syn_flg = sync
+     .main=linesensor_test_main
 };

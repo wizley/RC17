@@ -41,9 +41,9 @@ void template_main(void *params){
 
           }
           break;
-        case UI_STATUSBAR_TICK:
-           status_bar_redraw();
-          break;
+//        case UI_STATUSBAR_TICK:
+//           status_bar_redraw();
+//          break;
         default:
 
           break;
@@ -56,6 +56,5 @@ void template_main(void *params){
 
 application template = {
     .name = "Template",
-    .main = template_main,
-    .syn_flg = no_sync
+    .main = template_main
 };

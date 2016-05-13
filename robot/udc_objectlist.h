@@ -50,10 +50,10 @@ UDC_Obj_t udc_objectlist[32] =
     {ID_SERVO2, (udc_tx_data_t)&Servo2.command, 16, (udc_rx_data_t)&Servo2.current, 2, servo_setAlive, &Servo2},
 #endif
 #if USE_ENCODER && ENCODER_NUMBER > 0
-    {ID_ENCODER1_2, NULL, 0, (udc_rx_data_t)&encoder1_2.count, 4, encoder_setAlive, &encoder1_2},
+    {ID_ENCODER1_2, NULL, 0, (udc_rx_data_t)&encoder1_2.delta_count, 4, encoder_setAlive, &encoder1_2},
 #endif
 #if USE_ENCODER && ENCODER_NUMBER > 2
-    {ID_ENCODER3_4, NULL, 0, (udc_rx_data_t)&encoder3_4.count, 4, encoder_setAlive, &encoder3_4},
+    {ID_ENCODER3_4, NULL, 0, (udc_rx_data_t)&encoder3_4.delta_count, 4, encoder_setAlive, &encoder3_4},
 #endif
 #if USE_LINESENSOR_0
     {ID_L0_POS, NULL, 0, (udc_rx_data_t) &LineSensor[0].Position, 8, linesensor_setAlive, &LineSensor[0]},
