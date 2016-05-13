@@ -32,3 +32,7 @@
 //#include "Lato-Regular32.c"
 //#include "Ubuntu-Regular32.c"
 #include "DroidSans32.c"
+#include "DroidSans23_aa.c"
+#include "System San Francisco Display Regular32.c"
+#include "System San Francisco Display Ultralight20_aa.c"
+
