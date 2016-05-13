@@ -20,7 +20,7 @@ extern mailbox_t app_mb;
 typedef enum{
   UI_INPUT_BUTTON = 0,
   UI_INPUT_TOUCH,
- // UI_STATUSBAR_TICK
+  UI_STATUSBAR_TICK
 }ui_evt_type_e;
 
 typedef enum{

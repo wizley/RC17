@@ -417,7 +417,7 @@ static bool_t checkSides(bool_t left) {
 
 static void goRight(void) {
   int i;
-  if (checkSides(TRUE) == FALSE) {
+  if (checkSides(FALSE) == FALSE) {
     drawShape(0);
     for (i = 0; i <= 3; i++) {
       tetrisCurrentShape[i][0]++;
@@ -428,7 +428,7 @@ static void goRight(void) {
 
 static void goLeft(void) {
   int i;
-  if (checkSides(FALSE) == FALSE) {
+  if (checkSides(TRUE) == FALSE) {
     drawShape(0);
     for (i = 0; i <= 3; i++) {
       tetrisCurrentShape[i][0]--;
