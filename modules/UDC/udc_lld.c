@@ -103,6 +103,7 @@ static THD_FUNCTION(udc_lld_process, arg) {
 //      uartStartReceive(&UDC_UART, rx_frame.rx_len, rx_frame.rx_buffer);
       UDCD.udc_rx_state = udc_rx_active;
 //      gptStartOneShot(&UDC_TIMER, RCV_TIMEOUT25 * rx_frame.rx_len);
+      gptStopTimer(&UDC_TIMER);
       gptStartOneShot(&UDC_TIMER, RCV_TIMEOUT25);
       UDCD.udc_rx_state = udc_lld_get_rx_event(&el_rx);
     }else{

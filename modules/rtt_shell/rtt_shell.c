@@ -2,7 +2,7 @@
 #include "ch.h"
 #include "hal.h"
 #include "rtt_shell.h"
-#include "RTTstream.h"
+#include "RTTchannel.h"
 #include "shell.h"
 #include "chprintf.h"
 
@@ -135,7 +135,7 @@ static const ShellConfig shell_cfg1 = {
 
 void rtt_shell_init(void){
   shellInit();
-  RTTstreamObjectInit(&RTT_S0);
+  RTTchannelObjectInit(&RTT_S0);
   /*
    * Initializes a serial-over-USB CDC driver.
    */

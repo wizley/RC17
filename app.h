@@ -20,8 +20,7 @@ extern mailbox_t app_mb;
 typedef enum{
   UI_INPUT_BUTTON = 0,
   UI_INPUT_TOUCH,
-  UI_STATUSBAR_TICK,
-  UI_UDC_UPDATE
+  UI_STATUSBAR_TICK
 }ui_evt_type_e;
 
 typedef enum{
@@ -79,11 +78,6 @@ typedef struct {
   }data;
 }ui_event;
 
-typedef enum{
-  no_sync = 0,
-  sync
-}sync_update_flag;
-
 extern uint8_t timer_sleep;
 
 /**
@@ -98,7 +92,6 @@ typedef struct {
      */
     void (*main)(void* params);
     //need synchronous redraw and reprint ui element ==> sync,otherwise ==> no_sync
-    sync_update_flag syn_flg;
 } application;
 
 extern int ButtonDown[9];

@@ -6,7 +6,7 @@
 # Compiler options here.
 ifeq ($(USE_OPT),)
   USE_OPT = -O2 -ggdb -fomit-frame-pointer -falign-functions=16 \
-            -fshort-enums --specs=nano.specs -std=gnu99 -finline-functions
+            -fshort-enums --specs=nano.specs -std=gnu99 -finline-functions -fno-builtin
 endif
 
 # C specific options here (added to USE_OPT).
@@ -223,7 +223,7 @@ UINCDIR =
 ULIBDIR =
 
 # List all user libraries here
-ULIBS = -lc -lm $(GFXLIBS)
+ULIBS = -lc -lm -lnosys $(GFXLIBS)
 
 #
 # End of user defines

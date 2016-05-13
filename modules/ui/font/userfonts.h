@@ -35,4 +35,5 @@
 #include "DroidSans23_aa.c"
 #include "System San Francisco Display Regular32.c"
 #include "System San Francisco Display Ultralight20_aa.c"
-
+#include "DejaVuSansMono12_aa.c"
+#include "DejaVuSansMono-Bold16_aa.c"

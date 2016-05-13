@@ -102,8 +102,16 @@ void guiCreate(void)
 
   // Console sample text
   //gwinPrintf(ghConsole, "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet");
+void guiUpdate(){
+     gwinClear(ghConsole1);
+     gwinPrintf(ghConsole1, UIDrivingState[DrivingState]);
+     gwinClear(ghConsole);
+     gwinPrintf(ghConsole, "Setpoint: %d\r\n", M[0].SetPoint);
+     gwinPrintf(ghConsole, "feedback: %d\r\n", M[0].Feedback);
+     gwinPrintf(ghConsole, "current: %d\r\n",M[0].Board.Current);
+     //gwinPrintf(ghConsole, "voltage: %d\r\n",M[0].Board.Voltage);
+     gwinPrintf(ghConsole, "temperature: %d\r\n",M[0].Board.Temperature);
 }
-
 void start_robot_main(void *params){
   (void) params;
 
@@ -113,7 +121,7 @@ void start_robot_main(void *params){
   //ActivateDriving();//lock motor
   while(TRUE){
 
-    if(chMBFetch(&app_mb, (msg_t*)(&evt), TIME_INFINITE) == MSG_OK){
+    if(chMBFetch(&app_mb, (msg_t*)(&evt), TIME_IMMEDIATE) == MSG_OK){
 
       switch(evt->type){
         case UI_INPUT_BUTTON:
@@ -124,14 +132,7 @@ void start_robot_main(void *params){
           }
           break;
         case UI_UDC_UPDATE:
-             gwinClear(ghConsole1);
-             gwinPrintf(ghConsole1, UIDrivingState[DrivingState]);
-             gwinClear(ghConsole);
-             gwinPrintf(ghConsole, "Setpoint: %d\r\n", M[0].SetPoint);
-             gwinPrintf(ghConsole, "feedback: %d\r\n", M[0].Feedback);
-             gwinPrintf(ghConsole, "current: %d\r\n",M[0].Board.Current);
-             //gwinPrintf(ghConsole, "voltage: %d\r\n",M[0].Board.Voltage);
-             gwinPrintf(ghConsole, "temperature: %d\r\n",M[0].Board.Temperature);
+
           break;
         case UI_STATUSBAR_TICK:
              status_bar_redraw();
@@ -140,6 +141,8 @@ void start_robot_main(void *params){
           break;
       }
     }
+    guiUpdate();
+    chThdSleepMilliseconds(60);
   }
 
 }
