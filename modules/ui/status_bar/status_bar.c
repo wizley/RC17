@@ -61,7 +61,7 @@ void status_bar_redraw(void){
   gdispDrawStringBox(0,0,GDISP_SCREEN_WIDTH, STATUS_BAR_HEIGHT, buffer, gdispOpenFont("SFNS Display UltraLight 20"), Black, justifyCenter);
 }
 
-THD_WORKING_AREA (wa_ui_rtc_event, 64);
+THD_WORKING_AREA (wa_ui_rtc_event, 128);
 THD_FUNCTION(ui_rtc_evt, arg){
   (void) arg;
 //  ui_event evt;

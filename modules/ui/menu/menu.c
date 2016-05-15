@@ -32,11 +32,6 @@
 #include "../start_robot_page/widgetstyles.h"
 //#include <stdio.h>
 #include "gfx.h"
-uint8_t timer_sleep = 0;
-static semaphore_t timer_sem;
-extern THD_WORKING_AREA (wa_ui_udc_event, 64);
-extern THD_FUNCTION(ui_udcupdate_evt, arg);
-
 static font_t font1;
 static GHandle MenuPage;
 

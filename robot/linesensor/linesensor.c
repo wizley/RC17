@@ -33,7 +33,7 @@ void linesensor_get_data(LINE_SENSOR *line){
      {.id=CAL_ID_DATA36_47(line->id),.tx_data=(udc_tx_data_t)&(line->size),.tx_len=2,.rx_data=(udc_rx_data_t)&(line->Data[36]),.rx_len=12,.rx_callback=NULL},
      {ID_END, NULL, 0, NULL, 0, NULL, NULL}
     };
-    UDC_PollObjectList(&line_object_list);
+    UDC_PollObjectList(line_object_list);
     return;
   }else if(line->size > 23){
     UDC_Obj_t line_object_list[5] = {
@@ -43,7 +43,7 @@ void linesensor_get_data(LINE_SENSOR *line){
      {.id=CAL_ID_DATA24_35(line->id),.tx_data=(udc_tx_data_t)&(line->size),.tx_len=2,.rx_data=(udc_rx_data_t)&(line->Data[24]),.rx_len=12,.rx_callback=NULL},
      {ID_END, NULL, 0, NULL, 0, NULL, NULL}
     };
-    UDC_PollObjectList(&line_object_list);
+    UDC_PollObjectList(line_object_list);
     return;
   }else if(line->size > 11){
     UDC_Obj_t line_object_list[4] = {
@@ -52,7 +52,7 @@ void linesensor_get_data(LINE_SENSOR *line){
      {.id=CAL_ID_DATA12_23(line->id),.tx_data=(udc_tx_data_t)&(line->size),.tx_len=2,.rx_data=(udc_rx_data_t)&(line->Data[12]),.rx_len=12,.rx_callback=NULL},
      {ID_END, NULL, 0, NULL, 0, NULL, NULL}
     };
-    UDC_PollObjectList(&line_object_list);
+    UDC_PollObjectList(line_object_list);
     return;
   }else if(line->size > 0){
     UDC_Obj_t udc_object;
