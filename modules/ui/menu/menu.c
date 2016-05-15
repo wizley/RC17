@@ -280,7 +280,6 @@ void menu_main(void* params) {
 //    clock_app.main(NULL);
     menu_ui_init();
     // Once it is deactivated - display the menu
-    //starts the synchronous update
     status_bar_init();
     while(1) {
 
