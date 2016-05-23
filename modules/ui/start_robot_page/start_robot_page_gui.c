@@ -78,6 +78,18 @@ GHandle ghLabelMotorVolt;
 GHandle ghLabelMotorVolt_VAL;
 GHandle ghLabelMBVolt;
 GHandle ghLabelMBVolt_VAL;
+GHandle ghLabellp_avg;
+GHandle ghLabellp_max;
+GHandle ghLabelcomm_avg;
+GHandle ghLabelcomm_max;
+GHandle ghLabellp_max_val;
+GHandle ghLabelcomm_avg_val;
+GHandle ghLabelcomm_max_val;
+GHandle ghLabellp_avg_val;
+GHandle ghLabelloop;
+GHandle ghLabelcomm;
+GHandle ghLabelstat;
+GHandle ghLabelprofile_name;
 
 // Fonts
 font_t dejavu_sans_16_anti_aliased;
@@ -309,8 +321,9 @@ static void createPagePage0(void)
 	wi.g.height = 20;
 	wi.g.parent = ghContainer4;
 	wi.text = "+0000";
-	wi.customDraw = gwinLabelDrawJustifiedRight;
-	wi.customParam = 0;
+  wi.customDraw = CustomLabelDraw;
+  char buf_m2_set[8] = "\0";
+  wi.customParam = buf_m2_set;
 	wi.customStyle = 0;
 	ghLabelM2_Setpoint = gwinLabelCreate(0, &wi);
 	gwinLabelSetBorder(ghLabelM2_Setpoint, FALSE);
@@ -325,8 +338,9 @@ static void createPagePage0(void)
 	wi.g.height = 20;
 	wi.g.parent = ghContainer4;
 	wi.text = "+0000";
-	wi.customDraw = gwinLabelDrawJustifiedRight;
-	wi.customParam = 0;
+  wi.customDraw = CustomLabelDraw;
+  char buf_m4_set[8] = "\0";
+  wi.customParam = buf_m4_set;
 	wi.customStyle = 0;
 	ghLabelM4_Setpoint = gwinLabelCreate(0, &wi);
 	gwinLabelSetBorder(ghLabelM4_Setpoint, FALSE);
@@ -342,8 +356,9 @@ static void createPagePage0(void)
 	wi.g.parent = ghContainer4;
 	wi.text = "+0000";
 	wi.customDraw = gwinLabelDrawJustifiedRight;
-	wi.customParam = 0;
-	wi.customStyle = 0;
+  wi.customDraw = CustomLabelDraw;
+  char buf_m0_set[8] = "\0";
+  wi.customParam = buf_m0_set;
 	ghLabelM0_Setpoint = gwinLabelCreate(0, &wi);
 	gwinLabelSetBorder(ghLabelM0_Setpoint, FALSE);
 	gwinSetFont(ghLabelM0_Setpoint, dejavu_sans_12_anti_aliased);
@@ -357,8 +372,9 @@ static void createPagePage0(void)
 	wi.g.height = 20;
 	wi.g.parent = ghContainer4;
 	wi.text = "+0000";
-	wi.customDraw = gwinLabelDrawJustifiedRight;
-	wi.customParam = 0;
+  wi.customDraw = CustomLabelDraw;
+  char buf_m1_set[8] = "\0";
+  wi.customParam = buf_m1_set;
 	wi.customStyle = 0;
 	ghLabelM1_Setpoint = gwinLabelCreate(0, &wi);
 	gwinLabelSetBorder(ghLabelM1_Setpoint, FALSE);
@@ -373,8 +389,9 @@ static void createPagePage0(void)
 	wi.g.height = 20;
 	wi.g.parent = ghContainer4;
 	wi.text = "+0000";
-	wi.customDraw = gwinLabelDrawJustifiedRight;
-	wi.customParam = 0;
+  wi.customDraw = CustomLabelDraw;
+  char buf_m3_set[8] = "\0";
+  wi.customParam = buf_m3_set;
 	wi.customStyle = 0;
 	ghLabelM3_Setpoint = gwinLabelCreate(0, &wi);
 	gwinLabelSetBorder(ghLabelM3_Setpoint, FALSE);
@@ -389,8 +406,9 @@ static void createPagePage0(void)
 	wi.g.height = 20;
 	wi.g.parent = ghContainer4;
 	wi.text = "+0000";
-	wi.customDraw = gwinLabelDrawJustifiedRight;
-	wi.customParam = 0;
+  wi.customDraw = CustomLabelDraw;
+  char buf_m5_set[8] = "\0";
+  wi.customParam = buf_m5_set;
 	wi.customStyle = 0;
 	ghLabelM5_Setpoint = gwinLabelCreate(0, &wi);
 	gwinLabelSetBorder(ghLabelM5_Setpoint, FALSE);
@@ -405,8 +423,9 @@ static void createPagePage0(void)
 	wi.g.height = 20;
 	wi.g.parent = ghContainer4;
 	wi.text = "+0000";
-	wi.customDraw = gwinLabelDrawJustifiedRight;
-	wi.customParam = 0;
+  wi.customDraw = CustomLabelDraw;
+  char buf_m6_set[8] = "\0";
+  wi.customParam = buf_m6_set;
 	wi.customStyle = 0;
 	ghLabelM6_Setpoint = gwinLabelCreate(0, &wi);
 	gwinLabelSetBorder(ghLabelM6_Setpoint, FALSE);
@@ -421,8 +440,9 @@ static void createPagePage0(void)
 	wi.g.height = 20;
 	wi.g.parent = ghContainer4;
 	wi.text = "+0000";
-	wi.customDraw = gwinLabelDrawJustifiedRight;
-	wi.customParam = 0;
+  wi.customDraw = CustomLabelDraw;
+  char buf_m7_set[8] = "\0";
+  wi.customParam = buf_m7_set;
 	wi.customStyle = 0;
 	ghLabelM7_Setpoint = gwinLabelCreate(0, &wi);
 	gwinLabelSetBorder(ghLabelM7_Setpoint, FALSE);
@@ -501,8 +521,9 @@ static void createPagePage0(void)
 	wi.g.height = 20;
 	wi.g.parent = ghContainer4;
 	wi.text = "+0000";
-	wi.customDraw = gwinLabelDrawJustifiedRight;
-	wi.customParam = 0;
+  wi.customDraw = CustomLabelDraw;
+  char buf_m0_feed[8] = "\0";
+  wi.customParam = buf_m0_feed;
 	wi.customStyle = 0;
 	ghLabelM0_Feedback = gwinLabelCreate(0, &wi);
 	gwinLabelSetBorder(ghLabelM0_Feedback, FALSE);
@@ -517,8 +538,9 @@ static void createPagePage0(void)
 	wi.g.height = 20;
 	wi.g.parent = ghContainer4;
 	wi.text = "+0000";
-	wi.customDraw = gwinLabelDrawJustifiedRight;
-	wi.customParam = 0;
+  wi.customDraw = CustomLabelDraw;
+  char buf_m1_feed[8] = "\0";
+  wi.customParam = buf_m1_feed;
 	wi.customStyle = 0;
 	ghLabelM1_Feedback = gwinLabelCreate(0, &wi);
 	gwinLabelSetBorder(ghLabelM1_Feedback, FALSE);
@@ -533,8 +555,9 @@ static void createPagePage0(void)
 	wi.g.height = 20;
 	wi.g.parent = ghContainer4;
 	wi.text = "+0000";
-	wi.customDraw = gwinLabelDrawJustifiedRight;
-	wi.customParam = 0;
+  wi.customDraw = CustomLabelDraw;
+  char buf_m2_feed[8] = "\0";
+  wi.customParam = buf_m2_feed;
 	wi.customStyle = 0;
 	ghLabelM2_Feedback = gwinLabelCreate(0, &wi);
 	gwinLabelSetBorder(ghLabelM2_Feedback, FALSE);
@@ -549,8 +572,9 @@ static void createPagePage0(void)
 	wi.g.height = 20;
 	wi.g.parent = ghContainer4;
 	wi.text = "+0000";
-	wi.customDraw = gwinLabelDrawJustifiedRight;
-	wi.customParam = 0;
+  wi.customDraw = CustomLabelDraw;
+  char buf_m3_feed[8] = "\0";
+  wi.customParam = buf_m3_feed;
 	wi.customStyle = 0;
 	ghLabelM3_Feedback = gwinLabelCreate(0, &wi);
 	gwinLabelSetBorder(ghLabelM3_Feedback, FALSE);
@@ -565,8 +589,9 @@ static void createPagePage0(void)
 	wi.g.height = 20;
 	wi.g.parent = ghContainer4;
 	wi.text = "+0000";
-	wi.customDraw = gwinLabelDrawJustifiedRight;
-	wi.customParam = 0;
+  wi.customDraw = CustomLabelDraw;
+  char buf_m4_feed[8] = "\0";
+  wi.customParam = buf_m4_feed;
 	wi.customStyle = 0;
 	ghLabelM4_Feedback = gwinLabelCreate(0, &wi);
 	gwinLabelSetBorder(ghLabelM4_Feedback, FALSE);
@@ -581,8 +606,9 @@ static void createPagePage0(void)
 	wi.g.height = 20;
 	wi.g.parent = ghContainer4;
 	wi.text = "+0000";
-	wi.customDraw = gwinLabelDrawJustifiedRight;
-	wi.customParam = 0;
+  wi.customDraw = CustomLabelDraw;
+  char buf_m5_feed[8] = "\0";
+  wi.customParam = buf_m5_feed;
 	wi.customStyle = 0;
 	ghLabelM5_Feedback = gwinLabelCreate(0, &wi);
 	gwinLabelSetBorder(ghLabelM5_Feedback, FALSE);
@@ -597,8 +623,9 @@ static void createPagePage0(void)
 	wi.g.height = 20;
 	wi.g.parent = ghContainer4;
 	wi.text = "+0000";
-	wi.customDraw = gwinLabelDrawJustifiedRight;
-	wi.customParam = 0;
+  wi.customDraw = CustomLabelDraw;
+  char buf_m6_feed[8] = "\0";
+  wi.customParam = buf_m6_feed;
 	wi.customStyle = 0;
 	ghLabelM6_Feedback = gwinLabelCreate(0, &wi);
 	gwinLabelSetBorder(ghLabelM6_Feedback, FALSE);
@@ -613,8 +640,9 @@ static void createPagePage0(void)
 	wi.g.height = 20;
 	wi.g.parent = ghContainer4;
 	wi.text = "+0000";
-	wi.customDraw = gwinLabelDrawJustifiedRight;
-	wi.customParam = 0;
+  wi.customDraw = CustomLabelDraw;
+  char buf_m7_feed[8] = "\0";
+  wi.customParam = buf_m7_feed;
 	wi.customStyle = 0;
 	ghLabelM7_Feedback = gwinLabelCreate(0, &wi);
 	gwinLabelSetBorder(ghLabelM7_Feedback, FALSE);
@@ -629,8 +657,9 @@ static void createPagePage0(void)
 	wi.g.height = 20;
 	wi.g.parent = ghContainer4;
 	wi.text = "00000";
-	wi.customDraw = gwinLabelDrawJustifiedRight;
-	wi.customParam = 0;
+  wi.customDraw = CustomLabelDraw;
+  char buf_m0_current[8] = "\0";
+  wi.customParam = buf_m0_current;
 	wi.customStyle = 0;
 	ghLabelM0_Current = gwinLabelCreate(0, &wi);
 	gwinLabelSetBorder(ghLabelM0_Current, FALSE);
@@ -645,8 +674,9 @@ static void createPagePage0(void)
 	wi.g.height = 20;
 	wi.g.parent = ghContainer4;
 	wi.text = "00000";
-	wi.customDraw = gwinLabelDrawJustifiedRight;
-	wi.customParam = 0;
+  wi.customDraw = CustomLabelDraw;
+  char buf_m1_current[8] = "\0";
+  wi.customParam = buf_m1_current;
 	wi.customStyle = 0;
 	ghLabelM1_Current = gwinLabelCreate(0, &wi);
 	gwinLabelSetBorder(ghLabelM1_Current, FALSE);
@@ -661,8 +691,9 @@ static void createPagePage0(void)
 	wi.g.height = 20;
 	wi.g.parent = ghContainer4;
 	wi.text = "00000";
-	wi.customDraw = gwinLabelDrawJustifiedRight;
-	wi.customParam = 0;
+  wi.customDraw = CustomLabelDraw;
+  char buf_m2_current[8] = "\0";
+  wi.customParam = buf_m2_current;
 	wi.customStyle = 0;
 	ghLabelM2_Current = gwinLabelCreate(0, &wi);
 	gwinLabelSetBorder(ghLabelM2_Current, FALSE);
@@ -677,8 +708,9 @@ static void createPagePage0(void)
 	wi.g.height = 20;
 	wi.g.parent = ghContainer4;
 	wi.text = "00000";
-	wi.customDraw = gwinLabelDrawJustifiedRight;
-	wi.customParam = 0;
+  wi.customDraw = CustomLabelDraw;
+  char buf_m3_current[8] = "\0";
+  wi.customParam = buf_m3_current;
 	wi.customStyle = 0;
 	ghLabelM3_Current = gwinLabelCreate(0, &wi);
 	gwinLabelSetBorder(ghLabelM3_Current, FALSE);
@@ -693,8 +725,9 @@ static void createPagePage0(void)
 	wi.g.height = 20;
 	wi.g.parent = ghContainer4;
 	wi.text = "00000";
-	wi.customDraw = gwinLabelDrawJustifiedRight;
-	wi.customParam = 0;
+  wi.customDraw = CustomLabelDraw;
+  char buf_m4_current[8] = "\0";
+  wi.customParam = buf_m4_current;
 	wi.customStyle = 0;
 	ghLabelM4_Current = gwinLabelCreate(0, &wi);
 	gwinLabelSetBorder(ghLabelM4_Current, FALSE);
@@ -709,8 +742,9 @@ static void createPagePage0(void)
 	wi.g.height = 20;
 	wi.g.parent = ghContainer4;
 	wi.text = "00000";
-	wi.customDraw = gwinLabelDrawJustifiedRight;
-	wi.customParam = 0;
+  wi.customDraw = CustomLabelDraw;
+  char buf_m5_current[8] = "\0";
+  wi.customParam = buf_m5_current;
 	wi.customStyle = 0;
 	ghLabelM5_Current = gwinLabelCreate(0, &wi);
 	gwinLabelSetBorder(ghLabelM5_Current, FALSE);
@@ -725,8 +759,9 @@ static void createPagePage0(void)
 	wi.g.height = 20;
 	wi.g.parent = ghContainer4;
 	wi.text = "00000";
-	wi.customDraw = gwinLabelDrawJustifiedRight;
-	wi.customParam = 0;
+  wi.customDraw = CustomLabelDraw;
+  char buf_m6_current[8] = "\0";
+  wi.customParam = buf_m6_current;
 	wi.customStyle = 0;
 	ghLabelM6_Current = gwinLabelCreate(0, &wi);
 	gwinLabelSetBorder(ghLabelM6_Current, FALSE);
@@ -741,8 +776,9 @@ static void createPagePage0(void)
 	wi.g.height = 20;
 	wi.g.parent = ghContainer4;
 	wi.text = "00000";
-	wi.customDraw = gwinLabelDrawJustifiedRight;
-	wi.customParam = 0;
+  wi.customDraw = CustomLabelDraw;
+  char buf_m7_current[8] = "\0";
+  wi.customParam = buf_m7_current;
 	wi.customStyle = 0;
 	ghLabelM7_Current = gwinLabelCreate(0, &wi);
 	gwinLabelSetBorder(ghLabelM7_Current, FALSE);
@@ -789,9 +825,7 @@ static void createPagePage0(void)
 	wi.g.height = 20;
 	wi.g.parent = ghContainer4;
 	wi.text = "+0000";
-	//wi.customDraw = gwinLabelDrawJustifiedRight;
   wi.customDraw = CustomLabelDraw;
-  //wi.customParam = 0;
   char buf_e1[8] = "\0";
   wi.customParam = buf_e1;
 	wi.customStyle = 0;
@@ -808,9 +842,7 @@ static void createPagePage0(void)
 	wi.g.height = 20;
 	wi.g.parent = ghContainer4;
 	wi.text = "+0000";
-	//wi.customDraw = gwinLabelDrawJustifiedRight;
   wi.customDraw = CustomLabelDraw;
-  //wi.customParam = 0;
   char buf_e2[8] = "\0";
   wi.customParam = buf_e2;
 	wi.customStyle = 0;
@@ -827,9 +859,7 @@ static void createPagePage0(void)
 	wi.g.height = 20;
 	wi.g.parent = ghContainer4;
 	wi.text = "+0000";
-	//wi.customDraw = gwinLabelDrawJustifiedRight;
   wi.customDraw = CustomLabelDraw;
-  //wi.customParam = 0;
   char buf_e3[8] = "\0";
   wi.customParam = buf_e3;
 	wi.customStyle = 0;
@@ -846,9 +876,7 @@ static void createPagePage0(void)
 	wi.g.height = 20;
 	wi.g.parent = ghContainer4;
 	wi.text = "+0000";
-	//wi.customDraw = gwinLabelDrawJustifiedRight;
 	wi.customDraw = CustomLabelDraw;
-	//wi.customParam = 0;
 	char buf_e4[8] = "\0";
 	wi.customParam = buf_e4;
 	wi.customStyle = 0;
@@ -892,7 +920,7 @@ static void createPagePage0(void)
 	wi.g.width = 80;
 	wi.g.height = 30;
 	wi.g.parent = ghContainerPage0;
-	wi.text = "Button1";
+	wi.text = "Profile";
 	wi.customDraw = gwinButtonDraw_Normal;
 	wi.customParam = 0;
 	wi.customStyle = 0;
@@ -918,43 +946,11 @@ static void createPagePage0(void)
 	wi.g.width = 80;
 	wi.g.height = 30;
 	wi.g.parent = ghContainerPage0;
-	wi.text = "Button3";
+	wi.text = "Reset";
 	wi.customDraw = gwinButtonDraw_Normal;
 	wi.customParam = 0;
 	wi.customStyle = 0;
 	ghButton3 = gwinButtonCreate(0, &wi);
-
-	// create checkbox widget: ghCheckboxMotor
-	wi.g.show = TRUE;
-	wi.g.x = 100;
-	wi.g.y = 340;
-	wi.g.width = 130;
-	wi.g.height = 20;
-	wi.g.parent = ghContainerPage0;
-	wi.text = "Motors Online";
-	wi.customDraw = gwinCheckboxDraw_CheckOnRight;
-	wi.customParam = 0;
-	wi.customStyle = 0;
-	ghCheckboxMotor = gwinCheckboxCreate(0, &wi);
-	gwinCheckboxCheck(ghCheckboxMotor, FALSE);
-	gwinSetFont(ghCheckboxMotor, dejavu_sans_12_anti_aliased);
-	gwinRedraw(ghCheckboxMotor);
-
-	// create checkbox widget: ghCheckboxEncoder
-	wi.g.show = TRUE;
-	wi.g.x = 100;
-	wi.g.y = 370;
-	wi.g.width = 130;
-	wi.g.height = 20;
-	wi.g.parent = ghContainerPage0;
-	wi.text = "Encoders Online";
-	wi.customDraw = gwinCheckboxDraw_CheckOnRight;
-	wi.customParam = 0;
-	wi.customStyle = 0;
-	ghCheckboxEncoder = gwinCheckboxCreate(0, &wi);
-	gwinCheckboxCheck(ghCheckboxEncoder, FALSE);
-	gwinSetFont(ghCheckboxEncoder, dejavu_sans_12_anti_aliased);
-	gwinRedraw(ghCheckboxEncoder);
 
 	// Create label widget: ghLabelTimer
 	wi.g.show = TRUE;
@@ -987,7 +983,7 @@ static void createPagePage0(void)
 
 	// Create label widget: ghLabel35
 	wi.g.show = TRUE;
-	wi.g.x = 570;
+	wi.g.x = 580;
 	wi.g.y = 0;
 	wi.g.width = 220;
 	wi.g.height = 220;
@@ -1001,9 +997,9 @@ static void createPagePage0(void)
 
 	// create checkbox widget: ghCheckboxDS4
 	wi.g.show = TRUE;
-	wi.g.x = 100;
-	wi.g.y = 310;
-	wi.g.width = 130;
+	wi.g.x = 130;
+	wi.g.y = 450;
+	wi.g.width = 100;
 	wi.g.height = 20;
 	wi.g.parent = ghContainerPage0;
 	wi.text = "DS4 Online";
@@ -1039,9 +1035,7 @@ static void createPagePage0(void)
   wi.g.height = 30;
   wi.g.parent = ghContainerPage0;
   wi.text = "00";
-  //wi.customDraw = gwinLabelDrawJustifiedRight;
   wi.customDraw = CustomLabelDraw;
-  //wi.customParam = 0;
   char buf_cpu[8] = "\0";
   wi.customParam = buf_cpu;
   wi.customStyle = 0;
@@ -1113,6 +1107,200 @@ static void createPagePage0(void)
   gwinLabelSetBorder(ghLabelMotorVolt_VAL, FALSE);
   gwinSetFont(ghLabelMotorVolt_VAL, dejavu_sans_16_anti_aliased);
   gwinRedraw(ghLabelMotorVolt_VAL);
+
+  // Create label widget: ghLabellp_avg
+  wi.g.show = TRUE;
+  wi.g.x = 0;
+  wi.g.y = 60;
+  wi.g.width = 70;
+  wi.g.height = 20;
+  wi.g.parent = ghContainer3;
+  wi.text = "Avg";
+  wi.customDraw = gwinLabelDrawJustifiedLeft;
+  wi.customParam = 0;
+  wi.customStyle = 0;
+  ghLabellp_avg = gwinLabelCreate(0, &wi);
+  gwinLabelSetBorder(ghLabellp_avg, FALSE);
+  gwinSetFont(ghLabellp_avg, dejavu_sans_12_anti_aliased);
+  gwinRedraw(ghLabellp_avg);
+
+  // Create label widget: ghLabellp_max
+  wi.g.show = TRUE;
+  wi.g.x = 0;
+  wi.g.y = 80;
+  wi.g.width = 70;
+  wi.g.height = 20;
+  wi.g.parent = ghContainer3;
+  wi.text = "Max";
+  wi.customDraw = gwinLabelDrawJustifiedLeft;
+  wi.customParam = 0;
+  wi.customStyle = 0;
+  ghLabellp_max = gwinLabelCreate(0, &wi);
+  gwinLabelSetBorder(ghLabellp_max, FALSE);
+  gwinSetFont(ghLabellp_max, dejavu_sans_12_anti_aliased);
+  gwinRedraw(ghLabellp_max);
+
+  // Create label widget: ghLabelcomm_avg
+  wi.g.show = TRUE;
+  wi.g.x = 0;
+  wi.g.y = 130;
+  wi.g.width = 70;
+  wi.g.height = 20;
+  wi.g.parent = ghContainer3;
+  wi.text = "Avg";
+  wi.customDraw = gwinLabelDrawJustifiedLeft;
+  wi.customParam = 0;
+  wi.customStyle = 0;
+  ghLabelcomm_avg = gwinLabelCreate(0, &wi);
+  gwinLabelSetBorder(ghLabelcomm_avg, FALSE);
+  gwinSetFont(ghLabelcomm_avg, dejavu_sans_12_anti_aliased);
+  gwinRedraw(ghLabelcomm_avg);
+
+  // Create label widget: ghLabelcomm_max
+  wi.g.show = TRUE;
+  wi.g.x = 0;
+  wi.g.y = 150;
+  wi.g.width = 70;
+  wi.g.height = 20;
+  wi.g.parent = ghContainer3;
+  wi.text = "Max";
+  wi.customDraw = gwinLabelDrawJustifiedLeft;
+  wi.customParam = 0;
+  wi.customStyle = 0;
+  ghLabelcomm_max = gwinLabelCreate(0, &wi);
+  gwinLabelSetBorder(ghLabelcomm_max, FALSE);
+  gwinSetFont(ghLabelcomm_max, dejavu_sans_12_anti_aliased);
+  gwinRedraw(ghLabelcomm_max);
+
+  // Create label widget: ghLabellp_max_val
+  wi.g.show = TRUE;
+  wi.g.x = 100;
+  wi.g.y = 80;
+  wi.g.width = 60;
+  wi.g.height = 20;
+  wi.g.parent = ghContainer3;
+  wi.text = "10000";
+  wi.customDraw = CustomLabelDraw;
+  char buf_lp_max[8] = "\0";
+  wi.customParam = buf_lp_max;
+  wi.customStyle = 0;
+  ghLabellp_max_val = gwinLabelCreate(0, &wi);
+  gwinLabelSetBorder(ghLabellp_max_val, FALSE);
+  gwinSetFont(ghLabellp_max_val, dejavu_sans_12_anti_aliased);
+  gwinRedraw(ghLabellp_max_val);
+
+  // Create label widget: ghLabelcomm_avg_val
+  wi.g.show = TRUE;
+  wi.g.x = 100;
+  wi.g.y = 130;
+  wi.g.width = 60;
+  wi.g.height = 20;
+  wi.g.parent = ghContainer3;
+  wi.text = "10000";
+  wi.customDraw = CustomLabelDraw;
+  char buf_comm_avg[8] = "\0";
+  wi.customParam = buf_comm_avg;
+  wi.customStyle = 0;
+  ghLabelcomm_avg_val = gwinLabelCreate(0, &wi);
+  gwinLabelSetBorder(ghLabelcomm_avg_val, FALSE);
+  gwinSetFont(ghLabelcomm_avg_val, dejavu_sans_12_anti_aliased);
+  gwinRedraw(ghLabelcomm_avg_val);
+
+  // Create label widget: ghLabelcomm_max_val
+  wi.g.show = TRUE;
+  wi.g.x = 100;
+  wi.g.y = 150;
+  wi.g.width = 60;
+  wi.g.height = 20;
+  wi.g.parent = ghContainer3;
+  wi.text = "10000";
+  wi.customDraw = CustomLabelDraw;
+  char buf_comm_max[8] = "\0";
+  wi.customParam = buf_comm_max;
+  wi.customStyle = 0;
+  ghLabelcomm_max_val = gwinLabelCreate(0, &wi);
+  gwinLabelSetBorder(ghLabelcomm_max_val, FALSE);
+  gwinSetFont(ghLabelcomm_max_val, dejavu_sans_12_anti_aliased);
+  gwinRedraw(ghLabelcomm_max_val);
+
+  // Create label widget: ghLabellp_avg_val
+  wi.g.show = TRUE;
+  wi.g.x = 100;
+  wi.g.y = 60;
+  wi.g.width = 60;
+  wi.g.height = 20;
+  wi.g.parent = ghContainer3;
+  wi.text = "10000";
+  wi.customDraw = CustomLabelDraw;
+  char buf_lp_avg[8] = "\0";
+  wi.customParam = buf_lp_avg;
+  wi.customStyle = 0;
+  ghLabellp_avg_val = gwinLabelCreate(0, &wi);
+  gwinLabelSetBorder(ghLabellp_avg_val, FALSE);
+  gwinSetFont(ghLabellp_avg_val, dejavu_sans_12_anti_aliased);
+  gwinRedraw(ghLabellp_avg_val);
+
+  // Create label widget: ghLabelloop
+  wi.g.show = TRUE;
+  wi.g.x = 0;
+  wi.g.y = 40;
+  wi.g.width = 170;
+  wi.g.height = 20;
+  wi.g.parent = ghContainer3;
+  wi.text = "Loop roundtrip(us)";
+  wi.customDraw = gwinLabelDrawJustifiedLeft;
+  wi.customParam = 0;
+  wi.customStyle = 0;
+  ghLabelloop = gwinLabelCreate(0, &wi);
+  gwinLabelSetBorder(ghLabelloop, FALSE);
+  gwinSetFont(ghLabelloop, dejavu_sans_12_anti_aliased);
+  gwinRedraw(ghLabelloop);
+
+  // Create label widget: ghLabelcomm
+  wi.g.show = TRUE;
+  wi.g.x = 0;
+  wi.g.y = 110;
+  wi.g.width = 170;
+  wi.g.height = 20;
+  wi.g.parent = ghContainer3;
+  wi.text = "Comm roundtrip(us)";
+  wi.customDraw = gwinLabelDrawJustifiedLeft;
+  wi.customParam = 0;
+  wi.customStyle = 0;
+  ghLabelcomm = gwinLabelCreate(0, &wi);
+  gwinLabelSetBorder(ghLabelcomm, FALSE);
+  gwinSetFont(ghLabelcomm, dejavu_sans_12_anti_aliased);
+  gwinRedraw(ghLabelcomm);
+
+  // Create label widget: ghLabelstat
+  wi.g.show = TRUE;
+  wi.g.x = 0;
+  wi.g.y = 10;
+  wi.g.width = 120;
+  wi.g.height = 20;
+  wi.g.parent = ghContainer3;
+  wi.text = "RT Loop Stat";
+  wi.customDraw = gwinLabelDrawJustifiedLeft;
+  wi.customParam = 0;
+  wi.customStyle = 0;
+  ghLabelstat = gwinLabelCreate(0, &wi);
+  gwinLabelSetBorder(ghLabelstat, FALSE);
+  gwinSetFont(ghLabelstat, dejavu_sans_12_anti_aliased);
+  gwinRedraw(ghLabelstat);
+
+  // Create label widget: ghLabelprofile_name
+  wi.g.show = TRUE;
+  wi.g.x = 100;
+  wi.g.y = 260;
+  wi.g.width = 130;
+  wi.g.height = 30;
+  wi.g.parent = ghContainerPage0;
+  wi.text = "Profile name ";
+  wi.customDraw = gwinLabelDrawJustifiedLeft;
+  wi.customParam = 0;
+  wi.customStyle = 0;
+  ghLabelprofile_name = gwinLabelCreate(0, &wi);
+  gwinLabelSetBorder(ghLabelprofile_name, FALSE);
 }
 
 void guiShowPage(unsigned pageIndex)

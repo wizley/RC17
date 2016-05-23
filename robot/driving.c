@@ -22,8 +22,6 @@ static event_source_t CtrlLp_evt;
 static virtual_timer_t CtrlLpVT;
 static UDC_config_t udc_config;
 
-loop_stats_t loop_stats;
-
 void control_loop_timer(void *p) {
   /* Restarts the timer.*/
   chSysLockFromISR();
