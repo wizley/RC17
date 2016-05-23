@@ -295,9 +295,9 @@ void menu_main(void* params) {
               menu_screen_event(evt);
             }
             break;
-//          case UI_STATUSBAR_TICK:
-//            status_bar_redraw();
-//            break;
+          case UI_STATUSBAR_TICK:
+            status_bar_redraw();
+            break;
           default:
             //ui_update(&evt);
             break;

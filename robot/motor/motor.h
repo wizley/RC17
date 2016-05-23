@@ -54,11 +54,12 @@ typedef enum{
 }motor_mode_e;
 
 typedef struct{
-    int16_t Voltage;		// in mV
-    int16_t Current;		// in mA
-    int16_t Temperature;	// in Degree Celsius
-    uint16_t ADCValue;
-    uint16_t State;
+  int16_t Voltage;      // in mV
+  int16_t Current;      // in mA
+  int16_t Temperature;  // in Degree Celsius
+  int32_t EncoderCounter;
+  uint16_t ADCValue;
+  uint16_t State;
 }__attribute__((packed)) board_status_t;
 
 typedef struct{

@@ -46,6 +46,9 @@ void backlight_main(void* params){
               //TODO: eeprom to save the brightness
             }
             break;
+          case UI_STATUSBAR_TICK:
+               status_bar_redraw();
+            break;
           default:
             break;
         }

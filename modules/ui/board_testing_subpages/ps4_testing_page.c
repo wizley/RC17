@@ -37,7 +37,7 @@ void ps4_test_main(void *params){
 
   while(TRUE){
 
-    if(chMBFetch(&app_mb, (msg_t*)(&evt), TIME_IMMEDIATE) == MSG_OK){
+    if(chMBFetch(&app_mb, (msg_t*)(&evt), TIME_INFINITE) == MSG_OK){
 
       switch(evt->type){
         case UI_INPUT_BUTTON:
@@ -49,9 +49,9 @@ void ps4_test_main(void *params){
 
           }
           break;
-//        case UI_STATUSBAR_TICK:
-//             status_bar_redraw();
-//          break;
+        case UI_STATUSBAR_TICK:
+             status_bar_redraw();
+          break;
         default:
           break;
       }

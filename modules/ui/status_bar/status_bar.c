@@ -16,6 +16,15 @@
 #if  USE_MOTOR_0  ||  USE_MOTOR_1  ||  USE_MOTOR_2  ||  USE_MOTOR_3  ||  USE_MOTOR_4  ||  USE_MOTOR_5  ||  USE_MOTOR_6  ||  USE_MOTOR_7
     #include "motor.h"
 #endif
+#if USE_ENCODER
+#include "encoder.h"
+#endif
+#if USE_SERVO
+#include "servo.h"
+#endif
+#if USE_LINESENSOR_0 || USE_LINESENSOR_1 || USE_LINESENSOR_2 || USE_LINESENSOR_3
+#include "linesensor.h"
+#endif
 
 static GHandle statusbar;
 static RTCDateTime timespec;
@@ -35,7 +44,10 @@ float UpdateVoltage(void){
           Count++;
       }
   }
-  return (float) (((float)(Sum / Count))/1000.0);
+  if (Sum == 0 && Count == 0)
+    return 0.0;
+  else
+    return (float) (((float)(Sum / Count))/1000.0);
 }
 #endif
 
@@ -55,23 +67,24 @@ void status_bar_redraw(void){
   int hour, min, sec;
   get_time(&hour, &min, &sec);
   gwinClear(statusbar);
-  chsnprintf(buffer, (sizeof(buffer)/sizeof(buffer[0])),"cks:%d frm:%d tmo:%d %02d:%02d:%02d mb:%uV cpu:%.2f",
+  chsnprintf(buffer, (sizeof(buffer)/sizeof(buffer[0])),"%d %d cks:%d frm:%d tmo:%d %02d:%02d:%02d mb:%4.2fV",
+             M[0].Alive, Servo1.Alive,
              UDC_GetStatistics(UDC_CHECKSUM_ERROR),UDC_GetStatistics(UDC_FRAMING_ERROR),UDC_GetStatistics(UDC_TIMEOUT),
-             hour, min, sec, mb_voltage, cpu_usage_get_recent());
-  gdispDrawStringBox(0,0,GDISP_SCREEN_WIDTH, STATUS_BAR_HEIGHT, buffer, gdispOpenFont("SFNS Display UltraLight 20"), Black, justifyCenter);
+             hour, min, sec, UpdateVoltage());
+  gdispDrawStringBox(0,0,GDISP_SCREEN_WIDTH, STATUS_BAR_HEIGHT, buffer, gdispOpenFont("DroidSans23"), Black, justifyCenter);
 }
 
 THD_WORKING_AREA (wa_ui_rtc_event, 128);
 THD_FUNCTION(ui_rtc_evt, arg){
   (void) arg;
-//  ui_event evt;
-//  evt.type = UI_STATUSBAR_TICK;
+  ui_event evt;
+  evt.type = UI_STATUSBAR_TICK;
   uint32_t time = chVTGetSystemTimeX();
   while (true) {
-//      evt.data.status_bar_info.system_time = system_time;
+      evt.data.status_bar_info.system_time = system_time;
       time += S2ST(1);
-//      chMBPost(&app_mb, (msg_t)&evt, TIME_IMMEDIATE);
-      status_bar_redraw();
+      chMBPost(&app_mb, (msg_t)&evt, TIME_IMMEDIATE);
+      //status_bar_redraw();
       chThdSleepUntil(time);
      }
 }

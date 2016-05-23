@@ -85,7 +85,7 @@ udc_rx_state_e motor_get_status(MotorObj *motor){
   udc_object.id = CAL_ID_M_STATUS(motor->id);
   udc_object.rx_data = (udc_rx_data_t)&(motor->Board);
   udc_object.tx_len = 0;
-  udc_object.rx_len = 10;
+  udc_object.rx_len = 14;
   udc_object.rx_callback = NULL;
   return UDC_Poll_Single(&udc_object);
 }

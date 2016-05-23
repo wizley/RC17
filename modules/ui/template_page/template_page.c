@@ -41,9 +41,9 @@ void template_main(void *params){
 
           }
           break;
-//        case UI_STATUSBAR_TICK:
-//           status_bar_redraw();
-//          break;
+        case UI_STATUSBAR_TICK:
+           status_bar_redraw();
+          break;
         default:
 
           break;

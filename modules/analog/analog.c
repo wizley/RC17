@@ -9,8 +9,6 @@
 #include "hal.h"
 #include "analog.h"
 
-static uint16_t mb_voltage;
-static adcsample_t samples1[ADC_GRP1_NUM_CHANNELS * ADC_GRP1_BUF_DEPTH];
 static adcsample_t samples2[ADC_GRP2_NUM_CHANNELS * ADC_GRP2_BUF_DEPTH];
 /*
  * ADC streaming callback.
@@ -28,10 +26,6 @@ static void adccallback(ADCDriver *adcp, adcsample_t *buffer, size_t n) {
 //     else {
 //       ny += n;
 //     }
-  }else if(adcp == &ADCD3){
-    if (adcp->state == ADC_COMPLETE) {
-        mb_voltage = (samples1[0] + samples1[1] + samples1[2] + samples1[3] + samples1[4] + samples1[5] + samples1[6] + samples1[7]) / 8;
-    }
   }
 }
 
@@ -65,35 +59,15 @@ static const ADCConversionGroup adcgrpcfg2 = {
   ADC_SQR3_SQ2_N(ADC_CHANNEL_IN0)   | ADC_SQR3_SQ1_N(ADC_CHANNEL_IN11)
 };
 
-/*
- * ADC conversion group.
- * Mode:        Continuous, 8 samples of 1 channel, SW triggered.
- * Channels:    IN10.
- */
-static const ADCConversionGroup adcgrpcfg1 = {
-  TRUE,
-  ADC_GRP1_NUM_CHANNELS,
-  adccallback,
-  adcerrorcallback,
-  0,                        /* CR1 */
-  ADC_CR2_SWSTART,          /* CR2 */
-  ADC_SMPR1_SMP_AN11(ADC_SAMPLE_56),
-  0,                        /* SMPR2 */
-  ADC_SQR1_NUM_CH(ADC_GRP1_NUM_CHANNELS),
-  0,                        /* SQR2 */
-  ADC_SQR3_SQ1_N(ADC_CHANNEL_IN10)
-};
 
 void adc_init(void){
 /*
  * Activates the ADC1 driver and the temperature sensor.
  */
 adcStart(&ADCD1, NULL);
-adcStart(&ADCD3, NULL);
 adcSTM32EnableTSVREFE();
 /*
  * Starts an ADC continuous conversion.
  */
 adcStartConversion(&ADCD1, &adcgrpcfg2, samples2, ADC_GRP2_BUF_DEPTH);
-adcStartConversion(&ADCD3, &adcgrpcfg1, samples1, ADC_GRP1_BUF_DEPTH);
 }

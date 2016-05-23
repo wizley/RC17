@@ -99,12 +99,12 @@ static THD_FUNCTION(udc_lld_process, arg) {
     UDCD.udc_tx_state = udc_tx_active;
 
     if(udc_object->rx_len > 1){
-//      uartStopReceive(&UDC_UART);
-//      uartStartReceive(&UDC_UART, rx_frame.rx_len, rx_frame.rx_buffer);
+      uartStopReceive(&UDC_UART);
+      uartStartReceive(&UDC_UART, rx_frame.rx_len, rx_frame.rx_buffer);
       UDCD.udc_rx_state = udc_rx_active;
-//      gptStartOneShot(&UDC_TIMER, RCV_TIMEOUT25 * rx_frame.rx_len);
       gptStopTimer(&UDC_TIMER);
-      gptStartOneShot(&UDC_TIMER, RCV_TIMEOUT25);
+      gptStartOneShot(&UDC_TIMER, RCV_TIMEOUT25 * rx_frame.rx_len);
+//      gptStartOneShot(&UDC_TIMER, RCV_TIMEOUT25);
       UDCD.udc_rx_state = udc_lld_get_rx_event(&el_rx);
     }else{
       UDCD.udc_rx_state = udc_rx_idle;
@@ -201,90 +201,90 @@ void udc_lld_rxerr(UARTDriver *uartp, uartflags_t e) {
 void udc_lld_rxchar(UARTDriver *uartp, uint16_t c) {
   //this callback is only invoked when receiving character but not at RX_ACTIVE STATE
   (void) uartp;
-  chSysLockFromISR();
-  gptStopTimerI(&UDC_TIMER);
-  chSysUnlockFromISR();
-  switch(UDCD.udc_rx_state){
-    case udc_rx_init:
-      UDCD.udc_rx_state = udc_rx_state_error;
-      break;
-    case udc_rx_idle:
-      UDCD.udc_rx_state = udc_rx_state_error;
-      break;
-    case udc_rx_active:
-      rx_frame.rx_buffer[rx_frame.rx_count++] = c;
-      if(rx_frame.rx_count <= rx_frame.rx_len) rx_frame.checksum ^= c;
-      if(rx_frame.rx_count == rx_frame.rx_len){
-        if(rx_frame.checksum == 0xAA){
-          for(rx_frame.rx_count = 0; rx_frame.rx_count < rx_frame.rx_len - 1; rx_frame.rx_count++){
-            *rx_frame.out_data_ptr++ = rx_frame.rx_buffer[rx_frame.rx_count];
-          }
-          UDCD.udc_rx_state = udc_rx_idle;
-        }else{
-          UDCD.checksum_error++;
-          UDCD.udc_rx_state = udc_rx_checksum_error;
-        }
-        chSysLockFromISR();
-        osalEventBroadcastFlagsI(&UDCD.rx_evt, (eventflags_t)UDCD.udc_rx_state);
-        chSysUnlockFromISR();
-        return;
-      }
-      chSysLockFromISR();
-      gptStartOneShotI(&UDC_TIMER, RCV_TIMEOUT15);
-      chSysUnlockFromISR();
-      break;
-    default:
-      UDCD.udc_rx_state = udc_rx_state_error;
-      break;
-
-  }
+//  chSysLockFromISR();
+//  gptStopTimerI(&UDC_TIMER);
+//  chSysUnlockFromISR();
+//  switch(UDCD.udc_rx_state){
+//    case udc_rx_init:
+//      UDCD.udc_rx_state = udc_rx_state_error;
+//      break;
+//    case udc_rx_idle:
+//      UDCD.udc_rx_state = udc_rx_state_error;
+//      break;
+//    case udc_rx_active:
+//      rx_frame.rx_buffer[rx_frame.rx_count++] = c;
+//      if(rx_frame.rx_count <= rx_frame.rx_len) rx_frame.checksum ^= c;
+//      if(rx_frame.rx_count == rx_frame.rx_len){
+//        if(rx_frame.checksum == 0xAA){
+//          for(rx_frame.rx_count = 0; rx_frame.rx_count < rx_frame.rx_len-1; rx_frame.rx_count++){
+//            *rx_frame.out_data_ptr++ = rx_frame.rx_buffer[rx_frame.rx_count];
+//          }
+//          UDCD.udc_rx_state = udc_rx_idle;
+//        }else{
+//          UDCD.checksum_error++;
+//          UDCD.udc_rx_state = udc_rx_checksum_error;
+//        }
+//        chSysLockFromISR();
+//        osalEventBroadcastFlagsI(&UDCD.rx_evt, (eventflags_t)UDCD.udc_rx_state);
+//        chSysUnlockFromISR();
+//        return;
+//      }
+//      chSysLockFromISR();
+//      gptStartOneShotI(&UDC_TIMER, RCV_TIMEOUT15);
+//      chSysUnlockFromISR();
+//      break;
+//    default:
+//      UDCD.udc_rx_state = udc_rx_state_error;
+//      break;
+//
+//  }
 }
 
 void udc_lld_rxend(UARTDriver *uartp) {
   (void) uartp;
-  UDCD.udc_rx_state = udc_rx_idle;
-//  uint8_t i;
-//  chSysLockFromISR();
-//    gptStopTimerI(&UDC_TIMER);
-//    chSysUnlockFromISR();
-//    switch(UDCD.udc_rx_state){
-//      case udc_rx_init:
-//        UDCD.udc_rx_state = udc_rx_state_error;
-//        break;
-//      case udc_rx_idle:
-//        UDCD.udc_rx_state = udc_rx_state_error;
-//        break;
-//      case udc_rx_active:
-//        for (i = 0; i < rx_frame.rx_len; i++) {
-//            rx_frame.checksum ^= rx_frame.rx_buffer[i];
-//          }
-//
-//          if (rx_frame.checksum == 0xAA) {
-//            for (i = 0; i < rx_frame.rx_len-1; i++) {
-//              rx_frame.out_data_ptr[i] = rx_frame.rx_buffer[i];
-//            }
-//            UDCD.udc_rx_state = udc_rx_idle;
-//          }else{
-//            UDCD.checksum_error++;
-//            UDCD.udc_rx_state = udc_rx_checksum_error;
-//          }
-//        break;
-//      case udc_rx_framing_error:
-//        //palClearPad(GPIOC, GPIOC_LED_R);
-//        break;
-//      case udc_rx_state_error:
-//        break;
-//      case udc_rx_timeout:
-//        UDCD.timeout_error++;
-//        break;
-//      default:
-//        UDCD.udc_rx_state = udc_rx_state_error;
-//        break;
-//    }
-//    chSysLockFromISR();
-//    osalEventBroadcastFlagsI(&UDCD.rx_evt, (eventflags_t)UDCD.udc_rx_state);
-//    chSysUnlockFromISR();
-//    return;
+  //UDCD.udc_rx_state = udc_rx_idle;
+  uint8_t i;
+  chSysLockFromISR();
+    gptStopTimerI(&UDC_TIMER);
+    chSysUnlockFromISR();
+    switch(UDCD.udc_rx_state){
+      case udc_rx_init:
+        UDCD.udc_rx_state = udc_rx_state_error;
+        break;
+      case udc_rx_idle:
+        UDCD.udc_rx_state = udc_rx_state_error;
+        break;
+      case udc_rx_active:
+        for (i = 0; i < rx_frame.rx_len; i++) {
+            rx_frame.checksum ^= rx_frame.rx_buffer[i];
+          }
+
+          if (rx_frame.checksum == 0xAA) {
+            for (i = 0; i < rx_frame.rx_len-1; i++) {
+              rx_frame.out_data_ptr[i] = rx_frame.rx_buffer[i];
+            }
+            UDCD.udc_rx_state = udc_rx_idle;
+          }else{
+            UDCD.checksum_error++;
+            UDCD.udc_rx_state = udc_rx_checksum_error;
+          }
+        break;
+      case udc_rx_framing_error:
+        //palClearPad(GPIOC, GPIOC_LED_R);
+        break;
+      case udc_rx_state_error:
+        break;
+      case udc_rx_timeout:
+        UDCD.timeout_error++;
+        break;
+      default:
+        UDCD.udc_rx_state = udc_rx_state_error;
+        break;
+    }
+    chSysLockFromISR();
+    osalEventBroadcastFlagsI(&UDCD.rx_evt, (eventflags_t)UDCD.udc_rx_state);
+    chSysUnlockFromISR();
+    return;
 }
 
 void udc_lld_timer_cb(GPTDriver *gptp) {

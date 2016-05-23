@@ -32,6 +32,7 @@ GListener gl;
 GHandle ghContainerPage0;
 GHandle ghConsole;
 GHandle ghConsole1;
+GHandle Console2;
 
 // Fonts
 font_t dejavu_sans_16_anti_aliased;
@@ -46,11 +47,14 @@ static void createPagePage0(void)
   ghContainerPage0 = createContainer(0, STATUS_BAR_HEIGHT, GDISP_SCREEN_WIDTH, GDISP_SCREEN_HEIGHT - STATUS_BAR_HEIGHT, FALSE);
 
   // Create console widget: ghConsole
-  ghConsole = createConsole(&ghContainerPage0, 0, 0, 270, 270);
+  ghConsole = createConsole(&ghContainerPage0, 0, 0, 270, 130);
   gwinSetColor(ghConsole, Silver);
   gwinSetBgColor(ghConsole, Black);
-  gwinSetFont(ghConsole, dejavu_sans_32_anti_aliased);
+  //gwinSetFont(ghConsole, dejavu_sans_32_anti_aliased);
   gwinRedraw(ghConsole);
+
+  Console2 = createConsole(&ghContainerPage0, 0, 131, 270, 130);
+  gwinRedraw(Console2);
 
   ghConsole1 = createConsole(&ghContainerPage0, 270,0,270,130);
   gwinSetColor(ghConsole1, Silver);
@@ -111,8 +115,14 @@ void guiUpdate(){
      gwinPrintf(ghConsole, "Setpoint: %d\r\n", M[0].SetPoint);
      gwinPrintf(ghConsole, "feedback: %d\r\n", M[0].Feedback);
      gwinPrintf(ghConsole, "current: %d\r\n",M[0].Board.Current);
-     //gwinPrintf(ghConsole, "voltage: %d\r\n",M[0].Board.Voltage);
+//     gwinPrintf(ghConsole, "voltage: %d\r\n",M[0].Board.Voltage);
      gwinPrintf(ghConsole, "temperature: %d\r\n",M[0].Board.Temperature);
+     gwinClear(Console2);
+     gwinPrintf(Console2, "Setpoint: %d\r\n", M[5].SetPoint);
+     gwinPrintf(Console2, "feedback: %d\r\n", M[5].Feedback);
+     gwinPrintf(Console2, "current: %d\r\n",M[5].Board.Current);
+//     gwinPrintf(Console2, "voltage: %d\r\n",M[5].Board.Voltage);
+     gwinPrintf(Console2, "temperature: %d\r\n",M[5].Board.Temperature);
 }
 
 void start_robot_main(void *params){
@@ -134,9 +144,9 @@ void start_robot_main(void *params){
           } else {
           }
           break;
-//        case UI_STATUSBAR_TICK:
-//             status_bar_redraw();
-//          break;
+        case UI_STATUSBAR_TICK:
+             status_bar_redraw();
+          break;
         default:
           break;
       }

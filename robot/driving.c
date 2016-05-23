@@ -75,18 +75,19 @@ static THD_FUNCTION(ControlLoop, arg) {
     if (current_running_menu->data.app == &start_robot){
              //motor_get_status(&M[0]);// Miscellaneous Data
              //motor_send_setting(&M[5]);
-             if (ps4_data.triangle)//brake
-                 motor_setBrake(&M[0]);
-             else if (ps4_data.square)//reactivate after brake
-                 motor_send_setting(&M[0]);//should have set the motor global setting before calling this
-             //motor_send_setpoint(&M[0]);
-             //Servo1.command[0] = (qeiGetCount(&QEID4) - oldcount) * 10;
-             else if (ps4_data.ps)
-                 DeactivateDriving();
+//             if (ps4_data.triangle)//brake
+//                 motor_setBrake(&M[0]);
+//             else if (ps4_data.square)//reactivate after brake
+//                 motor_send_setting(&M[0]);//should have set the motor global setting before calling this
+//             //motor_send_setpoint(&M[0]);
+//             //Servo1.command[0] = (qeiGetCount(&QEID4) - oldcount) * 10;
+//             else if (ps4_data.ps)
+//                 DeactivateDriving();
              M[0].SetPoint = (qeiGetCount(&QEID4) - oldcount) * 10;
+             M[4].SetPoint = (qeiGetCount(&QEID4) - oldcount) * 10;
              M[5].SetPoint = (qeiGetCount(&QEID4) - oldcount) * 10;
              M[6].SetPoint = (qeiGetCount(&QEID4) - oldcount) * 10;
-             palSetPad(GPIOC, GPIOC_LED_G);
+             palClearPad(GPIOC, GPIOC_LED_G);
     }else if (current_running_menu->data.app == &ps4_test_app){
              //should not do anything at all --> TODO: to be removed
            palClearPad(GPIOC, GPIOC_LED_G);
@@ -105,59 +106,59 @@ static THD_FUNCTION(ControlLoop, arg) {
     chEvtUnregister(&CtrlLp_evt, &el);
 }
 
-static THD_WORKING_AREA(wa_aux, 1024);
+static THD_WORKING_AREA(wa_aux, 2048);
 static THD_FUNCTION(auxiliary_comm, arg){
   (void) arg;
   chRegSetThreadName("auxiliary communication thread");
   while (!chThdShouldTerminateX()) {
 #if USE_MOTOR_0
     motor_get_status(&M[0]);
-    chThdSleepMilliseconds(50);
+    chThdSleepMilliseconds(100);
 #endif
 #if USE_MOTOR_1
     motor_get_status(&M[1]);
-    chThdSleepMilliseconds(50);
+    chThdSleepMilliseconds(100);
 #endif
 #if USE_MOTOR_2
     motor_get_status(&M[2]);
-    chThdSleepMilliseconds(50);
+    chThdSleepMilliseconds(100);
 #endif
 #if USE_MOTOR_3
     motor_get_status(&M[3]);
-    chThdSleepMilliseconds(50);
+    chThdSleepMilliseconds(100);
 #endif
 #if USE_MOTOR_4
     motor_get_status(&M[4]);
-    chThdSleepMilliseconds(50);
+    chThdSleepMilliseconds(100);
 #endif
 #if USE_MOTOR_5
     motor_get_status(&M[5]);
-    chThdSleepMilliseconds(50);
+    chThdSleepMilliseconds(100);
 #endif
 #if USE_MOTOR_6
     motor_get_status(&M[6]);
-    chThdSleepMilliseconds(50);
+    chThdSleepMilliseconds(100);
 #endif
 #if USE_MOTOR_7
     motor_get_status(&M[7]);
-    chThdSleepMilliseconds(50);
+    chThdSleepMilliseconds(100);
 #endif
      if (current_running_menu->data.app == &line_sensor_test_app){
 #if USE_LINESENSOR_0
         linesensor_get_data(&LineSensor[0]);
-        chThdSleepMilliseconds(50);
+        chThdSleepMilliseconds(100);
 #endif
 #if USE_LINESENSOR_1
         linesensor_get_data(&LineSensor[1]);
-        chThdSleepMilliseconds(50);
+        chThdSleepMilliseconds(100);
 #endif
 #if USE_LINESENSOR_2
         linesensor_get_data(&LineSensor[2]);
-        chThdSleepMilliseconds(50);
+        chThdSleepMilliseconds(100);
 #endif
 #if USE_LINESENSOR_3
         linesensor_get_data(&LineSensor[3]);
-        chThdSleepMilliseconds(50);
+        chThdSleepMilliseconds(100);
 #endif
      }else{
           continue;
