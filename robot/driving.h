@@ -1,6 +1,8 @@
 #ifndef _DRIVING_H_
 #define _DRIVING_H_
 
+#define MOTOR_NUM 8
+
 typedef enum tagDrivingState {
 	ACTIVATED,
 	DEACTIVATED
@@ -33,48 +35,6 @@ typedef struct
 }iPOSITION;
 
 extern DRIVING_STATE DrivingState;
-
-#if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_MOTOR_0                 TRUE
-#endif
-
-#if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_MOTOR_1                 TRUE
-#endif
-
-#if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_MOTOR_2                 TRUE
-#endif
-
-#if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_MOTOR_3                 TRUE
-#endif
-
-#if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_MOTOR_4                 TRUE
-#endif
-
-#if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_MOTOR_5                 TRUE
-#endif
-
-#if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_MOTOR_6                 TRUE
-#endif
-
-#if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_MOTOR_7                 TRUE
-#endif
-
-#if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_ENCODER                 TRUE
-#define ENCODER_NUMBER              2
-#endif
-
-#if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_SERVO                   TRUE
-#define SERVO_NUMBER                7
-#endif
 
 void ActivateDriving(void);
 void DeactivateDriving(void);

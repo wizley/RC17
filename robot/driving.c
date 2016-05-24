@@ -5,6 +5,7 @@
 
 #include "driving.h"
 #include "loop_stats.h"
+#include "ds4.h"
 
 #include "motor.h"
 #include "servo.h"
@@ -39,6 +40,7 @@ static THD_FUNCTION(ControlLoop, arg) {
   volatile systime_t last_loop_start = chVTGetSystemTimeX();
   volatile systime_t last_monitor_time = chVTGetSystemTimeX();
   volatile uint32_t cycle_count = 0;
+  uint8_t motor_iter = 0;
 
   chEvtRegister(&CtrlLp_evt, &el, CONTROL_EVENT);
 
@@ -60,10 +62,21 @@ static THD_FUNCTION(ControlLoop, arg) {
     comm_stat_sample(ST2US(after_comm - start));
 
 
-    //motor_send_setpoint(&M[0]);
+    //get motor board status
+    if(motor_get_status(&M[motor_iter]) == udc_rx_idle){
+      M[motor_iter].timeout = 3;
+      if(!(M[motor_iter].Board.State & MOTOR_STATE_OK)){
+        motor_send_setting(&M[motor_iter]);
+      }
+    }else{
+      if(M[motor_iter].timeout)
+        M[motor_iter].timeout--;
+    }
+    motor_iter = (motor_iter + 1) % MOTOR_NUM;
 
 
     M[0].SetPoint = (qeiGetCount(&QEID4) - oldcount) * 10;
+    M[1].SetPoint = DS4.hat_right_y - 128;
 
 
     cycle_count++;
@@ -102,7 +115,7 @@ void DeactivateDriving(void){
   chVTDoResetI(&CtrlLpVT);
   chSysUnlock();
 
-  motor_setIdle(&M[0]);
+  //motor_setIdle(&M[0]);
 }
 
 extern volatile int DebugRun[4];
@@ -111,6 +124,8 @@ void InitDriving(void) {
   osalEventObjectInit(&CtrlLp_evt);
 
   memset(&loop_stats, 0, sizeof(loop_stats));
+
+  motor_init(&M[0], &DefaultVMode);
 
   UDC_Init(&udc_config);
   UDC_Start();

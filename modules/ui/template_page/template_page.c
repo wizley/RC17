@@ -26,6 +26,7 @@ void template_main(void *params){
     if(chMBFetch(&app_mb, (msg_t*)(&evt), TIME_INFINITE) == MSG_OK){
 
       switch(evt->type){
+        case UI_DS4_BUTTON:
         case UI_INPUT_BUTTON:
           if(evt->data.button_state == UI_BUTTON_BACK){
             return;

@@ -460,6 +460,7 @@ static DECLARE_THREAD_FUNCTION(thdTetris, arg) {
     msg = chMBFetch(&app_mb, (msg_t*)(&evt), gfxMillisecondsToTicks(tetrisKeySpeed));
     if( msg == MSG_OK){
       switch(evt->type){
+        case UI_DS4_BUTTON:
         case UI_INPUT_BUTTON:
           if(!tetrisPaused){
             if(evt->data.button_state == UI_BUTTON_BACK){

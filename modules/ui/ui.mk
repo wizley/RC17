@@ -10,3 +10,4 @@ MODULESSRC += $(MODULESPATH)/ui/custom_draw/custom_draw.c
 MODULESINC += $(MODULESPATH)/ui/menu
 MODULESINC += $(MODULESPATH)/ui/font
 MODULESINC += $(MODULESPATH)/ui/custom_draw
+MODULESINC += $(MODULESPATH)/ui/start_robot_page

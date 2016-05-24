@@ -1,6 +1,7 @@
 #include "ch.h"
 #include "udc.h"
 #include "motor.h"
+#include "string.h"
 
 
 MotorObj M[8] = {{.id=0},{.id=1},{.id=2},{.id=3},{.id=4},{.id=5},{.id=6},{.id=7}};
@@ -102,8 +103,11 @@ udc_rx_state_e motor_send_setting(MotorObj *motor){
 
 udc_rx_state_e motor_setIdle(MotorObj *motor){
   UDC_Obj_t udc_object;
+  motor_setting_t setting;
+  memcpy(&setting, &(motor->SetPoint), sizeof(motor_setting_t));
+  setting.Mode = motor_idle;
   udc_object.id = CAL_ID_M_SETTING(motor->id);
-  udc_object.tx_data = (udc_tx_data_t)&DefaultIdle;
+  udc_object.tx_data = (udc_tx_data_t)&setting;
   udc_object.tx_len = 24;
   udc_object.rx_len = 0;
   udc_object.rx_callback = NULL;

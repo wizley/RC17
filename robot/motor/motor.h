@@ -91,6 +91,7 @@ typedef struct{
 	board_status_t Board;
 	motor_setting_t Setting;
 	const uint8_t id;
+	uint8_t timeout;
 }MotorObj;
 
 extern MotorObj M[8];

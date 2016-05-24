@@ -123,7 +123,7 @@ static void menu_select_item(uint8_t index){
 static void menu_screen_event(ui_event *evt){
 
     // scroll through the menu if a button was pressed
-    if(evt->type == UI_INPUT_BUTTON) {
+    if(evt->type == UI_INPUT_BUTTON || evt->type == UI_DS4_BUTTON) {
         if(evt->data.button_state == UI_BUTTON_DOWN) {
             if(selected_item < menu_size - 1) {
                 ++selected_item;
@@ -257,6 +257,7 @@ void menu_main(void* params) {
       if(chMBFetch(&app_mb, (msg_t*)(&evt), TIME_INFINITE) == MSG_OK){
 
         switch(evt->type){
+          case UI_DS4_BUTTON:
           case UI_INPUT_BUTTON:
             if(evt->data.button_state == UI_BUTTON_BACK){
               go_back();
