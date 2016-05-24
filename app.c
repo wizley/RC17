@@ -34,7 +34,7 @@ THD_FUNCTION(ui_button_thread, arg) {
     /* scan for buttons */
     if((palReadPad(GPIOH, GPIOH_BUT1) == PAL_LOW) && (but1_old_state == PAL_HIGH)){
       evt.type = UI_INPUT_BUTTON;
-      evt.data.button_state = UI_BUTTON_BACK;
+      evt.data.button_state = UI_BUTTON_1;
       need_post = true;
     }
     else if((palReadPad(GPIOB, GPIOB_BUT2) == PAL_LOW) && (but2_old_state == PAL_HIGH)){
@@ -49,17 +49,17 @@ THD_FUNCTION(ui_button_thread, arg) {
     }
     else if((palReadPad(GPIOE, GPIOE_BUT4) == PAL_LOW) && (but4_old_state == PAL_HIGH)){
       evt.type = UI_INPUT_BUTTON;
-      evt.data.button_state = UI_BUTTON_UP;
+      evt.data.button_state = UI_BUTTON_RESERVED1;
       need_post = true;
     }
     else if((palReadPad(GPIOH, GPIOH_BUT5) == PAL_LOW) && (but5_old_state == PAL_HIGH)){
       evt.type = UI_INPUT_BUTTON;
-      evt.data.button_state = UI_BUTTON_DOWN;
+      evt.data.button_state = UI_BUTTON_RESERVED2;
       need_post = true;
     }
     else if((palReadPad(GPIOE, GPIOE_BUT6) == PAL_LOW) && (but6_old_state == PAL_HIGH)){
       evt.type = UI_INPUT_BUTTON;
-      evt.data.button_state = UI_BUTTON_DOWN;
+      evt.data.button_state = UI_BUTTON_RESERVED3;
       need_post = true;
     }
     else if((palReadPad(GPIOD, GPIOD_BUT7) == PAL_LOW) && (but7_old_state == PAL_HIGH)){
@@ -69,7 +69,7 @@ THD_FUNCTION(ui_button_thread, arg) {
     }
     else if((palReadPad(GPIOC, GPIOC_BUT8) == PAL_LOW) && (but8_old_state == PAL_HIGH)){
       evt.type = UI_INPUT_BUTTON;
-      evt.data.button_state = UI_BUTTON_8;
+      evt.data.button_state = UI_BUTTON_BACK;
       need_post = true;
     }
     else if((palReadPad(GPIOB, GPIOB_PB12) == PAL_LOW) && (but9_old_state == PAL_HIGH)){

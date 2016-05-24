@@ -26,7 +26,6 @@ void linesensor_test_main(void *params){
   //gwinClear(pageContainer);
   console1 = createConsole(&linesensorpageContainer,0,STATUS_BAR_HEIGHT,GDISP_SCREEN_WIDTH,250);
   gwinRedraw(console1);
-  //gwinSetFont(console1, "DroidSans23");
   gwinShow(linesensorpageContainer);
   ui_event *evt = NULL;
   DeactivateDriving();
@@ -42,12 +41,11 @@ void linesensor_test_main(void *params){
 
           } else if(evt->data.button_state == UI_BUTTON_UP){
             linesensor_send_command(&LineSensor[0], ESTIM_BLACK);
-
           }else if(evt->data.button_state == UI_BUTTON_DOWN){
             linesensor_send_command(&LineSensor[0], ESTIM_WHITE);
-          }else if(evt->data.button_state == UI_BUTTON_7){
+          }else if(evt->data.button_state == UI_BUTTON_RESERVED1){
             linesensor_send_command(&LineSensor[1], ESTIM_BLACK);
-          }else if(evt->data.button_state == UI_BUTTON_8){
+          }else if(evt->data.button_state == UI_BUTTON_RESERVED2){
             linesensor_send_command(&LineSensor[1], ESTIM_WHITE);
           }
           break;
@@ -62,7 +60,7 @@ void linesensor_test_main(void *params){
     gwinClear(linesensorpageContainer);
     gwinClear(console1);
     gwinPrintf(console1, "Press Button 2 for L0black, Button 3 for L0white\r\n");
-    gwinPrintf(console1, "Press Button 7 for L1black, Button 8 for L1white\r\n");
+    gwinPrintf(console1, "Press Button 4 for L1black, Button 5 for L1white\r\n");
 #if USE_LINESENSOR_0
     gwinPrintf(console1, "Alive: %d Position: %d Width: %d\r\n", LineSensor[0].Alive, LineSensor[0].Position[0], LineSensor[0].Position[1]);
 #endif
@@ -101,7 +99,7 @@ void linesensor_test_main(void *params){
                       GDISP_SCREEN_WIDTH/LineSensor[3].size,((LineSensor[3].Data[i])/15.0)*barheight,Green);
         }
 #endif
-    chThdSleepMilliseconds(100);
+    chThdSleepMilliseconds(60);
   }
 
 }

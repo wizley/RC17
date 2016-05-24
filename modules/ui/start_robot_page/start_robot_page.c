@@ -212,7 +212,7 @@ void start_robot_main(void *params){
       }
     }
     guiUpdate();
-    chThdSleepMilliseconds(100);
+    chThdSleepMilliseconds(60);
   }
 
 }

@@ -286,9 +286,9 @@ static void printGameOver(void) {
 
 static bool_t stay(bool_t down) {
   int sk, k;
-  bool_t stay;
+  bool_t s;
   if (down == TRUE) sk = 1; else sk = 0;
-  stay = FALSE;
+  s = FALSE;
   for (k = 0; k <= 3; k++) {
     if (tetrisCurrentShape[k][1] == 0) {
       return TRUE;
@@ -297,9 +297,9 @@ static bool_t stay(bool_t down) {
   for (k = 0; k <= 3; k++) {
     if ((tetrisCurrentShape[k][0] < 0) || (tetrisCurrentShape[k][0] > 9)) return TRUE;
     if (tetrisCurrentShape[k][1] <= 16)
-      if (tetrisField[tetrisCurrentShape[k][1]-sk-1][tetrisCurrentShape[k][0]] != 0) return TRUE;
+      if (tetrisField[tetrisCurrentShape[k][1]-sk][tetrisCurrentShape[k][0]] != 0) return TRUE;
   }
-  return stay;
+  return s;
 }
 
 static void clearCompleteLines(void) {
@@ -417,7 +417,7 @@ static bool_t checkSides(bool_t left) {
 
 static void goRight(void) {
   int i;
-  if (checkSides(FALSE) == FALSE) {
+  if (checkSides(TRUE) == FALSE) {
     drawShape(0);
     for (i = 0; i <= 3; i++) {
       tetrisCurrentShape[i][0]++;
@@ -428,7 +428,7 @@ static void goRight(void) {
 
 static void goLeft(void) {
   int i;
-  if (checkSides(TRUE) == FALSE) {
+  if (checkSides(FALSE) == FALSE) {
     drawShape(0);
     for (i = 0; i <= 3; i++) {
       tetrisCurrentShape[i][0]--;
@@ -476,7 +476,7 @@ static DECLARE_THREAD_FUNCTION(thdTetris, arg) {
               rotateShape();
             }
           }
-          if(evt->data.button_state == UI_BUTTON_8){
+          if(evt->data.button_state == UI_BUTTON_1){
             tetrisPaused = !tetrisPaused;
             printPaused();
           }

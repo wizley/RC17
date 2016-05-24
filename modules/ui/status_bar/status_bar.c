@@ -26,11 +26,14 @@
 #include "linesensor.h"
 #endif
 
+static font_t font1;
 static GHandle statusbar;
 static RTCDateTime timespec;
 static RTCDateTime starttime = { 0 };
 static uint32_t system_time;
-static char buffer[200] = {0};
+static char left[60] = "\0";
+static char right[60] = "\0";
+static char center[10] = "\0";
 
 #if  USE_MOTOR_0  ||  USE_MOTOR_1  ||  USE_MOTOR_2  ||  USE_MOTOR_3  ||  USE_MOTOR_4  ||  USE_MOTOR_5  ||  USE_MOTOR_6  ||  USE_MOTOR_7
 int16_t UpdateVoltage(void){
@@ -48,7 +51,7 @@ int16_t UpdateVoltage(void){
 //    return 0.0;
 //  else
    //return (float) (((float)(Sum / Count))/1000.0);
-  return M[0].Board.Voltage;
+  return M[5].Board.Voltage;
 }
 #endif
 
@@ -73,10 +76,19 @@ void status_bar_redraw(void){
   int hour, min, sec;
   get_time(&hour, &min, &sec);
   gwinClear(statusbar);
-  chsnprintf(buffer, (sizeof(buffer)/sizeof(buffer[0])),"cks:%d frm:%d tmo:%d %02d:%02d:%02d mb:%dV cpu:%.2f",
+  chsnprintf(left, (sizeof(right)/sizeof(char)), "M0 M1 M2");
+  gdispDrawStringBox(0, 0, (GDISP_SCREEN_WIDTH/2 - gdispGetFontMetric(font1, fontMaxWidth) * (8/2))-1, STATUS_BAR_HEIGHT,
+                     left, font1, Black, justifyLeft);
+  chsnprintf(center, (sizeof(center)/sizeof(char)), "%02d:%02d:%02d", hour, min, sec);
+  gdispDrawStringBox((GDISP_SCREEN_WIDTH/2 - gdispGetFontMetric(font1, fontMaxWidth) * (8/2)),0,
+                       gdispGetFontMetric(font1, fontMaxWidth) * 8, STATUS_BAR_HEIGHT, center, font1 , Black, justifyCenter);
+  chsnprintf(right, (sizeof(right)/sizeof(char)),"c:%05d f:%05d t:%05d v:%05dV cpu:%2.2f",
              UDC_GetStatistics(UDC_CHECKSUM_ERROR),UDC_GetStatistics(UDC_FRAMING_ERROR),UDC_GetStatistics(UDC_TIMEOUT),
-             hour, min, sec, UpdateVoltage(), cpu_usage_get_recent());
-  gdispDrawStringBox(0,0,GDISP_SCREEN_WIDTH, STATUS_BAR_HEIGHT, buffer, gdispOpenFont("DroidSans23"), Black, justifyCenter);
+             UpdateVoltage(), cpu_usage_get_recent());
+  gdispDrawStringBox((GDISP_SCREEN_WIDTH/2 + gdispGetFontMetric(font1, fontMaxWidth) * (8/2)),0,
+                     GDISP_SCREEN_WIDTH - (GDISP_SCREEN_WIDTH/2 + gdispGetFontMetric(font1, fontMaxWidth) * (8/2)),
+                     STATUS_BAR_HEIGHT, right, font1, Black, justifyRight);
+
 }
 
 THD_WORKING_AREA (wa_ui_rtc_event, 128);
@@ -96,6 +108,7 @@ THD_FUNCTION(ui_rtc_evt, arg){
 
 void status_bar_init(void){
   //intitialize the rtc driver
+  font1 = gdispOpenFont("DroidSans23");
   chThdCreateStatic(wa_ui_rtc_event, sizeof(wa_ui_rtc_event), LOWPRIO, ui_rtc_evt, NULL);
   statusbar = createContainer(0, 0, GDISP_SCREEN_WIDTH, STATUS_BAR_HEIGHT, FALSE);
   gwinShow(statusbar);
