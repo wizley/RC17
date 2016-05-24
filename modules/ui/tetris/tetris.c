@@ -476,7 +476,7 @@ static DECLARE_THREAD_FUNCTION(thdTetris, arg) {
               rotateShape();
             }
           }
-          if(evt->data.button_state == UI_BUTTON_1){
+          if(evt->data.button_state == UI_BUTTON_8){
             tetrisPaused = !tetrisPaused;
             printPaused();
           }

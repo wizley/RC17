@@ -81,6 +81,18 @@ extern GHandle ghLabelMotorVolt;
 extern GHandle ghLabelMotorVolt_VAL;
 extern GHandle ghLabelMBVolt;
 extern GHandle ghLabelMBVolt_VAL;
+extern GHandle ghLabellp_avg;
+extern GHandle ghLabellp_max;
+extern GHandle ghLabelcomm_avg;
+extern GHandle ghLabelcomm_max;
+extern GHandle ghLabellp_max_val;
+extern GHandle ghLabelcomm_avg_val;
+extern GHandle ghLabelcomm_max_val;
+extern GHandle ghLabellp_avg_val;
+extern GHandle ghLabelloop;
+extern GHandle ghLabelcomm;
+extern GHandle ghLabelstat;
+extern GHandle ghLabelprofile_name;
 
 // Function Prototypes
 void guiCreate(void);
