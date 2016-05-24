@@ -22,6 +22,9 @@ THD_FUNCTION(ui_button_thread, arg) {
   uint8_t but1_old_state = PAL_HIGH;
   uint8_t but2_old_state = PAL_HIGH;
   uint8_t but3_old_state = PAL_HIGH;
+  uint8_t but4_old_state = PAL_HIGH;
+  uint8_t but5_old_state = PAL_HIGH;
+  uint8_t but6_old_state = PAL_HIGH;
   uint8_t but7_old_state = PAL_HIGH;
   uint8_t but8_old_state = PAL_HIGH;
   uint8_t but9_old_state = PAL_HIGH;
@@ -34,12 +37,27 @@ THD_FUNCTION(ui_button_thread, arg) {
       evt.data.button_state = UI_BUTTON_BACK;
       need_post = true;
     }
-    if((palReadPad(GPIOB, GPIOB_BUT2) == PAL_LOW) && (but2_old_state == PAL_HIGH)){
+    else if((palReadPad(GPIOB, GPIOB_BUT2) == PAL_LOW) && (but2_old_state == PAL_HIGH)){
       evt.type = UI_INPUT_BUTTON;
       evt.data.button_state = UI_BUTTON_UP;
       need_post = true;
     }
     else if((palReadPad(GPIOG, GPIOG_BUT3) == PAL_LOW) && (but3_old_state == PAL_HIGH)){
+      evt.type = UI_INPUT_BUTTON;
+      evt.data.button_state = UI_BUTTON_DOWN;
+      need_post = true;
+    }
+    else if((palReadPad(GPIOE, GPIOE_BUT4) == PAL_LOW) && (but4_old_state == PAL_HIGH)){
+      evt.type = UI_INPUT_BUTTON;
+      evt.data.button_state = UI_BUTTON_UP;
+      need_post = true;
+    }
+    else if((palReadPad(GPIOH, GPIOH_BUT5) == PAL_LOW) && (but5_old_state == PAL_HIGH)){
+      evt.type = UI_INPUT_BUTTON;
+      evt.data.button_state = UI_BUTTON_DOWN;
+      need_post = true;
+    }
+    else if((palReadPad(GPIOE, GPIOE_BUT6) == PAL_LOW) && (but6_old_state == PAL_HIGH)){
       evt.type = UI_INPUT_BUTTON;
       evt.data.button_state = UI_BUTTON_DOWN;
       need_post = true;
@@ -80,6 +98,9 @@ THD_FUNCTION(ui_button_thread, arg) {
     but1_old_state = palReadPad(GPIOH, GPIOH_BUT1);
     but2_old_state = palReadPad(GPIOB, GPIOB_BUT2);
     but3_old_state = palReadPad(GPIOG, GPIOG_BUT3);
+    but4_old_state = palReadPad(GPIOE, GPIOE_BUT4);
+    but5_old_state = palReadPad(GPIOH, GPIOH_BUT5);
+    but6_old_state = palReadPad(GPIOE, GPIOE_BUT6);
     but7_old_state = palReadPad(GPIOD, GPIOD_BUT7);
     but8_old_state = palReadPad(GPIOC, GPIOC_BUT8);
     but9_old_state = palReadPad(GPIOB, GPIOB_PB12);

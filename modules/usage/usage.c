@@ -16,7 +16,7 @@ static THD_FUNCTION(CPUUSAGE, arg) {
   while (TRUE) {
     idle_ticks = 0;
     chThdSleepMilliseconds(CPU_USAGE_BIN_INTERVAL_MS);
-    cpu_usage = (1.0f - (float) idle_ticks / MS2ST(CPU_USAGE_BIN_INTERVAL_MS)) * 100.0;
+    cpu_usage = (1.0f - (float) ((float) idle_ticks / (float) MS2ST(CPU_USAGE_BIN_INTERVAL_MS))) * 100.0;
     memmove(&cpu_usage_history[1], cpu_usage_history, sizeof(float) * (CPU_USAGE_HISTORY_SIZE -1));
     cpu_usage_history[0] = cpu_usage;
   }

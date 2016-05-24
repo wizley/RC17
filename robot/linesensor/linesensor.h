@@ -9,6 +9,7 @@
 #define ROBOT_LINESENSOR_LINESENSOR_H_
 
 #include "driving.h"
+#include "udc.h"
 
 #define ESTIM_BLACK     80
 #define ESTIM_WHITE     81

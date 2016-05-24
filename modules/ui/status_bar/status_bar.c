@@ -30,10 +30,10 @@ static GHandle statusbar;
 static RTCDateTime timespec;
 static RTCDateTime starttime = { 0 };
 static uint32_t system_time;
-static char buffer[100] = {0};
+static char buffer[200] = {0};
 
 #if  USE_MOTOR_0  ||  USE_MOTOR_1  ||  USE_MOTOR_2  ||  USE_MOTOR_3  ||  USE_MOTOR_4  ||  USE_MOTOR_5  ||  USE_MOTOR_6  ||  USE_MOTOR_7
-float UpdateVoltage(void){
+int16_t UpdateVoltage(void){
   int i, Count = 0;
   float Sum = 0;
   for(i = 0; i < 8; i++)
@@ -44,10 +44,11 @@ float UpdateVoltage(void){
           Count++;
       }
   }
-  if (Sum == 0 && Count == 0)
-    return 0.0;
-  else
-    return (float) (((float)(Sum / Count))/1000.0);
+//  if (Sum == 0 && Count == 0)
+//    return 0.0;
+//  else
+   //return (float) (((float)(Sum / Count))/1000.0);
+  return M[0].Board.Voltage;
 }
 #endif
 
@@ -59,6 +60,11 @@ void get_time(int * hour, int * min, int * sec){
     system_time = ((*hour << 12) & 0x0003F000) || ((*min<<6) & 0x00000FC0) || (*sec & 0x0000003F);
 }
 
+void online_status_update(void){
+   //if (M[0].Alive)
+
+}
+
 void status_bar_redraw(void){
   //get cpu usage
   //get the online status of all board
@@ -67,10 +73,9 @@ void status_bar_redraw(void){
   int hour, min, sec;
   get_time(&hour, &min, &sec);
   gwinClear(statusbar);
-  chsnprintf(buffer, (sizeof(buffer)/sizeof(buffer[0])),"%d %d cks:%d frm:%d tmo:%d %02d:%02d:%02d mb:%4.2fV",
-             M[0].Alive, Servo1.Alive,
+  chsnprintf(buffer, (sizeof(buffer)/sizeof(buffer[0])),"cks:%d frm:%d tmo:%d %02d:%02d:%02d mb:%dV cpu:%.2f",
              UDC_GetStatistics(UDC_CHECKSUM_ERROR),UDC_GetStatistics(UDC_FRAMING_ERROR),UDC_GetStatistics(UDC_TIMEOUT),
-             hour, min, sec, UpdateVoltage());
+             hour, min, sec, UpdateVoltage(), cpu_usage_get_recent());
   gdispDrawStringBox(0,0,GDISP_SCREEN_WIDTH, STATUS_BAR_HEIGHT, buffer, gdispOpenFont("DroidSans23"), Black, justifyCenter);
 }
 
