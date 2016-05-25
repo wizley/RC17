@@ -1,3 +1,4 @@
+
 #include "ch.h"
 #include "motor.h"
 #include "drivers.h"
@@ -10,8 +11,8 @@
 #include "motor.h"
 #include "servo.h"
 #include "encoder.h"
-#include "udc_objectlist.h"
-#include "udc.h"
+#include "umd.h"
+#include "umd_objectlist.h"
 
 #define LOOP_TIME 10                      /* Control Loop time in ms */
 #define CTRL_LOOP_FREQ (1000 / LOOP_TIME) /* Control Loop frequency  */
@@ -21,7 +22,6 @@
 static thread_t *ctrllp = NULL;
 static event_source_t CtrlLp_evt;
 static virtual_timer_t CtrlLpVT;
-static UDC_config_t udc_config;
 
 void control_loop_timer(void *p) {
   /* Restarts the timer.*/
@@ -57,13 +57,13 @@ static THD_FUNCTION(ControlLoop, arg) {
 
     // communication roundtrip stat
     systime_t start = chVTGetSystemTimeX();
-    UDC_PollObjectList(udc_objectlist);
+    UMD_PollObjectList(umd_objectlist);
     systime_t after_comm = chVTGetSystemTimeX();
     comm_stat_sample(ST2US(after_comm - start));
 
 
     //get motor board status
-    if(motor_get_status(&M[motor_iter]) == udc_rx_idle){
+    if(motor_get_status(&M[motor_iter]) == UMD_OK){
       M[motor_iter].timeout = 3;
       if(!(M[motor_iter].Board.State & MOTOR_STATE_OK)){
         motor_send_setting(&M[motor_iter]);
@@ -127,6 +127,6 @@ void InitDriving(void) {
 
   motor_init(&M[0], &DefaultVMode);
 
-  UDC_Init(&udc_config);
-  UDC_Start();
+  UMD_Master_Init();
+  UMD_Master_Start();
 }

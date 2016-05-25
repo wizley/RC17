@@ -1,5 +1,4 @@
 #include "ch.h"
-#include "udc.h"
 #include "motor.h"
 #include "string.h"
 
@@ -67,59 +66,64 @@ void motor_init(MotorObj *motor, const motor_setting_t *cfg) {
   motor->Setting = *cfg;
 }
 
-udc_rx_state_e motor_send_setpoint(MotorObj *motor){
-  UDC_Obj_t udc_object;
+umd_return_e motor_send_setpoint(MotorObj *motor){
+  UMD_Obj_t object;
   if(motor->Setting.Mode == motor_Vmode)
-    udc_object.id = CAL_ID_VMODE(motor->id);
+    object.id = CAL_ID_VMODE(motor->id);
   if(motor->Setting.Mode == motor_Pmode)
-    udc_object.id = CAL_ID_PMODE(motor->id);
-  udc_object.tx_data = (udc_tx_data_t)&(motor->SetPoint);
-  udc_object.rx_data = (udc_rx_data_t)&(motor->Feedback);
-  udc_object.tx_len = 2;
-  udc_object.rx_len = 2;
-  udc_object.rx_callback = NULL;
-  return UDC_Poll_Single(&udc_object);
+    object.id = CAL_ID_PMODE(motor->id);
+  object.tx_data = (uint8_t*)&(motor->SetPoint);
+  object.rx_data = (uint8_t*)&(motor->Feedback);
+  object.tx_len = 2;
+  object.rx_len = 2;
+  object.rx_callback = NULL;
+  object.tx_callback = NULL;
+  return UMD_Poll_Single(&object);
 }
 
-udc_rx_state_e motor_get_status(MotorObj *motor){
-  UDC_Obj_t udc_object;
-  udc_object.id = CAL_ID_M_STATUS(motor->id);
-  udc_object.rx_data = (udc_rx_data_t)&(motor->Board);
-  udc_object.tx_len = 0;
-  udc_object.rx_len = 10;
-  udc_object.rx_callback = NULL;
-  return UDC_Poll_Single(&udc_object);
+umd_return_e motor_get_status(MotorObj *motor){
+  UMD_Obj_t object;
+  object.id = CAL_ID_M_STATUS(motor->id);
+  object.rx_data = (uint8_t*)&(motor->Board);
+  object.tx_len = 0;
+  object.rx_len = 10;
+  object.rx_callback = NULL;
+  object.tx_callback = NULL;
+  return UMD_Poll_Single(&object);
 }
 
-udc_rx_state_e motor_send_setting(MotorObj *motor){
-  UDC_Obj_t udc_object;
-  udc_object.id = CAL_ID_M_SETTING(motor->id);
-  udc_object.tx_data = (udc_tx_data_t)&(motor->Setting);
-  udc_object.tx_len = 24;
-  udc_object.rx_len = 0;
-  udc_object.rx_callback = NULL;
-  return UDC_Poll_Single(&udc_object);
+umd_return_e motor_send_setting(MotorObj *motor){
+  UMD_Obj_t object;
+  object.id = CAL_ID_M_SETTING(motor->id);
+  object.tx_data = (uint8_t*)&(motor->Setting);
+  object.tx_len = 24;
+  object.rx_len = 0;
+  object.rx_callback = NULL;
+  object.tx_callback = NULL;
+  return UMD_Poll_Single(&object);
 }
 
-udc_rx_state_e motor_setIdle(MotorObj *motor){
-  UDC_Obj_t udc_object;
+umd_return_e motor_setIdle(MotorObj *motor){
+  UMD_Obj_t object;
   motor_setting_t setting;
   memcpy(&setting, &(motor->SetPoint), sizeof(motor_setting_t));
   setting.Mode = motor_idle;
-  udc_object.id = CAL_ID_M_SETTING(motor->id);
-  udc_object.tx_data = (udc_tx_data_t)&setting;
-  udc_object.tx_len = 24;
-  udc_object.rx_len = 0;
-  udc_object.rx_callback = NULL;
-  return UDC_Poll_Single(&udc_object);
+  object.id = CAL_ID_M_SETTING(motor->id);
+  object.tx_data = (uint8_t*)&setting;
+  object.tx_len = 24;
+  object.rx_len = 0;
+  object.rx_callback = NULL;
+  object.tx_callback = NULL;
+  return UMD_Poll_Single(&object);
 }
 
-udc_rx_state_e motor_setBrake(MotorObj *motor){
-  UDC_Obj_t udc_object;
-  udc_object.id = CAL_ID_M_SETTING(motor->id);
-  udc_object.tx_data = (udc_tx_data_t)&DefaultBrake;
-  udc_object.tx_len = 24;
-  udc_object.rx_len = 0;
-  udc_object.rx_callback = NULL;
-  return UDC_Poll_Single(&udc_object);
+umd_return_e motor_setBrake(MotorObj *motor){
+  UMD_Obj_t object;
+  object.id = CAL_ID_M_SETTING(motor->id);
+  object.tx_data = (uint8_t*)&DefaultBrake;
+  object.tx_len = 24;
+  object.rx_len = 0;
+  object.rx_callback = NULL;
+  object.tx_callback = NULL;
+  return UMD_Poll_Single(&object);
 }

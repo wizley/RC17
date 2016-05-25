@@ -6,7 +6,7 @@
  */
 
 #include "ch.h"
-#include "udc.h"
+#include "umd.h"
 #include "servo.h"
 
 servo_t Servo1;

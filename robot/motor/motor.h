@@ -1,7 +1,7 @@
 #ifndef _MOTOR_H_
 #define _MOTOR_H_
 
-#include "udc.h"
+#include "umd.h"
 
 #define MOTOR_STATE_OK 0x8000
 
@@ -102,10 +102,10 @@ extern const motor_setting_t DefaultPMode;
 
 
 void motor_init(MotorObj *motor, const motor_setting_t *cfg);
-udc_rx_state_e motor_send_setpoint(MotorObj *motor);
-udc_rx_state_e motor_get_status(MotorObj *motor);
-udc_rx_state_e motor_send_setting(MotorObj *motor);
-udc_rx_state_e motor_setIdle(MotorObj *motor);
-udc_rx_state_e motor_setBrake(MotorObj *motor);
+umd_return_e motor_send_setpoint(MotorObj *motor);
+umd_return_e motor_get_status(MotorObj *motor);
+umd_return_e motor_send_setting(MotorObj *motor);
+umd_return_e motor_setIdle(MotorObj *motor);
+umd_return_e motor_setBrake(MotorObj *motor);
 
 #endif  /* _MOTOR_H_ */
