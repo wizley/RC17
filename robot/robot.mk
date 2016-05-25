@@ -8,6 +8,7 @@ ROBOTSRC += $(ROBOTPATH)/driving.c
 ROBOTSRC += $(ROBOTPATH)/loop_stats.c
 ROBOTSRC += $(ROBOTPATH)/common.c
 ROBOTSRC += $(ROBOTPATH)/pid.c
+ROBOTSRC += $(ROBOTPATH)/auto_path.c
 
 ROBOTINC = $(ROBOTPATH)
 ROBOTINC += $(ROBOTPATH)/motor

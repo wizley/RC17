@@ -22,7 +22,8 @@
 #include "menu_struct.h"
 #include "app_list.h"
 #include "analog.h"
-
+#include "auto_path.h"
+#include "pid.h"
 
 
 #define LOOP_TIME 10                      /* Control Loop time in ms */
@@ -73,21 +74,8 @@ static THD_FUNCTION(ControlLoop, arg) {
     comm_stat_sample(ST2US(after_comm - start));
     //
     if (current_running_menu->data.app == &start_robot){
-             //motor_get_status(&M[0]);// Miscellaneous Data
-             //motor_send_setting(&M[5]);
-//             if (ps4_data.triangle)//brake
-//                 motor_setBrake(&M[0]);
-//             else if (ps4_data.square)//reactivate after brake
-//                 motor_send_setting(&M[0]);//should have set the motor global setting before calling this
-//             //motor_send_setpoint(&M[0]);
-//             //Servo1.command[0] = (qeiGetCount(&QEID4) - oldcount) * 10;
-//             else if (ps4_data.ps)
-//                 DeactivateDriving();
-             M[0].SetPoint = (qeiGetCount(&QEID4) - oldcount) * 10;
-             M[4].SetPoint = (qeiGetCount(&QEID4) - oldcount) * 10;
-             M[5].SetPoint = (qeiGetCount(&QEID4) - oldcount) * 10;
-             M[6].SetPoint = (qeiGetCount(&QEID4) - oldcount) * 10;
-             palClearPad(GPIOC, GPIOC_LED_G);
+      RunPath();
+      palClearPad(GPIOC, GPIOC_LED_G);
     }else if (current_running_menu->data.app == &ps4_test_app){
              //should not do anything at all --> TODO: to be removed
            palClearPad(GPIOC, GPIOC_LED_G);
@@ -369,6 +357,7 @@ void InitDriving(void) {
   motor_init(&M[5], &M5VMode);
   motor_init(&M[6], &M6VMode);
   motor_init(&M[7], &M7VMode);
+  p_profile_init();
 }
 
 

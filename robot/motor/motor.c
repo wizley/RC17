@@ -64,8 +64,6 @@ const motor_setting_t DefaultPMode = {
     .kFF = 0
 };
 
-
-
 const motor_setting_t M0VMode = {
  .Mode = motor_Vmode,
  .ScaleFactor = ChassisScaleFactor,

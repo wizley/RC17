@@ -140,7 +140,7 @@ int run_p_mode(MOTOR_COMMAND cmd, P_PROFILE *pmotor, long int set_point) {
       case RUN:
           pmode_flag = RUN_funt(pmotor, set_point);
           break;
-      case STOP:
+      case PAUSE:
           STOP_funt(pmotor);
           break;
       default:

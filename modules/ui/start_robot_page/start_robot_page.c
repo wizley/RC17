@@ -9,6 +9,7 @@
 #include "hal.h"
 #include "gfx.h"
 #include "app.h"
+#include "auto_path.h"
 
 #include "gui.h"
 
@@ -126,7 +127,7 @@ void guiUpdate(){
      gwinPrintf(Console2, "feedback: %d\r\n", M[5].Feedback);
      gwinPrintf(Console2, "current: %d\r\n",M[5].Board.Current);
 //     gwinPrintf(Console2, "voltage: %d\r\n",M[5].Board.Voltage);
-     gwinPrintf(Console2, "temperature: %d\r\n",M[5].Board.Temperature);
+     gwinPrintf(Console2, "init0: %d\r\n",track_init0);
 }
 
 //static char buf[8];

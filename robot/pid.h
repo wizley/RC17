@@ -60,7 +60,7 @@ typedef enum tagPMode
 {
 //    SET,
     RUN,
-    STOP,
+    PAUSE,
     NONE
 }MOTOR_COMMAND;
 
