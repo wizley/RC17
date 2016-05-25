@@ -6,6 +6,8 @@ ROBOTSRC += $(ROBOTPATH)/encoder/encoder.c
 ROBOTSRC += $(ROBOTPATH)/linesensor/linesensor.c
 ROBOTSRC += $(ROBOTPATH)/driving.c
 ROBOTSRC += $(ROBOTPATH)/loop_stats.c
+ROBOTSRC += $(ROBOTPATH)/common.c
+ROBOTSRC += $(ROBOTPATH)/pid.c
 
 ROBOTINC = $(ROBOTPATH)
 ROBOTINC += $(ROBOTPATH)/motor

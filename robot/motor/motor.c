@@ -1,9 +1,12 @@
 #include "ch.h"
 #include "udc.h"
 #include "motor.h"
+#include "driving.h"
+#include "common.h"
 
-
-MotorObj M[8] = {{.id=0},{.id=1},{.id=2},{.id=3},{.id=4},{.id=5},{.id=6},{.id=7}};
+MotorObj M[8] = {{.id=0},{.id=1},{.id=2},
+                 {.id=3},{.id=4},{.id=5},
+                 {.id=6},{.id=7}};
 
 const motor_setting_t DefaultIdle = {
     .Mode = motor_idle,
@@ -61,6 +64,119 @@ const motor_setting_t DefaultPMode = {
     .kFF = 0
 };
 
+
+
+const motor_setting_t M0VMode = {
+ .Mode = motor_Vmode,
+ .ScaleFactor = ChassisScaleFactor,
+ .AccelerationLimit = 1,
+ .SpeedLimit = 5000,
+ .CommandCycle = (int) (RearWheelSamplingTime * 1000),
+ .MotorVoltage = 12000,
+ .CurrentLimit = 10000,
+ .kP = 2000,                       //3000
+ .kI = 700,                         //1600
+ .kD = 50,                       //50
+ .kFF = 1500             //1815
+};
+
+const motor_setting_t M1VMode = {
+ .Mode = motor_Vmode,
+ .ScaleFactor = ChassisScaleFactor,
+ .AccelerationLimit = 1,
+ .SpeedLimit = 5000,
+ .CommandCycle = (int) (RearWheelSamplingTime * 1000),
+ .MotorVoltage = 12000,
+ .CurrentLimit = 10000,
+ .kP = 2000,
+ .kI = 700,
+ .kD = 50,
+ .kFF = 1500             //1800
+};
+
+const motor_setting_t M2VMode = {
+ .Mode = motor_Vmode,
+ .ScaleFactor = ChassisScaleFactor,
+ .AccelerationLimit = 1,
+ .SpeedLimit = 5000,
+ .CommandCycle = (int) (RearWheelSamplingTime * 1000),
+ .MotorVoltage = 12000,
+ .CurrentLimit = 10000,
+ .kP =2000,
+ .kI = 700,
+ .kD = 50,
+ .kFF = 1500             //1800
+};
+
+const motor_setting_t M3VMode = {
+ .Mode = motor_Vmode,
+ .ScaleFactor = ChassisScaleFactor,
+ .AccelerationLimit = 1,
+ .SpeedLimit = 5000,
+ .CommandCycle = (int) (RearWheelSamplingTime * 1000),
+ .MotorVoltage = 12000,
+ .CurrentLimit = 10000,
+ .kP = 2000,
+ .kI = 700,
+ .kD = 50,
+ .kFF = 1500,                //1685
+};
+
+const motor_setting_t M4VMode = {
+ .Mode = motor_Vmode,
+ .ScaleFactor = 1,
+ .AccelerationLimit = 1,
+ .SpeedLimit = 5000,
+ .CommandCycle = 4000,
+ .MotorVoltage = 12000,
+ .CurrentLimit = 10000,
+ .kP = 2000,
+ .kI = 800,
+ .kD = 50,
+ .kFF = 1000
+};
+
+const motor_setting_t M5VMode = {
+ .Mode = motor_Vmode,
+ .ScaleFactor = 1,
+ .AccelerationLimit = 1,
+ .SpeedLimit = 5000,
+ .CommandCycle = 4000,
+ .MotorVoltage = 12000,
+ .CurrentLimit = 10000,
+ .kP = 2000,
+ .kI = 800,
+ .kD = 0,
+ .kFF = 1000
+};
+
+const motor_setting_t M6VMode = {
+ .Mode = motor_Vmode,
+ .ScaleFactor = 1,
+ .AccelerationLimit = 1,
+ .SpeedLimit = 5000,
+ .CommandCycle = 4000,
+ .MotorVoltage = 12000,
+ .CurrentLimit = 14000,
+ .kP = 2000,
+ .kI = 800,
+ .kD = 0,
+ .kFF = 1000,
+};
+
+const motor_setting_t M7VMode = {
+ .Mode = motor_Vmode,
+ .ScaleFactor = 1,
+ .AccelerationLimit = 1,
+ .SpeedLimit = 5000,
+ .CommandCycle = 4000,
+ .MotorVoltage = 12000,
+ .CurrentLimit = 14000,
+ .kP = 2000,
+ .kI = 800,
+ .kD = 0,
+ .kFF = 2000,
+};
 
 void motor_init(MotorObj *motor, const motor_setting_t *cfg) {
   motor->Setting = *cfg;

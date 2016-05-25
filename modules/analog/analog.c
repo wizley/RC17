@@ -13,13 +13,14 @@ static adcsample_t samples2[ADC_GRP2_NUM_CHANNELS * ADC_GRP2_BUF_DEPTH];
 /*
  * ADC streaming callback.
  */
-size_t nx = 0, ny = 0;
+uint16_t ADCValue[8] = {0};
 static void adccallback(ADCDriver *adcp, adcsample_t *buffer, size_t n) {
+  if(samples2 != buffer){
+//  if (adcp == &ADCD1){
+//    if (adcp->state == ADC_COMPLETE) {
 
-  if (adcp == &ADCD1){
-    if (adcp->state == ADC_COMPLETE) {
-        //write your shit here
-      }
+         ADCValue[0] = (uint16_t)((samples2[0]+samples2[8]+samples2[16]+samples2[24]+samples2[32]+samples2[40]+samples2[48]+samples2[56])/8.0);
+//      }
 //     if (samples2 == buffer) {
 //       nx += n;
 //     }

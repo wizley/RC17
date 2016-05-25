@@ -102,6 +102,14 @@ extern const motor_setting_t DefaultIdle;
 extern const motor_setting_t DefaultBrake;
 extern const motor_setting_t DefaultVMode;
 extern const motor_setting_t DefaultPMode;
+extern const motor_setting_t M0VMode;
+extern const motor_setting_t M1VMode;
+extern const motor_setting_t M2VMode;
+extern const motor_setting_t M3VMode;
+extern const motor_setting_t M4VMode;
+extern const motor_setting_t M5VMode;
+extern const motor_setting_t M6VMode;
+extern const motor_setting_t M7VMode;
 
 
 void motor_init(MotorObj *motor, const motor_setting_t *cfg);

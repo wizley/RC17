@@ -1,36 +1,46 @@
 #ifndef _DRIVING_H_
 #define _DRIVING_H_
 
+
+
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
 #define USE_MOTOR_0                 TRUE
+#define IS_MOTOR_0_DC               FALSE
 #endif
 
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
 #define USE_MOTOR_1                 TRUE
+#define IS_MOTOR_1_DC               FALSE
 #endif
 
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
 #define USE_MOTOR_2                 TRUE
+#define IS_MOTOR_2_DC               FALSE
 #endif
 
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
 #define USE_MOTOR_3                 TRUE
+#define IS_MOTOR_3_DC               FALSE
 #endif
 
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
 #define USE_MOTOR_4                 TRUE
+#define IS_MOTOR_4_DC               FALSE
 #endif
 
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
 #define USE_MOTOR_5                 TRUE
+#define IS_MOTOR_5_DC               TRUE
 #endif
 
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
 #define USE_MOTOR_6                 TRUE
+#define IS_MOTOR_6_DC               TRUE
 #endif
 
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
 #define USE_MOTOR_7                 TRUE
+#define IS_MOTOR_7_DC               FALSE
 #endif
 
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
@@ -62,6 +72,25 @@
 #define USE_LINESENSOR_3            FALSE
 #define LINESENSOR_3_SIZE             12
 #endif
+
+#ifndef NUMBER_OF_WHEEL
+#define NUMBER_OF_WHEEL             (4)
+#endif
+
+#define EncoderDistance  (505.0f)
+#define EncoderDiameter (68.24f)
+#define EncoderResolution (4096.0f)
+
+#define RearWheelDiameter (101.6f) //Omniwheel diamter
+#define RearWheelGear (14.0f)
+#define RearWheelEncoderResolution (2048.0f)
+#define RearWheelSamplingTime (4.0f)
+
+#define FrontWheelDistance (300.0f)
+#define RearWheelDistance (610.0f)
+#define FrontToRearDistance (350.0f)
+
+#define ChassisScaleFactor (1.0f)/(RearWheelDiameter * (PI) / RearWheelEncoderResolution / RearWheelGear / RearWheelSamplingTime * (1000.0f))
 
 typedef enum tagDrivingState {
 	ACTIVATED = 0,

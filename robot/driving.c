@@ -23,6 +23,8 @@
 #include "app_list.h"
 #include "analog.h"
 
+
+
 #define LOOP_TIME 10                      /* Control Loop time in ms */
 #define CTRL_LOOP_FREQ (1000 / LOOP_TIME) /* Control Loop frequency  */
 #define CONTROL_EVENT 0
@@ -111,52 +113,108 @@ static THD_FUNCTION(auxiliary_comm, arg){
   while (!chThdShouldTerminateX()) {
 #if USE_MOTOR_0
     motor_get_status(&M[0]);
-    chThdSleepMilliseconds(100);
+    chThdSleepMilliseconds(50);
 #endif
 #if USE_MOTOR_1
     motor_get_status(&M[1]);
-    chThdSleepMilliseconds(100);
+    chThdSleepMilliseconds(50);
 #endif
 #if USE_MOTOR_2
     motor_get_status(&M[2]);
-    chThdSleepMilliseconds(100);
+    chThdSleepMilliseconds(50);
 #endif
 #if USE_MOTOR_3
     motor_get_status(&M[3]);
-    chThdSleepMilliseconds(100);
+    chThdSleepMilliseconds(50);
 #endif
 #if USE_MOTOR_4
     motor_get_status(&M[4]);
-    chThdSleepMilliseconds(100);
+    chThdSleepMilliseconds(50);
 #endif
 #if USE_MOTOR_5
     motor_get_status(&M[5]);
-    chThdSleepMilliseconds(100);
+    chThdSleepMilliseconds(50);
 #endif
 #if USE_MOTOR_6
     motor_get_status(&M[6]);
-    chThdSleepMilliseconds(100);
+    chThdSleepMilliseconds(50);
 #endif
 #if USE_MOTOR_7
     motor_get_status(&M[7]);
-    chThdSleepMilliseconds(100);
+    chThdSleepMilliseconds(50);
+#endif
+#if IS_MOTOR_0_DC
+    if(DrivingState == ACTIVATED)
+         motor_send_setting(&M[0]);
+    else if(DrivingState == DEACTIVATED)
+         motor_setIdle(&M[0]);
+    chThdSleepMilliseconds(50);
+#endif
+#if IS_MOTOR_1_DC
+    if(DrivingState == ACTIVATED)
+         motor_send_setting(&M[1]);
+    else if(DrivingState == DEACTIVATED)
+         motor_setIdle(&M[1]);
+    chThdSleepMilliseconds(50);
+#endif
+#if IS_MOTOR_2_DC
+    if(DrivingState == ACTIVATED)
+         motor_send_setting(&M[2]);
+    else if(DrivingState == DEACTIVATED)
+         motor_setIdle(&M[2]);
+    chThdSleepMilliseconds(50);
+#endif
+#if IS_MOTOR_3_DC
+    if(DrivingState == ACTIVATED)
+         motor_send_setting(&M[3]);
+    else if(DrivingState == DEACTIVATED)
+         motor_setIdle(&M[3]);
+    chThdSleepMilliseconds(50);
+#endif
+#if IS_MOTOR_4_DC
+    if(DrivingState == ACTIVATED)
+         motor_send_setting(&M[4]);
+    else if(DrivingState == DEACTIVATED)
+         motor_setIdle(&M[4]);
+    chThdSleepMilliseconds(50);
+#endif
+#if IS_MOTOR_5_DC
+    if(DrivingState == ACTIVATED)
+         motor_send_setting(&M[5]);
+    else if(DrivingState == DEACTIVATED)
+         motor_setIdle(&M[5]);
+    chThdSleepMilliseconds(50);
+#endif
+#if IS_MOTOR_6_DC
+    if(DrivingState == ACTIVATED)
+         motor_send_setting(&M[6]);
+    else if(DrivingState == DEACTIVATED)
+         motor_setIdle(&M[6]);
+    chThdSleepMilliseconds(50);
+#endif
+#if IS_MOTOR_7_DC
+    if(DrivingState == ACTIVATED)
+         motor_send_setting(&M[7]);
+    else if(DrivingState == DEACTIVATED)
+         motor_setIdle(&M[7]);
+    chThdSleepMilliseconds(50);
 #endif
      if (current_running_menu->data.app == &line_sensor_test_app){
 #if USE_LINESENSOR_0
         linesensor_get_data(&LineSensor[0]);
-        chThdSleepMilliseconds(100);
+        chThdSleepMilliseconds(50);
 #endif
 #if USE_LINESENSOR_1
         linesensor_get_data(&LineSensor[1]);
-        chThdSleepMilliseconds(100);
+        chThdSleepMilliseconds(50);
 #endif
 #if USE_LINESENSOR_2
         linesensor_get_data(&LineSensor[2]);
-        chThdSleepMilliseconds(100);
+        chThdSleepMilliseconds(50);
 #endif
 #if USE_LINESENSOR_3
         linesensor_get_data(&LineSensor[3]);
-        chThdSleepMilliseconds(100);
+        chThdSleepMilliseconds(50);
 #endif
      }else{
           continue;
@@ -166,14 +224,6 @@ static THD_FUNCTION(auxiliary_comm, arg){
 
 void ActivateDriving(void){
   if (DrivingState == DEACTIVATED){
-    M[0].Setting = DefaultVMode;//please initialize the motor with something else, this pid sucks
-    M[1].Setting = DefaultVMode;
-    M[2].Setting = DefaultVMode;
-    M[3].Setting = DefaultVMode;
-    M[4].Setting = DefaultVMode;
-    M[5].Setting = DefaultPMode;
-    M[6].Setting = DefaultPMode;
-    M[7].Setting = DefaultVMode;
 #if USE_MOTOR_0
     motor_send_setting(&M[0]);
 #endif
@@ -311,6 +361,14 @@ void InitDriving(void) {
   memset(&loop_stats, 0, sizeof(loop_stats));
   UDC_Init(&udc_config);
   UDC_Start();
+  motor_init(&M[0], &M0VMode);
+  motor_init(&M[1], &M1VMode);
+  motor_init(&M[2], &M2VMode);
+  motor_init(&M[3], &M3VMode);
+  motor_init(&M[4], &M4VMode);
+  motor_init(&M[5], &M5VMode);
+  motor_init(&M[6], &M6VMode);
+  motor_init(&M[7], &M7VMode);
 }
 
 

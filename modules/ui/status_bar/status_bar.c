@@ -31,9 +31,9 @@ static GHandle statusbar;
 static RTCDateTime timespec;
 static RTCDateTime starttime = { 0 };
 static uint32_t system_time;
-static char left[60] = "\0";
-static char right[60] = "\0";
-static char center[10] = "\0";
+static char left[60] = "";
+static char right[60] = "";
+static char center[10] = "";
 
 #if  USE_MOTOR_0  ||  USE_MOTOR_1  ||  USE_MOTOR_2  ||  USE_MOTOR_3  ||  USE_MOTOR_4  ||  USE_MOTOR_5  ||  USE_MOTOR_6  ||  USE_MOTOR_7
 int16_t UpdateVoltage(void){
@@ -64,8 +64,70 @@ void get_time(int * hour, int * min, int * sec){
 }
 
 void online_status_update(void){
-   //if (M[0].Alive)
-
+#if  USE_MOTOR_0
+  if (M[0].Alive)
+     strcat(left, "M0 ");
+#endif
+#if  USE_MOTOR_1
+  if (M[1].Alive)
+     strcat(left, "M1 ");
+#endif
+#if  USE_MOTOR_2
+  if (M[2].Alive)
+     strcat(left, "M2 ");
+#endif
+#if  USE_MOTOR_3
+  if (M[3].Alive)
+     strcat(left, "M3 ");
+#endif
+#if  USE_MOTOR_4
+  if (M[4].Alive)
+     strcat(left, "M4 ");
+#endif
+#if  USE_MOTOR_5
+  if (M[5].Alive)
+     strcat(left, "M5 ");
+#endif
+#if  USE_MOTOR_6
+  if (M[6].Alive)
+     strcat(left, "M6 ");
+#endif
+#if  USE_MOTOR_7
+  if (M[7].Alive)
+     strcat(left, "M7 ");
+#endif
+#if USE_ENCODER && ENCODER_NUMBER > 0
+  if (encoder1_2.Alive)
+      strcat(left, "E0_1 ");
+#endif
+#if USE_ENCODER && ENCODER_NUMBER > 2
+  if (encoder3_4.Alive)
+      strcat(left, "E2_3 ");
+#endif
+#if USE_SERVO && SERVO_NUMBER > 0
+  if (Servo1.Alive)
+      strcat(left, "S0 ");
+#endif
+#if USE_SERVO && SERVO_NUMBER > 8
+  if (Servo2.Alive)
+      strcat(left, "S1 ");
+#endif
+#if USE_LINESENSOR_0
+  if (LineSensor[0].Alive)
+      strcat(left, "L0 ");
+#endif
+#if USE_LINESENSOR_1
+  if (LineSensor[1].Alive)
+      strcat(left, "L1 ");
+#endif
+#if USE_LINESENSOR_2
+  if (LineSensor[2].Alive)
+      strcat(left, "L2 ");
+#endif
+#if USE_LINESENSOR_3
+  if (LineSensor[3].Alive)
+      strcat(left, "L3 ");
+#endif
 }
 
 void status_bar_redraw(void){
@@ -76,7 +138,8 @@ void status_bar_redraw(void){
   int hour, min, sec;
   get_time(&hour, &min, &sec);
   gwinClear(statusbar);
-  chsnprintf(left, (sizeof(right)/sizeof(char)), "M0 M1 M2");
+  //chsnprintf(left, (sizeof(left)/sizeof(char)), "M0 M1 M2");
+  online_status_update();
   gdispDrawStringBox(0, 0, (GDISP_SCREEN_WIDTH/2 - gdispGetFontMetric(font1, fontMaxWidth) * (8/2))-1, STATUS_BAR_HEIGHT,
                      left, font1, Black, justifyLeft);
   chsnprintf(center, (sizeof(center)/sizeof(char)), "%02d:%02d:%02d", hour, min, sec);
