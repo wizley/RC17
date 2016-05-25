@@ -25,6 +25,7 @@
 #if USE_LINESENSOR_0 || USE_LINESENSOR_1 || USE_LINESENSOR_2 || USE_LINESENSOR_3
 #include "linesensor.h"
 #endif
+#include <string.h>
 
 static font_t font1;
 static GHandle statusbar;
@@ -34,6 +35,9 @@ static uint32_t system_time;
 static char left[60] = "";
 static char right[60] = "";
 static char center[10] = "";
+static char temp[40];
+static int left_counter = 0;
+static int right_counter = 0;
 
 #if  USE_MOTOR_0  ||  USE_MOTOR_1  ||  USE_MOTOR_2  ||  USE_MOTOR_3  ||  USE_MOTOR_4  ||  USE_MOTOR_5  ||  USE_MOTOR_6  ||  USE_MOTOR_7
 int16_t UpdateVoltage(void){
@@ -130,6 +134,18 @@ void online_status_update(void){
 #endif
 }
 
+char * text_scrolling(const char * text, int size, int * position_counter, int line_width, int advancement){
+     int i;
+     memset(temp, 0, sizeof(temp));
+     for (i=*position_counter; i<(*position_counter+line_width); i++){
+         temp[i-*position_counter] = text[i%size];
+         //strcat(temp, text[i%size]);
+     }
+     //strcat(temp, '\0');
+     *position_counter = (*position_counter + advancement)%size;
+     return temp;
+}
+
 void status_bar_redraw(void){
   //get cpu usage
   //get the online status of all board
@@ -140,17 +156,19 @@ void status_bar_redraw(void){
   gwinClear(statusbar);
   //chsnprintf(left, (sizeof(left)/sizeof(char)), "M0 M1 M2");
   online_status_update();
-  gdispDrawStringBox(0, 0, (GDISP_SCREEN_WIDTH/2 - gdispGetFontMetric(font1, fontMaxWidth) * (8/2))-1, STATUS_BAR_HEIGHT,
-                     left, font1, Black, justifyLeft);
+  //chsnprintf(left, (sizeof(left)/sizeof(char)),"abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz");
+  gdispDrawStringBox(0, 0, (GDISP_SCREEN_WIDTH/2 - gdispGetFontMetric(font1, fontMaxWidth) * (6/2))-1, STATUS_BAR_HEIGHT,
+                     text_scrolling(left, strlen(left), &left_counter, 29, 3), font1, Black, justifyLeft);
   chsnprintf(center, (sizeof(center)/sizeof(char)), "%02d:%02d:%02d", hour, min, sec);
-  gdispDrawStringBox((GDISP_SCREEN_WIDTH/2 - gdispGetFontMetric(font1, fontMaxWidth) * (8/2)),0,
-                       gdispGetFontMetric(font1, fontMaxWidth) * 8, STATUS_BAR_HEIGHT, center, font1 , Black, justifyCenter);
-  chsnprintf(right, (sizeof(right)/sizeof(char)),"c:%05d f:%05d t:%05d v:%05dV cpu:%2.2f",
+  gdispDrawStringBox((GDISP_SCREEN_WIDTH/2 - gdispGetFontMetric(font1, fontMaxWidth) * (6/2)),0,
+                       gdispGetFontMetric(font1, fontMaxWidth) * 6, STATUS_BAR_HEIGHT, center, font1 , Black, justifyCenter);
+  chsnprintf(right, (sizeof(right)/sizeof(char)),"C:%d F:%d T:%d V:%dV CPU:%d ",
              UDC_GetStatistics(UDC_CHECKSUM_ERROR),UDC_GetStatistics(UDC_FRAMING_ERROR),UDC_GetStatistics(UDC_TIMEOUT),
-             UpdateVoltage(), cpu_usage_get_recent());
-  gdispDrawStringBox((GDISP_SCREEN_WIDTH/2 + gdispGetFontMetric(font1, fontMaxWidth) * (8/2)),0,
-                     GDISP_SCREEN_WIDTH - (GDISP_SCREEN_WIDTH/2 + gdispGetFontMetric(font1, fontMaxWidth) * (8/2)),
-                     STATUS_BAR_HEIGHT, right, font1, Black, justifyRight);
+             UpdateVoltage(), (int) cpu_usage_get_recent());
+  //chsnprintf(right, (sizeof(right)/sizeof(char)),"abcdefghijklmnopqrstuvwxyzabc");
+  gdispDrawStringBox((GDISP_SCREEN_WIDTH/2 + gdispGetFontMetric(font1, fontMaxWidth) * (6/2))+1,0,
+                     (GDISP_SCREEN_WIDTH/2 - gdispGetFontMetric(font1, fontMaxWidth) * (6/2))-1,
+                     STATUS_BAR_HEIGHT, text_scrolling(right, strlen(right), &right_counter, 29, 3), font1, Black, justifyRight);
 
 }
 

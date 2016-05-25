@@ -23,8 +23,6 @@
 #include "app_list.h"
 #include "analog.h"
 
-
-
 #define LOOP_TIME 10                      /* Control Loop time in ms */
 #define CTRL_LOOP_FREQ (1000 / LOOP_TIME) /* Control Loop frequency  */
 #define CONTROL_EVENT 0
