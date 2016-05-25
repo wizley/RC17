@@ -41,10 +41,12 @@ void UDC_PollObjectList(UDC_ObjectList object_list){
   if(udc_object == NULL) return;
   while(udc_object->id != -1){
     do{
+      if (udc_object->tx_callback != NULL)
+         udc_object->tx_callback(udc_object->tx_arg);
       state = udc_lld_send(udc_object);
     }while((state != udc_rx_idle) && (failcount++ < retry_count));
     if((state == udc_rx_idle) && (udc_object->rx_callback != NULL))
-      udc_object->rx_callback(udc_object->arg);
+      udc_object->rx_callback(udc_object->rx_arg);
     udc_object++;
   }
   osalMutexUnlock(&UDCD.mutex);
@@ -58,10 +60,12 @@ udc_rx_state_e UDC_Poll_Single(UDC_Obj_t* udc_object){
   osalDbgAssert(UDCD.udc_state == UDC_READY, "invalid state");
   osalMutexLock(&UDCD.mutex);
   do{
+    if (udc_object->tx_callback != NULL)
+       udc_object->tx_callback(udc_object->tx_arg);
     state = udc_lld_send(udc_object);
   }while((state != udc_rx_idle) && (failcount++ < retry_count));
   if((state == udc_rx_idle) && (udc_object->rx_callback != NULL))
-    udc_object->rx_callback(udc_object->arg);
+    udc_object->rx_callback(udc_object->rx_arg);
   osalMutexUnlock(&UDCD.mutex);
   return state;
 }

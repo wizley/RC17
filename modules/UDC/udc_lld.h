@@ -27,15 +27,18 @@ typedef enum{
 typedef uint8_t* udc_tx_data_t;
 typedef uint8_t* udc_rx_data_t;
 typedef void (*udc_rx_callback)(volatile void *);
+typedef void (*udc_tx_callback)(volatile void *);
 
 typedef struct{
   int16_t id;
   udc_tx_data_t tx_data;
   uint8_t tx_len;
+  udc_tx_callback tx_callback;
+  volatile void *tx_arg;
   udc_rx_data_t rx_data;
   uint8_t rx_len;
   udc_rx_callback rx_callback;
-  volatile void *arg;
+  volatile void *rx_arg;
 }UDC_Obj_t;
 
 typedef struct{

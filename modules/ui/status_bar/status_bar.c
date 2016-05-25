@@ -68,7 +68,7 @@ void get_time(int * hour, int * min, int * sec){
 }
 
 void online_status_update(void){
-  memset(left, 0, sizeof(left));
+  memset(left, 0, sizeof(left));
 #if  USE_MOTOR_0
   if (M[0].Alive)
      strcat(left, "M0 ");

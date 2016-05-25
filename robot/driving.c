@@ -59,7 +59,7 @@ static THD_FUNCTION(ControlLoop, arg) {
   while (!chThdShouldTerminateX()) {
     chEvtWaitAny(EVENT_MASK(CONTROL_EVENT));
     chEvtGetAndClearEvents(EVENT_MASK(CONTROL_EVENT));
-    decAllAlive();
+    //decAllAlive();
     // control loop roundtrip stat
     systime_t loop_start = chVTGetSystemTimeX();
     loop_stat_sample(ST2US(loop_start - last_loop_start));
@@ -303,56 +303,56 @@ void DeactivateDriving(void){
   }
 }
 
-void decAllAlive(void){
-#if USE_MOTOR_0
-    motor_decAlive(&M[0]);
-#endif
-#if USE_MOTOR_1
-    motor_decAlive(&M[1]);
-#endif
-#if USE_MOTOR_2
-    motor_decAlive(&M[2]);
-#endif
-#if USE_MOTOR_3
-    motor_decAlive(&M[3]);
-#endif
-#if USE_MOTOR_4
-    motor_decAlive(&M[4]);
-#endif
-#if USE_MOTOR_5
-    motor_decAlive(&M[5]);
-#endif
-#if USE_MOTOR_6
-    motor_decAlive(&M[6]);
-#endif
-#if USE_MOTOR_7
-    motor_decAlive(&M[7]);
-#endif
-#if USE_SERVO && SERVO_NUMBER > 0
-    servo_decAlive(&Servo1);
-#endif
-#if USE_SERVO && SERVO_NUMBER > 8
-    servo_decAlive(&Servo2);
-#endif
-#if USE_ENCODER && ENCODER_NUMBER > 0
-    encoder_decAlive(&encoder1_2);
-#endif
-#if USE_ENCODER && ENCODER_NUMBER > 2
-    encoder_decAlive(&encoder3_4);
-#endif
-#if USE_LINESENSOR_0
-    linesensor_decAlive(&LineSensor[0]);
-#endif
-#if USE_LINESENSOR_1
-    linesensor_decAlive(&LineSensor[1]);
-#endif
-#if USE_LINESENSOR_2
-    linesensor_decAlive(&LineSensor[2]);
-#endif
-#if USE_LINESENSOR_3
-    linesensor_decAlive(&LineSensor[3]);
-#endif
-}
+//void decAllAlive(void){
+//#if USE_MOTOR_0
+//    motor_decAlive(&M[0]);
+//#endif
+//#if USE_MOTOR_1
+//    motor_decAlive(&M[1]);
+//#endif
+//#if USE_MOTOR_2
+//    motor_decAlive(&M[2]);
+//#endif
+//#if USE_MOTOR_3
+//    motor_decAlive(&M[3]);
+//#endif
+//#if USE_MOTOR_4
+//    motor_decAlive(&M[4]);
+//#endif
+//#if USE_MOTOR_5
+//    motor_decAlive(&M[5]);
+//#endif
+//#if USE_MOTOR_6
+//    motor_decAlive(&M[6]);
+//#endif
+//#if USE_MOTOR_7
+//    motor_decAlive(&M[7]);
+//#endif
+//#if USE_SERVO && SERVO_NUMBER > 0
+//    servo_decAlive(&Servo1);
+//#endif
+//#if USE_SERVO && SERVO_NUMBER > 8
+//    servo_decAlive(&Servo2);
+//#endif
+//#if USE_ENCODER && ENCODER_NUMBER > 0
+//    encoder_decAlive(&encoder1_2);
+//#endif
+//#if USE_ENCODER && ENCODER_NUMBER > 2
+//    encoder_decAlive(&encoder3_4);
+//#endif
+//#if USE_LINESENSOR_0
+//    linesensor_decAlive(&LineSensor[0]);
+//#endif
+//#if USE_LINESENSOR_1
+//    linesensor_decAlive(&LineSensor[1]);
+//#endif
+//#if USE_LINESENSOR_2
+//    linesensor_decAlive(&LineSensor[2]);
+//#endif
+//#if USE_LINESENSOR_3
+//    linesensor_decAlive(&LineSensor[3]);
+//#endif
+//}
 
 void InitDriving(void) {
   osalEventObjectInit(&CtrlLp_evt);
