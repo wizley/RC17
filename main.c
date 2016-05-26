@@ -1,4 +1,9 @@
-
+/*
+ * main.c
+ *
+ *  Created on: May 26, 2016
+ *      Author: Melvin
+ */
 #include "ch.h"
 #include "hal.h"
 #include "drivers.h"
@@ -167,3 +172,5 @@ int main(void) {
     chThdSleepMilliseconds(1000);
   }
 }
+
+
