@@ -1,3 +1,4 @@
+
 /*
  * status_bar.c
  *
@@ -196,3 +197,4 @@ void status_bar_init(void){
   rtcSetTime(&RTCD1, &starttime);
   status_bar_redraw();
 }
+
