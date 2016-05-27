@@ -143,7 +143,7 @@ const motor_setting_t M5VMode = {
  .MotorVoltage = 12000,
  .CurrentLimit = 10000,
  .kP = 2000,
- .kI = 800,
+ .kI = 900,
  .kD = 0,
  .kFF = 1000
 };
@@ -155,9 +155,9 @@ const motor_setting_t M6VMode = {
  .SpeedLimit = 5000,
  .CommandCycle = 4000,
  .MotorVoltage = 12000,
- .CurrentLimit = 14000,
+ .CurrentLimit = 10000,
  .kP = 2000,
- .kI = 800,
+ .kI = 900,
  .kD = 0,
  .kFF = 1000,
 };

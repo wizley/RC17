@@ -6,6 +6,8 @@
  */
 #include "app.h"
 #include "ps4_usbhost.h"
+#include "menu_struct.h"
+#include "app_list.h"
 #if USBHDS4_DEBUG_ENABLE_INFO
 #include "chprintf.h"
 #endif
@@ -158,7 +160,7 @@ static THD_FUNCTION(DS4, arg) {
           memset(&ps4_data, 0, sizeof(ps4_data));
           memset(&old_data, 0, sizeof(old_data));
       }
-      if(need_post){
+      if(need_post && current_running_menu->data.app != &start_robot){
             chMBPost(&app_mb, (msg_t)&evt, TIME_IMMEDIATE);
             need_post = false;
       }

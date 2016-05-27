@@ -10,6 +10,7 @@
 #include "gfx.h"
 #include "app.h"
 #include "auto_path.h"
+#include "pid.h"
 
 #include "gui.h"
 
@@ -58,7 +59,7 @@ static void createPagePage0(void)
   //gwinSetFont(ghConsole, dejavu_sans_32_anti_aliased);
   gwinRedraw(Console);
 
-  Console2 = createConsole(&ContainerPage0, 0, 131, 270, 130);
+  Console2 = createConsole(&ContainerPage0, 0, 131, 270, 260);
   gwinRedraw(Console2);
 
   Console1 = createConsole(&ContainerPage0, 270,0,270,130);
@@ -117,17 +118,21 @@ void guiUpdate(){
      gwinClear(Console1);
      gwinPrintf(Console1, UIDrivingState[DrivingState]);
      gwinClear(Console);
-     gwinPrintf(Console, "Setpoint: %d\r\n", M[0].SetPoint);
-     gwinPrintf(Console, "feedback: %d\r\n", M[0].Feedback);
-     gwinPrintf(Console, "current: %d\r\n",M[0].Board.Current);
-//     gwinPrintf(ghConsole, "voltage: %d\r\n",M[0].Board.Voltage);
-     gwinPrintf(Console, "temperature: %d\r\n",M[0].Board.Temperature);
+     gwinPrintf(Console, "Setpoint0: %d\r\n", M[0].SetPoint);
+     gwinPrintf(Console, "Setpoint1: %d\r\n", M[1].SetPoint);
+     gwinPrintf(Console, "Setpoint2: %d\r\n", M[2].SetPoint);
+     gwinPrintf(Console, "Setpoint3: %d\r\n", M[3].SetPoint);
      gwinClear(Console2);
-     gwinPrintf(Console2, "Setpoint: %d\r\n", M[5].SetPoint);
-     gwinPrintf(Console2, "feedback: %d\r\n", M[5].Feedback);
-     gwinPrintf(Console2, "current: %d\r\n",M[5].Board.Current);
-//     gwinPrintf(Console2, "voltage: %d\r\n",M[5].Board.Voltage);
-     gwinPrintf(Console2, "init0: %d\r\n",track_init0);
+     gwinPrintf(Console2, "x: %d\r\n", x);
+     gwinPrintf(Console2, "y: %d\r\n", y);
+     gwinPrintf(Console2, "a: %d\r\n", tRotation);
+     gwinPrintf(Console2, "fb0: %d\r\n",M[0].Feedback);
+     gwinPrintf(Console2, "fb1: %d\r\n",M[1].Feedback);
+     gwinPrintf(Console2, "E0: %d\r\n",E0);
+     gwinPrintf(Console2, "E1: %d\r\n",E1);
+     gwinPrintf(Console2, "E2: %d\r\n",E2);
+
+
 }
 
 //static char buf[8];

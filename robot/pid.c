@@ -4,6 +4,8 @@
  *  Created on: 2015¦~4¤ë5¤é
  *      Author: Hung
  */
+#include "ch.h"
+#include "hal.h"
 #include "pid.h"
 #include "driving.h"
 #include "app.h"
@@ -13,6 +15,8 @@
 //static int output, pre_output, error, pre_error;
 P_PROFILE pmotor[4] = {{0}};
 #if  USE_MOTOR_0  ||  USE_MOTOR_1  ||  USE_MOTOR_2  ||  USE_MOTOR_3  ||  USE_MOTOR_4  ||  USE_MOTOR_5  ||  USE_MOTOR_6  ||  USE_MOTOR_7
+
+int df = 0;
 int RUN_funt(P_PROFILE *motor, long int target) {
     long int p_term, d_term;
 
@@ -34,7 +38,6 @@ int RUN_funt(P_PROFILE *motor, long int target) {
     motor->output = motor->output < -motor->max_speed ? -motor->max_speed : motor->output;
 
     M[motor->motor_idx].SetPoint = motor->output;
-
     motor->pre_output = motor->output;
 
     if (motor->bound_en == 1) {
@@ -153,17 +156,17 @@ void p_profile_init(void) {
   // 0 to -848904
     pmotor[0].motor_idx = 4;
     pmotor[0].adc_idx = 4;
-    pmotor[0].scale = 170;
+    pmotor[0].scale = 425;
     pmotor[0].max_acc = 50;
     pmotor[0].max_speed = 1300;
     pmotor[0].bound_en = 1;
-    pmotor[0].posLowLim = 100;    //relative to abs_pos
-    pmotor[0].posUpLim = 1470;     //relative to abs_pos
+    pmotor[0].posLowLim = -10;    //relative to abs_pos
+    pmotor[0].posUpLim = 550;     //relative to abs_pos
     pmotor[0].current_pos = 0;
     pmotor[0].deadzone = 10;
     pmotor[0].I_max = 400;
-    pmotor[0].kp = 2;
-    pmotor[0].ki = 0.05;
+    pmotor[0].kp = 4;
+    pmotor[0].ki = 0.06;
     pmotor[0].kd = 0;
     pmotor[0].kff = 0;
 

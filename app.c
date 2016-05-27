@@ -30,7 +30,6 @@ THD_FUNCTION(ui_button_thread, arg) {
   uint8_t but9_old_state = PAL_HIGH;
 
   while(TRUE){
-    runButton();
     /* scan for buttons */
     if((palReadPad(GPIOH, GPIOH_BUT1) == PAL_LOW) && (but1_old_state == PAL_HIGH)){
       evt.type = UI_INPUT_BUTTON;

@@ -21,6 +21,8 @@
 
 #define TURN_LIMIT 500
 
+int E0,E1,E2,E3;
+int base_lock = 1;
 float AvgVoltage;
 float tRotationf,xf,yf;
 int x,y,tRotation;
@@ -28,6 +30,7 @@ float HeadingAngle = 0;
 int xSpeed, ySpeed, zSpeed, turn;
 int pre_xSpeed, pre_ySpeed, pre_turn;
 int xSpeed_r, ySpeed_r;
+int auto_x, auto_y;
 int orientation;
 int centerFlag = 0;
 int lfCenter, rtCenter;
@@ -109,65 +112,57 @@ void UpdatePosition(void) {
     encoder3_4.delta_count[0] = 0;
     encoder3_4.delta_count[1] = 0;
   }
-    float encoderT = ((float) (-encoder1_2.delta_count[0] - encoder1_2.delta_count[1])) / 2.0 / 7179.7978;
-    tRotationf += encoderT; //in scale of RADIAN
-    HeadingAngle = fNormalizeAngle(tRotationf); //fNormalizeAngle set -PI<=angle<=PI
 
-    if(LineSensor[0].Position[1] > 0 && LineSensor[0].Position[1] < 40 && LineSensor[1].Position[1] > 0 && LineSensor[1].Position[1] < 40){
-      int line_diff = (int)LineSensor[0].Position[0] - (int)LineSensor[1].Position[0];
-      line_anglef = atanf((float)line_diff/224.0);
-      line_angle = line_anglef / PI * 1800;
+  E0 = (int16_t)encoder1_2.delta_count[0];
+  E1 = (int16_t)encoder1_2.delta_count[1];
+  E2 = (int16_t)encoder3_4.delta_count[0];
+  E3 = (int16_t)encoder3_4.delta_count[1];
 
-      if(line_angle < 180 && line_angle > -180){
-        tRotationf = line_anglef;
-//        if(tRotationf < PI/2 && tRotationf > -PI/2){
-//          tRotationf = line_anglef;
-//        }else if(tRotationf >= PI/2){
-//          tRotationf = line_anglef + PI;
-//        }else{
-//          tRotationf = line_anglef - PI;
-//        }
-      }
-    }
+  float encoderT = ((float) (-E0 - E1)) / 2.0 / 7179.7978;
+  tRotationf += encoderT; //in scale of RADIAN
+  HeadingAngle = fNormalizeAngle(tRotationf); //fNormalizeAngle set -PI<=angle<=PI
 
-    tRotation = NormalizeAngle((int) (tRotationf / PI * 1800));
+
+//  if(LineSensor[0].Position[1] > 0 && LineSensor[0].Position[1] < 40 && LineSensor[1].Position[1] > 0 && LineSensor[1].Position[1] < 40){
+//    int line_diff = (int)LineSensor[0].Position[0] - (int)LineSensor[1].Position[0];
+//    line_anglef = atanf((float)line_diff/224.0);
+//    line_angle = line_anglef / PI * 1800;
+//
+//    if(line_angle < 180 && line_angle > -180){
+//      tRotationf = line_anglef;
+////        if(tRotationf < PI/2 && tRotationf > -PI/2){
+////          tRotationf = line_anglef;
+////        }else if(tRotationf >= PI/2){
+////          tRotationf = line_anglef + PI;
+////        }else{
+////          tRotationf = line_anglef - PI;
+////        }
+//    }
+//  }
+
+  tRotation = NormalizeAngle((int) (tRotationf / PI * 1800));
 
 #ifdef BLUE
-    float encoderX = 0.5*(-encoder1_2.delta_count[0] +  encoder1_2.delta_count[1])*cosf(HeadingAngle) - encoder3_4.delta_count[0]*sinf(HeadingAngle);
-    float encoderY = 0.5*(-encoder1_2.delta_count[0] +  encoder1_2.delta_count[1])*sinf(HeadingAngle) + encoder3_4.delta_count[0]*cosf(HeadingAngle);
+    float encoderX = 0.5*(-E0 +  E1)*cosf(HeadingAngle) - E2*sinf(HeadingAngle);
+    float encoderY = 0.5*(-E0 +  E1)*sinf(HeadingAngle) + E2*cosf(HeadingAngle);
 #endif
 
 #ifdef RED
-    float encoderX = -0.5*(-encoder1_2.delta_count[0] +  encoder1_2.delta_count[1])*cosf(HeadingAngle) + encoder3_4.delta_count[0]*sinf(HeadingAngle);
-    float encoderY = -0.5*(-encoder1_2.delta_count[0] +  encoder1_2.delta_count[1])*sinf(HeadingAngle) - encoder3_4.delta_count[0]*cosf(HeadingAngle);
+    float encoderX = -0.5*(-E0 +  E1)*cosf(HeadingAngle) + E2*sinf(HeadingAngle);
+    float encoderY = -0.5*(-E0 +  E1)*sinf(HeadingAngle) - E2*cosf(HeadingAngle);
 #endif
 
     xf += encoderX*0.038705682;
     x = (int) xf;
     yf += encoderY*0.038705682;
     y = (int) yf;
-    sum += encoder1_2.delta_count[0] + encoder1_2.delta_count[1];
+    sum += E0 + E1;
     if(ps4_data.cross){
       if(LineSensor[0].Position[1] > 0 && LineSensor[0].Position[1] < 40){
         int yl = -(LineSensor[0].Position[0] -55) + 350*tanf(tRotationf);
         if(yl - yf > 20 || yl - yf < -20){
           yf = yl;
         }
-//        if(tRotation < 900 && tRotation > -900){
-//          if(yf - LineSensor[0].Position[0] > 20 || yf - LineSensor[0].Position[0] < -20){
-//            int yl = LineSensor[0].Position[0]- 55 +350*tanf(tRotationf);
-//            if(yl - yf > 30 || yl - yf < -30){
-//              yf = yl;
-//            }
-//          }
-//        }else{
-//          if(yf - LineSensor[0].Position[0] > 20 || yf - LineSensor[0].Position[0] < -20){
-//            int yl = -LineSensor[0].Position[0] -55 -350*tanf(tRotationf);
-//            if(yl - yf > 30 || yl - yf < -30){
-//              yf = yl;
-//            }
-//          }
-//        }
       }
     }
 
@@ -236,7 +231,7 @@ void RunPath(void) {
     push_length =  AddDeadZone((int)(((int16_t)ps4_data.l2-ps4_data.r2)), 15);
 
     ySpeed_r = -AddDeadZone((int)((uint16_t)(ps4_data.hat_right_y)-128), 15);
-    xSpeed_r = AddDeadZone((int)((uint16_t)(ps4_data.hat_right_x)-128), 15);
+ //   xSpeed_r = AddDeadZone((int)((uint16_t)(ps4_data.hat_right_x)-128), 15);
 
     push_length *= 8;     //4.5
     ySpeed_r *= 8;
@@ -330,29 +325,27 @@ void RunPath(void) {
 
 /////////////////////////////vertical track
     int track_y_offset = 500;
-    if(ps4_data.dpad_code == DPAD_UP){
+    if(stage == 1){
       if(yf < 1000 - track_y_offset){
-        v_track_h = -1200;
+        v_track_h = 100;
       }else if(yf < 2062.52 - track_y_offset){
-        v_track_h = -(yf-1000)/1062.52*1800 - 1200;
+        v_track_h = (yf-1000)/1062.52*200 + 100;
       }else if(yf < 3014.52 - track_y_offset){
       }else if(yf < 3792.34 - track_y_offset){
-        v_track_h = -(yf-3014.52)/777.82*1800 - 1800 - 1200;
+        v_track_h = (yf-3014.52)/777.82*200 + 300;
       }else if(yf < 5013.94 - track_y_offset){
       }else if(yf < 6076.46 - track_y_offset){
-        v_track_h = -(yf-5013.94)/1062.52*1800 -3600 - 1200;
+        v_track_h = (yf-5013.94)/1062.52*200 + 500;
       }else if(yf < 6831.75 - track_y_offset){
       }
-    }else if(ps4_data.dpad_code == DPAD_DOWN){
-      v_track_h = 500;
-    }else if(ps4_data.square){
-      v_track_h = 1000;
-    }else if(ButtonDown[3]){
-      v_track_h = 700;
+    }else if(ps4_data.r1){
+      v_track_h = 100;
+    }else if(ps4_data.triangle){
+      v_track_h = 550;
     }
 
-    if(v_track_h > 1400){
-      v_track_h = 1400;
+    if(v_track_h > 550){
+      v_track_h = 550;
     }
     if(v_track_h < 100){
       v_track_h = 100;
@@ -415,10 +408,14 @@ void RunPath(void) {
       }
     }
 
-    if(track_init1 == 2 && track_init2 == 2 && DrivingState == DEACTIVATED){
+    if(track_init1 == 2 && track_init2 == 2){
       if(tt_flag[5]){
-        if(DrivingState == ACTIVATED){
-          DeactivateDriving();
+        if(base_lock){
+          motor_setIdle(&M[0]);
+          motor_setIdle(&M[1]);
+          motor_setIdle(&M[2]);
+          motor_setIdle(&M[3]);
+          base_lock = 0;
         }
         int flag1 = run_p_mode(RUN,&pmotor[1],5117);
         int flag2 = run_p_mode(RUN,&pmotor[2],6300);
@@ -428,8 +425,12 @@ void RunPath(void) {
             climb_flag = 100;
         }
       }else{
-        if(DrivingState == DEACTIVATED){
-          ActivateDriving();
+        if(!base_lock){
+          motor_send_setting(&M[0]);
+          motor_send_setting(&M[1]);
+          motor_send_setting(&M[2]);
+          motor_send_setting(&M[3]);
+          base_lock = 1;
         }
         run_p_mode(RUN,&pmotor[1],-1244);
         run_p_mode(RUN,&pmotor[2],-61);
@@ -453,17 +454,20 @@ void RunPath(void) {
       z_control.pre_input = 0;
       z_control.pre_output = 0;
     }
-    //M[6].SetPoint += push_length;
-    if(ButtonDown[2]){
-      M[7].SetPoint += 1500;
-    }else if(ButtonDown[3]){
-      M[7].SetPoint += -1500;
-    }else{
-      M[7].SetPoint += 0;
-    }
+    M[7].SetPoint += push_length;
 
 /////////////////////////////path destinations calculation
-    if(ButtonDown[5]){
+    if(ps4_data.dpad_code == DPAD_UP){
+      stage = 0;
+    }else if(ps4_data.dpad_code == DPAD_LEFT){
+      stage = 1;
+    }else if(ps4_data.dpad_code == DPAD_RIGHT){
+      stage = 2;
+    }else if(ps4_data.dpad_code == DPAD_DOWN){
+      stage = 3;
+    }
+
+    if(ButtonDown[5] || ps4_data.square){
       if(stage == 0){
         x_dst.acc_lim = 40;
         y_dst.acc_lim = 40;
@@ -471,7 +475,7 @@ void RunPath(void) {
         x_dst.speed_lim = 1500;
         y_dst.speed_lim = 1500;
         a_dst.speed_lim = 1500;
-        x_dst.destination = 2857;
+        x_dst.destination = -2857;
         y_dst.destination = 0;
         a_dst.destination = 0;
       }else if(stage == 1){
@@ -479,61 +483,63 @@ void RunPath(void) {
         y_dst.acc_lim = 40;
         a_dst.acc_lim = 40;
         x_dst.speed_lim = 800;
-        y_dst.speed_lim = 800;
+        y_dst.speed_lim = 300;
         a_dst.speed_lim = 800;
-        y_dst.destination = y;
-        int angle_offset = -150;
-        if(y < red_path[1][1]){               //0-1
+        y_dst.destination = blue_path[6][1];
+        auto_y = 100;
+        int angle_offset = 0;
+        if(y < blue_path[1][1]){               //0-1
           a_dst.destination = 0 + angle_offset;
           x_dst.destination =  0;
-          xSpeed_r = 0;
-        }else if(y < red_path[2][1]){         //1-2
-          a_dst.destination = 150 + angle_offset;
-          x_dst.destination =  -(y - red_path[1][1])/tanf(5*PI/12);
-          xSpeed_r = -ySpeed_r/tanf(5*PI/12);
-        }else if(y < red_path[3][1]){         //2-3
-          a_dst.destination = 300 + angle_offset;
-          x_dst.destination =  -(y - red_path[2][1])/tanf(PI/3)+ red_path[2][0];
-          xSpeed_r = -ySpeed_r/tanf(PI/3);
-        }else if(y < red_path[4][1]){         //3-4
-          a_dst.destination = 450 + angle_offset;
-          x_dst.destination =  -(y - red_path[3][1])/tanf(PI/4) + red_path[3][0];
-          xSpeed_r = -ySpeed_r/tanf(PI/4);
-        }else if(y < red_path[5][1]){         //4-5
-          a_dst.destination = 300 + angle_offset*2;
-          x_dst.destination =  -(y - red_path[4][1])/tanf(PI/3) + red_path[4][0];
-          xSpeed_r = -ySpeed_r/tanf(PI/3);
-        }else if(y < red_path[6][1]){         //5-6
-          a_dst.destination = 150 + angle_offset*2;
-          x_dst.destination =  -(y - red_path[5][1])/tanf(5*PI/12)+ red_path[5][0];
-          xSpeed_r = -ySpeed_r/tanf(5*PI/12);
-        }else if(y < red_path[7][1]){         //6-7
-          a_dst.destination = -150 - 750*(y-red_path[6][1])/((float)(red_path[7][1]-red_path[6][1]));
-          x_dst.destination =  red_path[7][0];
-          xSpeed_r = 0;
-        }else if(y < red_path[8][1]){         //7-8
-          a_dst.destination = -900;
-          x_dst.destination =  red_path[8][0];
-          xSpeed_r = 0;
-        }else if(y < red_path[9][1]){         //8-9
-          a_dst.destination = -900;
-          x_dst.destination =  red_path[9][0];
-          xSpeed_r = 0;
+          auto_x = 0;
+        }else if(y < blue_path[2][1]){         //1-2
+          a_dst.destination = - 150 + angle_offset;
+          x_dst.destination = (y - blue_path[1][1])/tanf(5*PI/12);
+          auto_x = auto_y/tanf(5*PI/12);
+        }else if(y < blue_path[3][1]){         //2-3
+          a_dst.destination = - 300 + angle_offset;
+          x_dst.destination = (y - blue_path[2][1])/tanf(PI/3)+ blue_path[2][0];
+          auto_x = auto_y/tanf(PI/3);
+        }else if(y < blue_path[4][1]){         //3-4
+          a_dst.destination = - 450 + angle_offset;
+          x_dst.destination = (y - blue_path[3][1])/tanf(PI/4) + blue_path[3][0];
+          auto_x = auto_y/tanf(PI/4);
+        }else if(y < blue_path[5][1]){         //4-5
+          a_dst.destination = - 300 + angle_offset;
+          x_dst.destination = (y - blue_path[4][1])/tanf(PI/3) + blue_path[4][0];
+          auto_x = auto_y/tanf(PI/3);
+        }else if(y < blue_path[6][1]){         //5-6
+          a_dst.destination = - 150 + angle_offset;
+          x_dst.destination = (y - blue_path[5][1])/tanf(5*PI/12)+ blue_path[5][0];
+          auto_x = auto_y/tanf(5*PI/12);
+        }else if(y < blue_path[7][1]){         //6-7
+          a_dst.destination = 0;
+          x_dst.destination =  blue_path[6][0];
+          auto_x = 0;
+        }
+      }else if(stage == 2){
+        if(y < blue_path[8][1]){         //7-8
+          a_dst.destination = 0;
+          x_dst.destination =  blue_path[8][0];
+          auto_x = 0;
+        }else if(y < blue_path[9][1]){         //8-9
+          a_dst.destination = 1800;
+          x_dst.destination =  blue_path[9][0];
+          auto_x = 0;
           hysteresis_flag = 1;
-        }else if(y < red_path[10][1] && hysteresis_flag){     //9-10
-          a_dst.destination = -900 - 900*(y-red_path[9][1])/((float)(red_path[10][1]-red_path[9][1]));
-          x_dst.destination =  -(y - red_path[9][1])+ red_path[9][0];;
-          xSpeed_r = ySpeed_r;
+        }else if(y < blue_path[10][1] && hysteresis_flag){     //9-10
+          a_dst.destination = 900 - 900*(y-blue_path[9][1])/((float)(blue_path[10][1]-blue_path[9][1]));
+          x_dst.destination =  (y - blue_path[9][1])+ blue_path[9][0];;
+          auto_x = - auto_y;
         }else{                                //10-11
           hysteresis_flag = 0;
-          a_dst.destination = -1800;
-          y_dst.destination = red_path[11][1];
+          a_dst.destination = 1800;
+          y_dst.destination = blue_path[11][1];
           x_dst.destination =  x;
-          xSpeed_r = ySpeed_r;
-          ySpeed_r = 0;
+          auto_x = -auto_y;
+          auto_y = 0;
         }
-        //x_dst.destination = 2582/(1+temp); //2632
-      }else if(stage == 2){
+      }else if(stage == 3){
         x_dst.acc_lim = 30;
         y_dst.acc_lim = 30;
         a_dst.acc_lim = 30;
@@ -546,7 +552,7 @@ void RunPath(void) {
         y_dst.destination = 4400;
         a_dst.destination = 0;
         r_dst.destination = 4400;
-      }else if(stage == 3){
+      }else if(stage == 4){
         x_dst.acc_lim = 30;
         y_dst.acc_lim = 30;
         a_dst.acc_lim = 30;
@@ -576,22 +582,21 @@ void RunPath(void) {
       y_control.pre_output = 0;
       r_control.pre_input = 0;
       r_control.pre_output = 0;
+      auto_y = 0;
+      auto_x = 0;
     }
 
 /////////////////////////////movement input selection
     int output_x = PIDcontroller(&x_dst, x, &x_control,0);
     int output_y = PIDcontroller(&y_dst, y, &y_control,0);
     int output_a = PIDcontroller(&a_dst, tRotation, &a_control,1);
-    x_com = -(ySpeed_r+output_y)*sinf(HeadingAngle) - (xSpeed_r+output_x)*cosf(HeadingAngle);
-    y_com = -(ySpeed_r+output_y)*cosf(HeadingAngle) + (xSpeed_r+output_x)*sinf(HeadingAngle);
+    x_com = -(auto_y+output_y)*sinf(HeadingAngle) + (auto_x+output_x)*cosf(HeadingAngle);
+    y_com =  (auto_y+output_y)*cosf(HeadingAngle) + (auto_x+output_x)*sinf(HeadingAngle);
 
     M[0].SetPoint =  x_com + y_com + output_a + xSpeed + ySpeed + turn;
     M[1].SetPoint = -x_com + y_com + output_a - xSpeed + ySpeed + turn;
     M[2].SetPoint = -x_com - y_com + output_a - xSpeed - ySpeed + turn;
     M[3].SetPoint =  x_com - y_com + output_a + xSpeed - ySpeed + turn;
-
-//    pre_xSpeed = xSpeed;
-//    pre_ySpeed = ySpeed;
 
 }
 

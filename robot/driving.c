@@ -73,7 +73,11 @@ static THD_FUNCTION(ControlLoop, arg) {
     systime_t after_comm = chVTGetSystemTimeX();
     comm_stat_sample(ST2US(after_comm - start));
     //
+    runButton();
     if (current_running_menu->data.app == &start_robot){
+      motor_get_status(&M[4]);
+      motor_get_status(&M[5]);
+      motor_get_status(&M[6]);
       RunPath();
       palClearPad(GPIOC, GPIOC_LED_G);
     }else if (current_running_menu->data.app == &ps4_test_app){

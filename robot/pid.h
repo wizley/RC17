@@ -74,5 +74,6 @@ int PIDcontroller(TARGET *t, int src, GAIN *pid, int circular_flag);
 int acc_limit(int current, int next, int limit);
 int sp_limit(int input, int limit);
 extern P_PROFILE pmotor[4];
+extern int df;
 
 #endif /* PID_H_ */
