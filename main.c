@@ -9,6 +9,7 @@
 #include "ps4_usbhost.h"
 #include "driving.h"
 #include "usage.h"
+#include "ARTracker.h"
 
 #define SDRAM_SIZE  0x1000000
 /*
@@ -154,6 +155,7 @@ int main(void) {
   adc_init();
   ps4_usbhost_init();
   ActivateDriving();
+  artracker_init();
 
   /*
    * Normal main() thread activity, in this demo it just performs
