@@ -86,7 +86,7 @@ umd_return_e motor_get_status(MotorObj *motor){
   object.id = CAL_ID_M_STATUS(motor->id);
   object.rx_data = (uint8_t*)&(motor->Board);
   object.tx_len = 0;
-  object.rx_len = 10;
+  object.rx_len = 14;
   object.rx_callback = NULL;
   object.tx_callback = NULL;
   return UMD_Poll_Single(&object);
