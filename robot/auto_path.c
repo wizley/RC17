@@ -279,7 +279,7 @@ void RunPath(void) {
     }
 
     UpdatePosition();
-    update_pmotor();
+    //update_pmotor();
 
 /////////////////////////////fan
     if(ps4_data.circle){

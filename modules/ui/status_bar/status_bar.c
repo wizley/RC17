@@ -163,9 +163,9 @@ void status_bar_redraw(void){
   chsnprintf(center, (sizeof(center)/sizeof(char)), "%02d:%02d:%02d", hour, min, sec);
   gdispDrawStringBox((GDISP_SCREEN_WIDTH/2 - gdispGetFontMetric(font1, fontMaxWidth) * (6/2)),0,
                          gdispGetFontMetric(font1, fontMaxWidth) * 6, STATUS_BAR_HEIGHT, center, font1 , Black, justifyCenter);
-  chsnprintf(right, (sizeof(right)/sizeof(char)),"C:%d F:%d T:%d V:%dV CPU:%d ",
+  chsnprintf(right, (sizeof(right)/sizeof(char)),"C:%d F:%d T:%d CPU:%d ",
              UDC_GetStatistics(UDC_CHECKSUM_ERROR),UDC_GetStatistics(UDC_FRAMING_ERROR),UDC_GetStatistics(UDC_TIMEOUT),
-             UpdateVoltage(), (int) cpu_usage_get_recent());
+             (int) cpu_usage_get_recent());
              //chsnprintf(right, (sizeof(right)/sizeof(char)),"abcdefghijklmnopqrstuvwxyzabc");
              gdispDrawStringBox((GDISP_SCREEN_WIDTH/2 + gdispGetFontMetric(font1, fontMaxWidth) * (6/2))+1,0,
                                 (GDISP_SCREEN_WIDTH/2 - gdispGetFontMetric(font1, fontMaxWidth) * (6/2))-1,

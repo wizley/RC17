@@ -39,15 +39,16 @@ void linesensor_test_main(void *params){
             return;
           } else if(evt->data.button_state == UI_BUTTON_ENTER){
 
-          } else if(evt->data.button_state == UI_BUTTON_UP){
-            linesensor_send_command(&LineSensor[0], ESTIM_BLACK);
-          }else if(evt->data.button_state == UI_BUTTON_DOWN){
-            linesensor_send_command(&LineSensor[0], ESTIM_WHITE);
-          }else if(evt->data.button_state == UI_BUTTON_RESERVED1){
-            linesensor_send_command(&LineSensor[1], ESTIM_BLACK);
-          }else if(evt->data.button_state == UI_BUTTON_RESERVED2){
-            linesensor_send_command(&LineSensor[1], ESTIM_WHITE);
           }
+//          else if(evt->data.button_state == UI_BUTTON_UP){
+//            linesensor_send_command(&LineSensor[0], ESTIM_BLACK);
+//          }else if(evt->data.button_state == UI_BUTTON_DOWN){
+//            linesensor_send_command(&LineSensor[0], ESTIM_WHITE);
+//          }else if(evt->data.button_state == UI_BUTTON_RESERVED1){
+//            linesensor_send_command(&LineSensor[1], ESTIM_BLACK);
+//          }else if(evt->data.button_state == UI_BUTTON_RESERVED2){
+//            linesensor_send_command(&LineSensor[1], ESTIM_WHITE);
+//          }
           break;
         case UI_STATUSBAR_TICK:
            status_bar_redraw();

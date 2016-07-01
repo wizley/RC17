@@ -140,12 +140,12 @@ int sp_limit(int input, int limit){
 int run_p_mode(MOTOR_COMMAND cmd, P_PROFILE *pmotor, long int set_point) {
   int pmode_flag = 0;
   switch (cmd) {
-      case RUN:
-          pmode_flag = RUN_funt(pmotor, set_point);
-          break;
-      case PAUSE:
-          STOP_funt(pmotor);
-          break;
+//      case RUN:
+//          pmode_flag = RUN_funt(pmotor, set_point);
+//          break;
+//      case PAUSE:
+//          STOP_funt(pmotor);
+//          break;
       default:
           break;
   }
