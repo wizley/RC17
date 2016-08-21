@@ -1,29 +1,24 @@
+
 #include "ch.h"
-#include "motor.h"
 #include "drivers.h"
 #include "driving.h"
 #include "string.h"
 #include "loop_stats.h"
-#if  USE_MOTOR_0  ||  USE_MOTOR_1  ||  USE_MOTOR_2  ||  USE_MOTOR_3  ||  USE_MOTOR_4  ||  USE_MOTOR_5  ||  USE_MOTOR_6  ||  USE_MOTOR_7
-    #include "motor.h"
-#endif
-#if USE_ENCODER
+#include "motor.h"
 #include "encoder.h"
-#endif
-#if USE_SERVO
 #include "servo.h"
-#endif
-#if USE_LINESENSOR_0 || USE_LINESENSOR_1 || USE_LINESENSOR_2 || USE_LINESENSOR_3
 #include "linesensor.h"
-#endif
-#include "udc_objectlist.h"
-#include "udc.h"
-#include "ps4_usbhost.h"
+//#include "udc_objectlist.h"
+//#include "udc.h"
+//#include "ps4_usbhost.h"
 #include "menu_struct.h"
 #include "app_list.h"
 #include "analog.h"
 #include "auto_path.h"
 #include "pid.h"
+#include "ds4.h"
+#include "umd.h"
+#include "umd_objectlist.h"
 
 #define LOOP_TIME 10                      /* Control Loop time in ms */
 #define CTRL_LOOP_FREQ (1000 / LOOP_TIME) /* Control Loop frequency  */
@@ -34,7 +29,10 @@ DRIVING_STATE DrivingState = DEACTIVATED;
 static thread_t *ctrllp = NULL;
 static event_source_t CtrlLp_evt;
 static virtual_timer_t CtrlLpVT;
-static UDC_config_t udc_config = {0};
+//<<<<<<< HEAD
+//static UDC_config_t udc_config = {0};
+//=======
+//>>>>>>> b1ab300e10eec07a0da4c8f514d46b53bed302ea
 
 void control_loop_timer(void *p) {
   /* Restarts the timer.*/
@@ -53,6 +51,7 @@ static THD_FUNCTION(ControlLoop, arg) {
   volatile systime_t last_loop_start = chVTGetSystemTimeX();
   volatile systime_t last_monitor_time = chVTGetSystemTimeX();
   volatile uint32_t cycle_count = 0;
+  uint8_t motor_iter = 0;
 
   chEvtRegister(&CtrlLp_evt, &el, CONTROL_EVENT);
 
@@ -68,7 +67,7 @@ static THD_FUNCTION(ControlLoop, arg) {
     last_loop_start = chVTGetSystemTimeX();
     // communication roundtrip stat
     systime_t start = chVTGetSystemTimeX();
-    UDC_PollObjectList(udc_objectlist);
+    UMD_PollObjectList(umd_objectlist);
     systime_t after_comm = chVTGetSystemTimeX();
     comm_stat_sample(ST2US(after_comm - start));
     //
@@ -83,6 +82,24 @@ static THD_FUNCTION(ControlLoop, arg) {
              //should not do anything at all --> TODO: to be removed
            palClearPad(GPIOC, GPIOC_LED_G);
     }
+
+
+//    //get motor board status
+//    if(motor_get_status(&M[motor_iter]) == UMD_OK){
+//      M[motor_iter].timeout = 3;
+//      if(!(M[motor_iter].Board.State & MOTOR_STATE_OK)){
+//        motor_send_setting(&M[motor_iter]);
+//      }
+//    }else{
+//      if(M[motor_iter].timeout)
+//        M[motor_iter].timeout--;
+//    }
+//    motor_iter = (motor_iter + 1) % MOTOR_NUM;
+//
+//
+//    M[0].SetPoint = (qeiGetCount(&QEID4) - oldcount) * 10;
+//    M[1].SetPoint = DS4.hat_right_y - 128;
+
     cycle_count++;
     if(start - last_monitor_time > MS2ST(LOOP_STAT_MONITOR_PERIOD_MS)){
          loop_stats.loop_frequency = (float) cycle_count / LOOP_STAT_MONITOR_PERIOD_MS * 1000.0;
@@ -207,9 +224,8 @@ static THD_FUNCTION(auxiliary_comm, arg){
         linesensor_get_data(&LineSensor[3]);
         chThdSleepMilliseconds(50);
 #endif
-     }else{
-          continue;
      }
+     chThdSleepMicroseconds(1);
    }
 }
 
@@ -294,6 +310,15 @@ void DeactivateDriving(void){
     motor_setIdle(&M[7]);
 #endif
   }
+//<<<<<<< HEAD
+//=======
+//  chSysLock();
+//  /* Stops the timer.*/
+//  chVTDoResetI(&CtrlLpVT);
+//  chSysUnlock();
+//
+//  //motor_setIdle(&M[0]);
+//>>>>>>> b1ab300e10eec07a0da4c8f514d46b53bed302ea
 }
 
 void decAllAlive(void){
@@ -350,8 +375,8 @@ void decAllAlive(void){
 void InitDriving(void) {
   osalEventObjectInit(&CtrlLp_evt);
   memset(&loop_stats, 0, sizeof(loop_stats));
-  UDC_Init(&udc_config);
-  UDC_Start();
+//  UDC_Init(&udc_config);
+//  UDC_Start();
   motor_init(&M[0], &M0VMode);
   motor_init(&M[1], &M1VMode);
   motor_init(&M[2], &M2VMode);
@@ -361,6 +386,10 @@ void InitDriving(void) {
   motor_init(&M[6], &M6VMode);
   motor_init(&M[7], &M7VMode);
   p_profile_init();
+
+  UMD_Master_Init();
+  UMD_Master_Start();
+
 }
 
 

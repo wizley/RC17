@@ -70,7 +70,7 @@
 #define STM32_PLLSAIN_VALUE                 212
 #define STM32_PLLSAIQ_VALUE                 4
 #define STM32_PLLSAIR_VALUE                 2
-#define STM32_PLLSAIR_POST                  STM32_SAIR_DIV4
+#define STM32_PLLSAIDIVR                    STM32_PLLSAIDIVR_DIV4
 
 /*
  * ADC driver system settings.

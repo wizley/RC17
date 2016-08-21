@@ -13,7 +13,8 @@
 #include "linesensor.h"
 #include "motor.h"
 #include "servo.h"
-#include "ps4_usbhost.h"
+//#include "ps4_usbhost.h"
+#include "ds4.h"
 #include "analog.h"
 
 #define BLUE  //right
@@ -157,7 +158,7 @@ void UpdatePosition(void) {
     yf += encoderY*0.038705682;
     y = (int) yf;
     sum += E0 + E1;
-    if(ps4_data.cross){
+    if(DS4.cross){
       if(LineSensor[0].Position[1] > 0 && LineSensor[0].Position[1] < 40){
         int yl = -(LineSensor[0].Position[0] -55) + 350*tanf(tRotationf);
         if(yl - yf > 20 || yl - yf < -20){
@@ -187,7 +188,7 @@ void RunPath(void) {
   //      palSetPad(GPIOC, GPIOC_LED_B);
   //    }
 
-  if(ButtonDown[1] || ps4_data.r1){
+  if(ButtonDown[1] || DS4.r1){
     ClearPosition();
     a_control.pre_input = 0;
     a_control.pre_output = 0;
@@ -218,20 +219,20 @@ void RunPath(void) {
   }
 
 #ifdef BLUE
-    ySpeed = -AddDeadZone((int)((uint16_t)(ps4_data.hat_left_y)-128), 15);
-    xSpeed = AddDeadZone((int)((uint16_t)(ps4_data.hat_left_x)-128), 15);
+    ySpeed = -AddDeadZone((int)((uint16_t)(DS4.hat_left_y)-128), 15);
+    xSpeed = AddDeadZone((int)((uint16_t)(DS4.hat_left_x)-128), 15);
 #endif
 #ifdef RED
-    ySpeed =  AddDeadZone((int)((uint16_t)(ps4_data.hat_left_y)-128), 15);
-    xSpeed = -AddDeadZone((int)((uint16_t)(ps4_data.hat_left_x)-128), 15);
+    ySpeed =  AddDeadZone((int)((uint16_t)(DS4.hat_left_y)-128), 15);
+    xSpeed = -AddDeadZone((int)((uint16_t)(DS4.hat_left_x)-128), 15);
 #endif
 
-  //  zSpeed = -AddDeadZone((int)((uint16_t)(ps4_data.left_hat_x)-128), 15);
-    turn =  -AddDeadZone((int)((uint16_t)(ps4_data.hat_right_x)-128), 15);
-    push_length =  AddDeadZone((int)(((int16_t)ps4_data.l2-ps4_data.r2)), 15);
+  //  zSpeed = -AddDeadZone((int)((uint16_t)(DS4.left_hat_x)-128), 15);
+    turn =  -AddDeadZone((int)((uint16_t)(DS4.hat_right_x)-128), 15);
+    push_length =  AddDeadZone((int)(((int16_t)DS4.l2-DS4.r2)), 15);
 
-    ySpeed_r = -AddDeadZone((int)((uint16_t)(ps4_data.hat_right_y)-128), 15);
- //   xSpeed_r = AddDeadZone((int)((uint16_t)(ps4_data.hat_right_x)-128), 15);
+    ySpeed_r = -AddDeadZone((int)((uint16_t)(DS4.hat_right_y)-128), 15);
+ //   xSpeed_r = AddDeadZone((int)((uint16_t)(DS4.hat_right_x)-128), 15);
 
     push_length *= 8;     //4.5
     ySpeed_r *= 8;
@@ -271,7 +272,7 @@ void RunPath(void) {
     else if(turn < -TURN_LIMIT)
       turn = -TURN_LIMIT;
 
-    if(ps4_data.r3 == 0){
+    if(DS4.r3 == 0){
       turn = 0;
     }else{
       ySpeed_r = 0;
@@ -282,7 +283,7 @@ void RunPath(void) {
     //update_pmotor();
 
 /////////////////////////////fan
-    if(ps4_data.circle){
+    if(DS4.circle){
       if(bt_delay[4] < 200){
         bt_delay[4] ++;
       }
@@ -296,15 +297,15 @@ void RunPath(void) {
         Servo1.command[3] = 1500;
       }
     }
-    if((ps4_data.circle && !db_flag[4]) || ButtonDown[0] == 1){
+    if((DS4.circle && !db_flag[4]) || ButtonDown[0] == 1){
       Servo1.command[1] = 1000;
       Servo1.command[3] = 1000;
       bt_delay[4] = 0;
     }
-    db_flag[4] = ps4_data.circle;
+    db_flag[4] = DS4.circle;
 
 /////////////////////////////arm servo
-    if(ps4_data.tpad_click && !db_flag[2]){
+    if(DS4.tpad_click && !db_flag[2]){
       tt_flag[2] ^= 1;
     }
 
@@ -321,7 +322,7 @@ void RunPath(void) {
       servo_time = 0;
     }
 
-    db_flag[2] = ps4_data.tpad_click;
+    db_flag[2] = DS4.tpad_click;
 
 /////////////////////////////vertical track
     int track_y_offset = 500;
@@ -338,9 +339,9 @@ void RunPath(void) {
         v_track_h = (yf-5013.94)/1062.52*200 + 500;
       }else if(yf < 6831.75 - track_y_offset){
       }
-    }else if(ps4_data.r1){
+    }else if(DS4.r1){
       v_track_h = 100;
-    }else if(ps4_data.triangle){
+    }else if(DS4.triangle){
       v_track_h = 550;
     }
 
@@ -355,7 +356,7 @@ void RunPath(void) {
       if(M[4].Board.ADCValue <= 30000){
         M[4].SetPoint = -300;
       }else{
-        pmotor[0].offset = M[4].Board.EncoderCounter;
+        pmotor[0].offset = M[4].Board.EncoderCount;
         track_init0 = 1;
       }
     }else if(track_init0 == 1){
@@ -367,7 +368,7 @@ void RunPath(void) {
     }
 
 /////////////////////////////push motor   100 = 1 mm    p1 = p2 - 1183
-    if(ps4_data.l1 || ButtonDown[6]){
+    if(DS4.l1 || ButtonDown[6]){
       bt_delay[5]++;
     }else{
       bt_delay[5] = 0;
@@ -388,7 +389,7 @@ void RunPath(void) {
       }else{
         track_init1 = 2;
         M[5].SetPoint = 0;
-        pmotor[1].offset = M[5].Board.EncoderCounter;
+        pmotor[1].offset = M[5].Board.EncoderCount;
       }
     }
 
@@ -404,7 +405,7 @@ void RunPath(void) {
       }else{
         track_init2 = 2;
         M[6].SetPoint = 0;
-        pmotor[2].offset = M[6].Board.EncoderCounter;
+        pmotor[2].offset = M[6].Board.EncoderCount;
       }
     }
 
@@ -457,17 +458,17 @@ void RunPath(void) {
     M[7].SetPoint += push_length;
 
 /////////////////////////////path destinations calculation
-    if(ps4_data.dpad_code == DPAD_UP){
+    if(DS4.dpad_code == DPAD_UP){
       stage = 0;
-    }else if(ps4_data.dpad_code == DPAD_LEFT){
+    }else if(DS4.dpad_code == DPAD_LEFT){
       stage = 1;
-    }else if(ps4_data.dpad_code == DPAD_RIGHT){
+    }else if(DS4.dpad_code == DPAD_RIGHT){
       stage = 2;
-    }else if(ps4_data.dpad_code == DPAD_DOWN){
+    }else if(DS4.dpad_code == DPAD_DOWN){
       stage = 3;
     }
 
-    if(ButtonDown[5] || ps4_data.square){
+    if(ButtonDown[5] || DS4.square){
       if(stage == 0){
         x_dst.acc_lim = 40;
         y_dst.acc_lim = 40;

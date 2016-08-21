@@ -73,15 +73,15 @@ void update_pmotor(void) {
 //        motor->current_pos += 4096;
 //    motor->current_pos = motor->current_pos % 4096;
 //    motor->abs_pos = M[motor->motor_idx].Board.ADCValue;
-      pmotor[0].current_pos = M[pmotor[0].motor_idx].Board.EncoderCounter - pmotor[0].offset;
+      pmotor[0].current_pos = M[pmotor[0].motor_idx].Board.EncoderCount - pmotor[0].offset;
       pmotor[0].abs_pos = pmotor[0].current_pos / pmotor[0].scale;
-      pmotor[1].current_pos = M[pmotor[1].motor_idx].Board.EncoderCounter - pmotor[1].offset;
+      pmotor[1].current_pos = M[pmotor[1].motor_idx].Board.EncoderCount - pmotor[1].offset;
       pmotor[1].abs_pos = pmotor[1].current_pos / pmotor[1].scale;
-      pmotor[2].current_pos = M[pmotor[2].motor_idx].Board.EncoderCounter - pmotor[2].offset;
+      pmotor[2].current_pos = M[pmotor[2].motor_idx].Board.EncoderCount - pmotor[2].offset;
       pmotor[2].abs_pos = pmotor[2].current_pos / pmotor[2].scale;
-//      pmotor[2].current_pos = M[pmotor[2].motor_idx].Board.EncoderCounter - pmotor[2].offset;
+//      pmotor[2].current_pos = M[pmotor[2].motor_idx].Board.EncoderCount - pmotor[2].offset;
 //      pmotor[2].abs_pos = pmotor[2].current_pos / pmotor[2].scale;
-//      pmotor[3].current_pos = M[pmotor[3].motor_idx].Board.EncoderCounter - pmotor[3].offset;
+//      pmotor[3].current_pos = M[pmotor[3].motor_idx].Board.EncoderCount - pmotor[3].offset;
 //      pmotor[3].abs_pos = pmotor[3].current_pos / pmotor[3].scale;
 
 }

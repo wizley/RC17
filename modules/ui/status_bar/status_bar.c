@@ -8,7 +8,7 @@
 #include "ch.h"
 #include "hal.h"
 #include "gfx.h"
-#include "udc.h"
+#include "umd.h"
 #include "app.h"
 #include "status_bar.h"
 #include "widgets.h"
@@ -46,7 +46,7 @@ int16_t UpdateVoltage(void){
   float Sum = 0;
   for(i = 0; i < 8; i++)
   {
-      if(M[i].Alive)
+      if(M[i].timeout)
       {
           Sum += M[i].Board.Voltage;
           Count++;
@@ -63,6 +63,9 @@ int16_t UpdateVoltage(void){
 char * text_scrolling(const char * text, int size, int * position_counter, int line_width, int advancement){
      int i;
      memset(temp, 0, sizeof(temp));
+//     if (size < line_width){
+//       return text;
+//     }else{
      for (i=*position_counter; i<(*position_counter+line_width); i++){
          temp[i-*position_counter] = text[i%size];
          //strcat(temp, text[i%size]);
@@ -70,6 +73,7 @@ char * text_scrolling(const char * text, int size, int * position_counter, int l
      //strcat(temp, '\0');
      *position_counter = (*position_counter + advancement)%size;
      return temp;
+//     }
 }
 
 void get_time(int * hour, int * min, int * sec){
@@ -83,35 +87,35 @@ void get_time(int * hour, int * min, int * sec){
 void online_status_update(void){
   memset(left, 0,sizeof(left));
 #if  USE_MOTOR_0
-  if (M[0].Alive)
+  if (M[0].timeout)
      strcat(left, "M0 ");
 #endif
 #if  USE_MOTOR_1
-  if (M[1].Alive)
+  if (M[1].timeout)
      strcat(left, "M1 ");
 #endif
 #if  USE_MOTOR_2
-  if (M[2].Alive)
+  if (M[2].timeout)
      strcat(left, "M2 ");
 #endif
 #if  USE_MOTOR_3
-  if (M[3].Alive)
+  if (M[3].timeout)
      strcat(left, "M3 ");
 #endif
 #if  USE_MOTOR_4
-  if (M[4].Alive)
+  if (M[4].timeout)
      strcat(left, "M4 ");
 #endif
 #if  USE_MOTOR_5
-  if (M[5].Alive)
+  if (M[5].timeout)
      strcat(left, "M5 ");
 #endif
 #if  USE_MOTOR_6
-  if (M[6].Alive)
+  if (M[6].timeout)
      strcat(left, "M6 ");
 #endif
 #if  USE_MOTOR_7
-  if (M[7].Alive)
+  if (M[7].timeout)
      strcat(left, "M7 ");
 #endif
 #if USE_ENCODER && ENCODER_NUMBER > 0
@@ -158,18 +162,20 @@ void status_bar_redraw(void){
   gwinClear(statusbar);
   //chsnprintf(left, (sizeof(left)/sizeof(char)), "M0 M1 M2");
   online_status_update();
+  //draw the left part
   gdispDrawStringBox(0, 0, (GDISP_SCREEN_WIDTH/2 - gdispGetFontMetric(font1, fontMaxWidth) * (6/2))-1, STATUS_BAR_HEIGHT,
                       text_scrolling(left, strlen(left), &left_counter, 29, 3), font1, Black, justifyLeft);
+  //draw the middle part
   chsnprintf(center, (sizeof(center)/sizeof(char)), "%02d:%02d:%02d", hour, min, sec);
   gdispDrawStringBox((GDISP_SCREEN_WIDTH/2 - gdispGetFontMetric(font1, fontMaxWidth) * (6/2)),0,
                          gdispGetFontMetric(font1, fontMaxWidth) * 6, STATUS_BAR_HEIGHT, center, font1 , Black, justifyCenter);
-  chsnprintf(right, (sizeof(right)/sizeof(char)),"C:%d F:%d T:%d CPU:%d ",
-             UDC_GetStatistics(UDC_CHECKSUM_ERROR),UDC_GetStatistics(UDC_FRAMING_ERROR),UDC_GetStatistics(UDC_TIMEOUT),
+  chsnprintf(right, (sizeof(right)/sizeof(char)),"CPU:%d              ",
+//             UDC_GetStatistics(UDC_CHECKSUM_ERROR),UDC_GetStatistics(UDC_FRAMING_ERROR),UDC_GetStatistics(UDC_TIMEOUT),
              (int) cpu_usage_get_recent());
-             //chsnprintf(right, (sizeof(right)/sizeof(char)),"abcdefghijklmnopqrstuvwxyzabc");
-             gdispDrawStringBox((GDISP_SCREEN_WIDTH/2 + gdispGetFontMetric(font1, fontMaxWidth) * (6/2))+1,0,
-                                (GDISP_SCREEN_WIDTH/2 - gdispGetFontMetric(font1, fontMaxWidth) * (6/2))-1,
-                                STATUS_BAR_HEIGHT, text_scrolling(right, strlen(right), &right_counter, 29, 3), font1, Black, justifyRight);
+  //draw the right part
+  gdispDrawStringBox((GDISP_SCREEN_WIDTH/2 + gdispGetFontMetric(font1, fontMaxWidth) * (6/2))+1,0,
+                     (GDISP_SCREEN_WIDTH/2 - gdispGetFontMetric(font1, fontMaxWidth) * (6/2))-1,
+                      STATUS_BAR_HEIGHT, text_scrolling(right, strlen(right), &right_counter, 29, 3), font1, Black, justifyRight);
 
 }
 

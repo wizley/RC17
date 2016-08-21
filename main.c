@@ -6,10 +6,12 @@
 #include "rtt_shell.h"
 #include "app.h"
 #include "analog.h"
-#include "ps4_usbhost.h"
+//#include "ps4_usbhost.h"
 #include "driving.h"
 #include "usage.h"
-#include "ARTracker.h"
+//#include "ARTracker.h"
+#include "RTTLog.h"
+#include "ds4.h"
 
 #define SDRAM_SIZE  0x1000000
 /*
@@ -26,18 +28,18 @@ static void sdram_bulk_erase(void) {
 /*
  * Red LED blinker thread, times are in milliseconds.
  */
-static THD_WORKING_AREA(waThread1, 128);
-static THD_FUNCTION(Thread1, arg) {
-
-  (void)arg;
-  chRegSetThreadName("blinker1");
-  while (TRUE) {
-    palClearPad(GPIOC, GPIOC_LED_R);
-    chThdSleepMilliseconds(400);
-    palSetPad(GPIOC, GPIOC_LED_R);
-    chThdSleepMilliseconds(400);
-  }
-}
+//static THD_WORKING_AREA(waThread1, 128);
+//static THD_FUNCTION(Thread1, arg) {
+//
+//  (void)arg;
+//  chRegSetThreadName("blinker1");
+//  while (TRUE) {
+//    palClearPad(GPIOC, GPIOC_LED_R);
+//    chThdSleepMilliseconds(400);
+//    palSetPad(GPIOC, GPIOC_LED_R);
+//    chThdSleepMilliseconds(400);
+//  }
+//}
 
 /*
  * Blue LED blinker thread, times are in milliseconds.
@@ -55,8 +57,16 @@ static THD_FUNCTION(Thread2, arg) {
   }
 }
 
+static THD_WORKING_AREA(waUSBHOST, 1024);
+static THD_FUNCTION(USBHOST, arg) {
 
-
+  (void)arg;
+  chRegSetThreadName("USB Host Thread");
+  while (TRUE) {
+    usbhMainLoop(&USBHD2);
+    chThdSleepMilliseconds(100);
+  }
+}
 
 static QEIConfig qeicfg = {
   QEI_MODE_QUADRATURE,
@@ -143,6 +153,9 @@ int main(void) {
   rtt_shell_init();
   rtt_shell_start();
 
+  RTTLogObjectInit(&RTT_Log);
+  chThdSleepMilliseconds(100);
+
   /*
    * Activates the USB driver and then the USB bus pull-up on D+.
    * Note, a delay is inserted in order to not have to disconnect the cable
@@ -153,10 +166,14 @@ int main(void) {
 //  usbStart(serusbcfg.usbp, &usbcfg);
 //  usbConnectBus(serusbcfg.usbp);
   adc_init();
-  ps4_usbhost_init();
+//  ps4_usbhost_init();
   ActivateDriving();
-  artracker_init();
-
+//  artracker_init();
+  usbhStart(&USBHD2);
+  chThdCreateStatic(waUSBHOST, sizeof(waUSBHOST), NORMALPRIO,
+                      USBHOST, NULL);
+  chThdSleepMilliseconds(100);
+  DS4_Start();
   /*
    * Normal main() thread activity, in this demo it just performs
    * a shell respawn upon its termination.

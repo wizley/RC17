@@ -1,50 +1,57 @@
 #ifndef _DRIVING_H_
 #define _DRIVING_H_
 
+typedef enum tagDrivingState {
+	ACTIVATED,
+	DEACTIVATED
+} DRIVING_STATE;
 
+#ifndef MOTOR_NUM
+#define MOTOR_NUM 8
+#endif
 
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_MOTOR_0                 FALSE
+#define USE_MOTOR_0                 TRUE
 #define IS_MOTOR_0_DC               FALSE
 #endif
 
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_MOTOR_1                 FALSE
+#define USE_MOTOR_1                 TRUE
 #define IS_MOTOR_1_DC               FALSE
 #endif
 
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_MOTOR_2                 FALSE
+#define USE_MOTOR_2                 TRUE
 #define IS_MOTOR_2_DC               FALSE
 #endif
 
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_MOTOR_3                 FALSE
+#define USE_MOTOR_3                 TRUE
 #define IS_MOTOR_3_DC               FALSE
 #endif
 
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_MOTOR_4                 FALSE
+#define USE_MOTOR_4                 TRUE
 #define IS_MOTOR_4_DC               FALSE
 #endif
 
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_MOTOR_5                 FALSE
+#define USE_MOTOR_5                 TRUE
 #define IS_MOTOR_5_DC               FALSE
 #endif
 
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_MOTOR_6                 FALSE
+#define USE_MOTOR_6                 TRUE
 #define IS_MOTOR_6_DC               FALSE
 #endif
 
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_MOTOR_7                 FALSE
+#define USE_MOTOR_7                 TRUE
 #define IS_MOTOR_7_DC               FALSE
 #endif
 
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_ENCODER                 FALSE
+#define USE_ENCODER                 TRUE
 #define ENCODER_NUMBER              3
 #endif
 
@@ -54,23 +61,23 @@
 #endif
 
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_LINESENSOR_0            FALSE
+#define USE_LINESENSOR_0            TRUE
 #define LINESENSOR_0_SIZE             12
 #endif
 
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_LINESENSOR_1            FALSE
+#define USE_LINESENSOR_1            TRUE
 #define LINESENSOR_1_SIZE             12
 #endif
 
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_LINESENSOR_2            FALSE
-#define LINESENSOR_2_SIZE             12
+#define USE_LINESENSOR_2            TRUE
+#define LINESENSOR_2_SIZE             24
 #endif
 
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_LINESENSOR_3            FALSE
-#define LINESENSOR_3_SIZE             12
+#define USE_LINESENSOR_3            TRUE
+#define LINESENSOR_3_SIZE             24
 #endif
 
 #ifndef NUMBER_OF_WHEEL
@@ -91,13 +98,6 @@
 #define FrontToRearDistance (350.0f)
 
 #define ChassisScaleFactor (1.0f)/(RearWheelDiameter * (PI) / RearWheelEncoderResolution / RearWheelGear / RearWheelSamplingTime * (1000.0f))
-
-typedef enum tagDrivingState {
-	ACTIVATED = 0,
-	DEACTIVATED
-} DRIVING_STATE;
-
-
 
 typedef struct _tagWheelPosition {
 	float x;
@@ -128,7 +128,6 @@ typedef struct
 extern DRIVING_STATE DrivingState;
 
 void decAllAlive(void);
-
 void ActivateDriving(void);
 void DeactivateDriving(void);
 void InitDriving(void);

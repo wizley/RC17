@@ -1,7 +1,7 @@
 #ifndef _MOTOR_H_
 #define _MOTOR_H_
 
-#include "udc.h"
+#include "umd.h"
 
 #define MOTOR_STATE_OK 0x8000
 
@@ -57,7 +57,7 @@ typedef struct{
   int16_t Voltage;      // in mV
   int16_t Current;      // in mA
   int16_t Temperature;  // in Degree Celsius
-  int32_t EncoderCounter;
+  int32_t EncoderCount;
   uint16_t ADCValue;
   uint16_t State;
 }__attribute__((packed)) board_status_t;
@@ -94,7 +94,11 @@ typedef struct{
 	board_status_t Board;
 	motor_setting_t Setting;
 	const uint8_t id;
-	uint8_t Alive;
+//<<<<<<< HEAD
+//	uint8_t Alive;
+//=======
+	uint8_t timeout;
+//>>>>>>> b1ab300e10eec07a0da4c8f514d46b53bed302ea
 }MotorObj;
 
 extern MotorObj M[8];
@@ -113,12 +117,19 @@ extern const motor_setting_t M7VMode;
 
 
 void motor_init(MotorObj *motor, const motor_setting_t *cfg);
-udc_rx_state_e motor_send_setpoint(MotorObj *motor);
-udc_rx_state_e motor_get_status(MotorObj *motor);
-udc_rx_state_e motor_send_setting(MotorObj *motor);
-udc_rx_state_e motor_setIdle(MotorObj *motor);
-udc_rx_state_e motor_setBrake(MotorObj *motor);
-void motor_setAlive( volatile void * arg);
-void motor_decAlive(volatile void * arg);
+//<<<<<<< HEAD
+//udc_rx_state_e motor_send_setpoint(MotorObj *motor);
+//udc_rx_state_e motor_get_status(MotorObj *motor);
+//udc_rx_state_e motor_send_setting(MotorObj *motor);
+//udc_rx_state_e motor_setIdle(MotorObj *motor);
+//udc_rx_state_e motor_setBrake(MotorObj *motor);
+void motor_setAlive( void * arg);
+void motor_decAlive(void * arg);
+//=======
+umd_return_e motor_send_setpoint(MotorObj *motor);
+umd_return_e motor_get_status(MotorObj *motor);
+umd_return_e motor_send_setting(MotorObj *motor);
+umd_return_e motor_setIdle(MotorObj *motor);
+umd_return_e motor_setBrake(MotorObj *motor);
 
 #endif  /* _MOTOR_H_ */

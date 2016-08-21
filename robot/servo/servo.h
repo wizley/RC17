@@ -23,7 +23,7 @@ extern servo_t Servo2;
 void servo_init(servo_t *servo);
 void servo_set_offset(servo_t *servo);
 void servo_set_angle(servo_t *servo, float angle, uint8_t channel);
-void servo_setAlive(volatile void * arg);
-void servo_decAlive(volatile void * arg);
+void servo_setAlive(void * arg);
+void servo_decAlive(void * arg);
 
 #endif /* ROBOT_SERVO_SERVO_H_ */

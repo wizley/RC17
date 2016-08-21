@@ -10,7 +10,8 @@
 #include "gfx.h"
 #include "app.h"
 #include "status_bar.h"
-#include "ps4_usbhost.h"
+//#include "ps4_usbhost.h"
+#include "ds4.h"
 #include "widgets.h"
 
 GHandle ps4Console;

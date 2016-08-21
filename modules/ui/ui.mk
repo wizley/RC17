@@ -18,5 +18,6 @@ MODULESINC += $(MODULESPATH)/ui/menu
 MODULESINC += $(MODULESPATH)/ui/font
 MODULESINC += $(MODULESPATH)/ui/gui_wrappers
 MODULESINC += $(MODULESPATH)/ui/status_bar
-MODULESINT += $(MODULESPATH)/ui/start_robot_page
+MODULESINC += $(MODULESPATH)/ui/start_robot_page
 MODULESINC += $(MODULESPATH)/ui/custom_draw
+

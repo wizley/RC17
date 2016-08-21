@@ -9,7 +9,7 @@
 #define ROBOT_LINESENSOR_LINESENSOR_H_
 
 #include "driving.h"
-#include "udc.h"
+#include "umd.h"
 
 #define ESTIM_BLACK     80
 #define ESTIM_WHITE     81
@@ -40,9 +40,9 @@ typedef struct tagLineSensor {
 
 extern LINE_SENSOR LineSensor[4];
 
-void linesensor_decAlive(volatile void * arg);
-void linesensor_setAlive(volatile void * arg);
-udc_rx_state_e linesensor_send_command(LINE_SENSOR *line, int command);
+void linesensor_decAlive(void * arg);
+void linesensor_setAlive(void * arg);
+umd_return_e linesensor_send_command(LINE_SENSOR *line, int command);
 void linesensor_get_data(LINE_SENSOR *line);
 
 #endif /* ROBOT_LINESENSOR_LINESENSOR_H_ */
