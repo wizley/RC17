@@ -11,6 +11,7 @@ MODULESSRC += $(MODULESPATH)/ui/start_robot_page/start_robot_page.c
 MODULESSRC += $(MODULESPATH)/ui/start_robot_page/start_robot_page_gui.c
 MODULESSRC += $(MODULESPATH)/ui/start_robot_page/widgetstyles.c
 MODULESSRC += $(MODULESPATH)/ui/custom_draw/custom_draw.c
+MODULESSRC += $(MODULESPATH)/ui/red_page/red_page.c
 
 #MODULESSRC += $(MODULESPATH)/ui/menu/application.c
 

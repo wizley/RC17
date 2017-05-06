@@ -1,20 +1,20 @@
 /*
- * start_robot_main_page.c
+ * red_page.c
  *
- *  Created on: 21 Dec 2015
- *      Author: u564
+ *  Created on: 2016¦~6¤ë7¤é
+ *      Author: Hung
  */
-// This is the page for BLUE field, but not to rename.
 
 
-#include <blue.h>
+//#include "app_list.h"
+#include "red.h"
 #include "ch.h"
 #include "hal.h"
 #include "gfx.h"
 #include "app.h"
 #include "pid.h"
 #include "analog.h"
-#include "gui.h"
+//#include "gui.h"
 
 #include "stdio.h"
 #include "usage.h"
@@ -34,60 +34,59 @@
 #include "custom_draw.h"
 #include "widgets.h"
 #include "status_bar.h"
-char * UIDrivingState[2] = {"activated","deactivated"}; //for ui
+char * UIDrivingState_r[2] = {"activated","deactivated"}; //for ui
 
 // GHandles
-GHandle ContainerPage0;
-GHandle Console;
-GHandle Console1;
-GHandle Console2;
-GHandle Console3;
-GHandle ConsoleDebug;
-
+GHandle ContainerPage0_r;
+GHandle Console_r;
+GHandle Console1_r;
+GHandle Console2_r;
+GHandle Console3_r;
+GHandle ConsoleDebug_r;
 // Fonts
-font_t dejavu_sans_16_anti_aliased;
-font_t dejavu_sans_10;
-font_t dejavu_sans_12_anti_aliased;
-font_t dejavu_sans_24_anti_aliased;
-font_t dejavu_sans_32_anti_aliased;
+//font_t dejavu_sans_16_anti_aliased;
+//font_t dejavu_sans_10;
+//font_t dejavu_sans_12_anti_aliased;
+//font_t dejavu_sans_24_anti_aliased;
+//font_t dejavu_sans_32_anti_aliased;
 
-static void createPagePage0(void)
+static void createPagePage0_r(void)
 {
   // create container widget: ghContainerPage0
-  ContainerPage0 = createContainer(0, STATUS_BAR_HEIGHT, GDISP_SCREEN_WIDTH, GDISP_SCREEN_HEIGHT - STATUS_BAR_HEIGHT, FALSE);
+  ContainerPage0_r = createContainer(0, STATUS_BAR_HEIGHT, GDISP_SCREEN_WIDTH, GDISP_SCREEN_HEIGHT - STATUS_BAR_HEIGHT, FALSE);
 
   // Create console widget: ghConsole
-  Console = createConsole(&ContainerPage0, 0, 0, 500, 130);
-  gwinSetColor(Console, Silver);
-  gwinSetBgColor(Console, Black);
+  Console_r = createConsole(&ContainerPage0_r, 0, 0, 500, 130);
+  gwinSetColor(Console_r, Silver);
+  gwinSetBgColor(Console_r, Black);
   //gwinSetFont(ghConsole, dejavu_sans_32_anti_aliased);
-  gwinRedraw(Console);
+  gwinRedraw(Console_r);
 
-  Console2 = createConsole(&ContainerPage0, 0, 131, 300, 350);
-  gwinRedraw(Console2);
+  Console2_r = createConsole(&ContainerPage0_r, 0, 131, 300, 350);
+  gwinRedraw(Console2_r);
 
-  Console3 = createConsole(&ContainerPage0, 300, 131, 300, 350);
-  gwinRedraw(Console3);
+  Console3_r = createConsole(&ContainerPage0_r, 300, 131, 300, 350);
+  gwinRedraw(Console3_r);
 
-  ConsoleDebug = createConsole(&ContainerPage0, 600, 0, 300, 700);
-  gwinRedraw(ConsoleDebug);
+  ConsoleDebug_r = createConsole(&ContainerPage0_r, 600, 0, 300, 700);
+  gwinRedraw(ConsoleDebug_r);
 
-  Console1 = createConsole(&ContainerPage0, 270,0,270,130);
-  gwinSetColor(Console1, Silver);
-  gwinSetBgColor(Console1, Black);
-  //gwinSetFont(Console1, dejavu_sans_32_anti_aliased);
-  gwinRedraw(Console1);
+  Console1_r = createConsole(&ContainerPage0_r, 270,0,270,130);
+  gwinSetColor(Console1_r, Silver);
+  gwinSetBgColor(Console1_r, Black);
+//  gwinSetFont(Console1_r, dejavu_sans_32_anti_aliased);
+  gwinRedraw(Console1_r);
 }
 
-void guiShowPage(unsigned pageIndex)
+void guiShowPage_r(unsigned pageIndex)
 {
   // Hide all pages
-  gwinHide(ContainerPage0);
+  gwinHide(ContainerPage0_r);
 
   // Show page selected page
   switch (pageIndex) {
   case 0:
-    gwinShow(ContainerPage0);
+    gwinShow(ContainerPage0_r);
     break;
 
   default:
@@ -95,7 +94,7 @@ void guiShowPage(unsigned pageIndex)
   }
 }
 
-void guiCreate(void)
+void guiCreate_r(void)
 {
   //GWidgetInit wi;
 
@@ -115,63 +114,62 @@ void guiCreate(void)
 //  gwinSetDefaultBgColor(White);
 
   // Create all the display pages
-  createPagePage0();
+  createPagePage0_r();
 
   // Select the default display page
-  guiShowPage(0);
+  guiShowPage_r(0);
 
-  // Console sample text
+  // Console_r sample text
   //gwinPrintf(ghConsole, "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet");
 }
 
-void guiUpdate(){
-     gwinClear(Console1);
-     gwinPrintf(Console1, UIDrivingState[DrivingState]);
-     gwinClear(Console);
-     gwinPrintf(Console, "Setpoint: %d ", M[0].SetPoint);
-     gwinPrintf(Console, "%d ", M[1].SetPoint);
-     gwinPrintf(Console, "%d ", M[2].SetPoint);
-     gwinPrintf(Console, "%d\r\n", M[3].SetPoint);
-//     gwinPrintf(Console, "stage_flag: %d\r\n", stage1_line_flag_x);
-     gwinClear(Console2);
-     gwinPrintf(Console2, "x: %d\r\n", x);
-     gwinPrintf(Console2, "y: %d\r\n", y);
-     gwinPrintf(Console2, "a: %d\r\n", tRotation);
-     gwinPrintf(Console2, "E: %d ",E0);
-     gwinPrintf(Console2, "%d ",E1);
-     gwinPrintf(Console2, "%d\n",E2);
-     gwinPrintf(Console2, "L0W : %d    ", LineSensor[0].Position[1]);
-     gwinPrintf(Console2, "L0P: %d\n", LineSensor[0].Position[0]);
-     gwinPrintf(Console2, "L1W : %d    ", LineSensor[1].Position[1]);
-     gwinPrintf(Console2, "L1P: %d\n", LineSensor[1].Position[0]);
-     gwinPrintf(Console2, "L2W : %d    ", LineSensor[2].Position[1]);
-     gwinPrintf(Console2, "L2P: %d\n", LineSensor[2].Position[0]);
-     gwinPrintf(Console2, "L3W : %d    ", LineSensor[3].Position[1]);
-     gwinPrintf(Console2, "L3P: %d\n", LineSensor[3].Position[0]);
-     gwinPrintf(Console2, "Step: %d\n", step);
-//     gwinPrintf(Console2, "LD : %d\n", line_x_d);
-     gwinClear(Console3);
-//     gwinPrintf(Console3, "OA: %d\r\n", output_line_a);
-//     gwinPrintf(Console3, "OX: %d\r\n", output_line_x);
-//     gwinPrintf(Console3, "pc1: %d\r\n", pass_line_count[1]);
-//     gwinPrintf(Console3, "pc2: %d\r\n", pass_line_count[2]);
-//     gwinPrintf(Console3, "pc2: %d\r\n", stage2_line_flag);
-     gwinPrintf(Console3, "S7: %d\r\n", Servo1.command[7]);
-     gwinPrintf(Console3, "us : %d\n", ADCValue[0]);
-     gwinPrintf(Console3, "pl : %d\n", push_length);
-     gwinClear(ConsoleDebug);
-     gwinPrintf(ConsoleDebug, "D0: %d\r\n", debug_display[0]);
-     gwinPrintf(ConsoleDebug, "D1: %d\r\n", debug_display[1]);
-     gwinPrintf(ConsoleDebug, "D2: %d\r\n", debug_display[2]);
-     gwinPrintf(ConsoleDebug, "D3: %d\r\n", debug_display[3]);
-     gwinPrintf(ConsoleDebug, "D4: %d\r\n", debug_display[4]);
-     gwinPrintf(ConsoleDebug, "D5: %d\r\n", debug_display[5]);
-     gwinPrintf(ConsoleDebug, "D6: %d\r\n", debug_display[6]);
-     gwinPrintf(ConsoleDebug, "D7: %d\r\n", debug_display[7]);
-     gwinPrintf(ConsoleDebug, "D8: %d\r\n", debug_display[8]);
-     gwinPrintf(ConsoleDebug, "D9: %d\n", debug_display[9]);
-//     gwinPrintf(Console2, "sum : %d\n", sum);
-
+void guiUpdate_r(){
+     gwinClear(Console1_r);
+     gwinPrintf(Console1_r, UIDrivingState_r[DrivingState]);
+     gwinClear(Console_r);
+     gwinPrintf(Console_r, "Setpoint: %d ", M[0].SetPoint);
+     gwinPrintf(Console_r, "%d ", M[1].SetPoint);
+     gwinPrintf(Console_r, "%d ", M[2].SetPoint);
+     gwinPrintf(Console_r, "%d\r\n", M[3].SetPoint);
+     //gwinPrintf(Console_r, "stage_flag: %d\r\n", stage1_line_flag_x_r);
+     gwinClear(Console2_r);
+     gwinPrintf(Console2_r, "x: %d\r\n", x_r);
+     gwinPrintf(Console2_r, "y: %d\r\n", y_r);
+     gwinPrintf(Console2_r, "a: %d\r\n", tRotation_r);
+     gwinPrintf(Console2_r, "E: %d ",E0_r);
+     gwinPrintf(Console2_r, "%d ",E1_r);
+     gwinPrintf(Console2_r, "%d\n",E2_r);
+     gwinPrintf(Console2_r, "L0W : %d    ", LineSensor[0].Position[1]);
+     gwinPrintf(Console2_r, "L0P: %d\n", LineSensor[0].Position[0]);
+     gwinPrintf(Console2_r, "L1W : %d    ", LineSensor[1].Position[1]);
+     gwinPrintf(Console2_r, "L1P: %d\n", LineSensor[1].Position[0]);
+     gwinPrintf(Console2_r, "L2W : %d    ", LineSensor[2].Position[1]);
+     gwinPrintf(Console2_r, "L2P: %d\n", LineSensor[2].Position[0]);
+     gwinPrintf(Console2_r, "L3W : %d    ", LineSensor[3].Position[1]);
+     gwinPrintf(Console2_r, "L3P: %d\n", LineSensor[3].Position[0]);
+     gwinPrintf(Console2_r, "Step: %d\n", step_r);
+     //gwinPrintf(Console2_r, "LD : %d\n", line_x_d_r);
+     gwinClear(Console3_r);
+     //gwinPrintf(Console3_r, "OA: %d\r\n", output_line_a_r);
+     //gwinPrintf(Console3_r, "OX: %d\r\n", output_line_x_r);
+     //gwinPrintf(Console3_r, "pc1: %d\r\n", pass_line_count_r[1]);
+     //gwinPrintf(Console3_r, "pc2: %d\r\n", pass_line_count_r[2]);
+     //gwinPrintf(Console3_r, "pc2: %d\r\n", stage2_line_flag_r);
+     gwinPrintf(Console3_r, "S7: %d\r\n", Servo1.command[7]);
+     gwinPrintf(Console3_r, "us : %d\n", ADCValue[0]);
+     gwinPrintf(Console3_r, "pl : %d\n", push_length_r);
+     //gwinPrintf(Console2_r, "sum : %d\n", sum);
+     gwinClear(ConsoleDebug_r);
+     gwinPrintf(ConsoleDebug_r, "D0: %d\r\n", debug_display_r[0]);
+     gwinPrintf(ConsoleDebug_r, "D1: %d\r\n", debug_display_r[1]);
+     gwinPrintf(ConsoleDebug_r, "D2: %d\r\n", debug_display_r[2]);
+     gwinPrintf(ConsoleDebug_r, "D3: %d\r\n", debug_display_r[3]);
+     gwinPrintf(ConsoleDebug_r, "D4: %d\r\n", debug_display_r[4]);
+     gwinPrintf(ConsoleDebug_r, "D5: %d\r\n", debug_display_r[5]);
+     gwinPrintf(ConsoleDebug_r, "D6: %d\r\n", debug_display_r[6]);
+     gwinPrintf(ConsoleDebug_r, "D7: %d\r\n", debug_display_r[7]);
+     gwinPrintf(ConsoleDebug_r, "D8: %d\r\n", debug_display_r[8]);
+     gwinPrintf(ConsoleDebug_r, "D9: %d\n", debug_display_r[9]);
 }
 
 //static char buf[8];
@@ -180,7 +178,7 @@ void guiUpdate(){
 //  snprintf(buf, 8, __VA_ARGS__); \
 //  gwinSetText(handle, buf, TRUE);
 //
-//static void guiUpdate(void){
+//static void guiUpdate_r(void){
 //  //refresh encoder values
 //  VAL_UPDATE(ghLabelE1_count, "%+05d", encoder1_2.delta_count[0]);
 //  VAL_UPDATE(ghLabelE2_count, "%+05d", encoder1_2.delta_count[1]);
@@ -230,12 +228,12 @@ void guiUpdate(){
 //  VAL_UPDATE(ghLabelCPU_VAL, "%02d", (int) cpu_usage_get_recent());
 //}
 
-void start_robot_main(void *params){
+void red_main(void *params){
   (void) params;
 
   ui_event *evt = NULL;
 
-  guiCreate();
+  guiCreate_r();
   //ActivateDriving();//lock motor
   while(TRUE){
 
@@ -256,14 +254,14 @@ void start_robot_main(void *params){
           break;
       }
     }
-    guiUpdate();
+    guiUpdate_r();
     chThdSleepMilliseconds(60);
   }
 
 }
 
 
-application start_robot = {
-    .name = "Blue",
-    .main = start_robot_main
+application red = {
+    .name = "Red",
+    .main = red_main
 };

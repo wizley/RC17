@@ -46,11 +46,13 @@ extern application set_logging;
 extern application set_usb;
 
 extern application start_robot;
+extern application red;
 extern application motor_tuning;
 extern application console;
 //extern application game;
 extern application tetris;
 extern application reset;
+
 
 extern application template;
 

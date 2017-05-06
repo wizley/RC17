@@ -11,6 +11,8 @@
 #define ID_SERVO1 100
 #define ID_SERVO2 101
 
+#define ServoFanOffset 70 //Added for fan direction control (Robocon 2016 only)
+
 typedef struct{
   int16_t command[8];
   int16_t current;

@@ -1,13 +1,28 @@
 /*
- * linesensor.h
+n * boardio.h
  *
- *  Created on: May 6, 2016
- *      Author: Melvin
+ *  Created on: Oct 27, 2016
+ *      Author: Wizley
  */
 
-#ifndef ROBOT_LINESENSOR_LINESENSOR_H_
-#define ROBOT_LINESENSOR_LINESENSOR_H_
+#ifndef ROBOT_BOARDIO_H_
+#define ROBOT_BOARDIO_H_
 
+#include "udc.h"
+
+typedef struct tagAirBoard {
+  int size;
+  uint16_t states;
+  int Command;
+  int Alive;
+  const uint8_t id;
+} AIR_BOARD;
+
+extern AIR_BOARD AirBoard;
+void airSwitch(unsigned short which, bool state);
+void airSwitchOff();
+
+/*
 #include "driving.h"
 #include "udc.h"
 
@@ -29,8 +44,6 @@
 #define ID_L2_POS CAL_ID_POS(2)
 #define ID_L3_POS CAL_ID_POS(3)
 
-#define ID_AIRBOARD_0 110
-
 typedef struct tagLineSensor {
   int size;
   int short Position[4];
@@ -49,5 +62,5 @@ void linesensor_get_data(LINE_SENSOR *line);
 void linesensor_get_data0_11(LINE_SENSOR *line);
 void linesensor_get_data12_23(LINE_SENSOR *line);
 void linesensor_get_data24_35(LINE_SENSOR *line);
-
-#endif /* ROBOT_LINESENSOR_LINESENSOR_H_ */
+*/
+#endif /* ROBOT_BOARDIO_H_ */

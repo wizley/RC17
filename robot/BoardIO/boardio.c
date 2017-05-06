@@ -1,17 +1,43 @@
 /*
- * linesensor.c
+ * boardio.c
  *
- *  Created on: May 6, 2016
- *      Author: Melvin
+ *  Created on: Oct 27, 2016
+ *      Author: Wizley
  */
 
 #include "ch.h"
 #include "udc.h"
-#include "linesensor.h"
+#include "boardio.h"
+#include "driving.h"
 
-LINE_SENSOR LineSensor[4] = {{.id = 0, .size = LINESENSOR_0_SIZE},{.id = 1, .size = LINESENSOR_1_SIZE},
-                             {.id = 2, .size = LINESENSOR_2_SIZE},{.id = 3, .size = LINESENSOR_3_SIZE}};
+//LINE_SENSOR LineSensor[4] = {{.id = 0, .size = LINESENSOR_0_SIZE},{.id = 1, .size = LINESENSOR_1_SIZE},
+//                             {.id = 2, .size = LINESENSOR_2_SIZE},{.id = 3, .size = LINESENSOR_3_SIZE}};
 
+AIR_BOARD AirBoard = {.id = 0, .size = AIR_0_SIZE, .states=0x00};
+
+void airSwitch(unsigned short which, bool state){
+  /*
+  //Bitwise Operation(Not completed)
+  if (which >0 && which <11){
+    uint16_t mask;
+    mask = 1 << (which - 1);
+    AirBoard.states =  ~mask & AirBoard.states;
+    if (state) AirBoard.states = AirBoard.states | mask;
+    AirBoard.states = 0x0001;
+  }*/
+  if(state){
+    AirBoard.states = 0x0001;
+  }
+  else{
+    AirBoard.states = 0xFFFF;
+  }
+}
+
+void airSwitchOff(){
+  AirBoard.states = 0x0000;
+}
+
+/*
 udc_rx_state_e linesensor_send_command(LINE_SENSOR *line, int command){
   line->Command = command;
   UDC_Obj_t udc_object;
@@ -113,3 +139,4 @@ void linesensor_decAlive(volatile void * arg){
   if ((l->Alive) > 0)
     (l->Alive)--;
 }
+*/

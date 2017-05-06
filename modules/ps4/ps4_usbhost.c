@@ -115,6 +115,14 @@ static THD_FUNCTION(DS4, arg) {
 #endif
       memset(&ps4_data, 0, sizeof(ps4_data));
       memset(&old_data, 0, sizeof(old_data));
+      ps4_data.hat_left_x = 128;
+      ps4_data.hat_left_y = 128;
+      ps4_data.hat_right_x = 128;
+      ps4_data.hat_right_y = 128;
+      old_data.hat_left_x = 128;
+      old_data.hat_left_y = 128;
+      old_data.hat_right_x = 128;
+      old_data.hat_right_y = 128;
       chThdSleepMilliseconds(500);
       break;
     case USBHDS4_STATE_ACTIVE:
@@ -159,10 +167,18 @@ static THD_FUNCTION(DS4, arg) {
 #endif
           memset(&ps4_data, 0, sizeof(ps4_data));
           memset(&old_data, 0, sizeof(old_data));
+          ps4_data.hat_left_x = 128;
+          ps4_data.hat_left_y = 128;
+          ps4_data.hat_right_x = 128;
+          ps4_data.hat_right_y = 128;
+          old_data.hat_left_x = 128;
+          old_data.hat_left_y = 128;
+          old_data.hat_right_x = 128;
+          old_data.hat_right_y = 128;
       }
-      if(need_post && current_running_menu->data.app != &start_robot){
-            chMBPost(&app_mb, (msg_t)&evt, TIME_IMMEDIATE);
-            need_post = false;
+      if(need_post && (current_running_menu->data.app != &start_robot && current_running_menu->data.app != &red)){
+          chMBPost(&app_mb, (msg_t)&evt, TIME_IMMEDIATE);
+          need_post = false;
       }
       memcpy(&old_data, &ps4_data, sizeof(old_data));
       //old_data = ps4_data;

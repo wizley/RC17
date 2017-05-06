@@ -18,28 +18,53 @@ P_PROFILE pmotor[4] = {{0}};
 
 int df = 0;
 int RUN_funt(P_PROFILE *motor, long int target) {
-    long int p_term, d_term;
+    long int p_term, d_term, max_v;
 
     motor->error = target - motor->abs_pos;
 
     p_term = motor->error;
-    motor->I_term = motor->I_term + motor->error / 100.0;
-    d_term = (motor->error - motor->pre_error)*10;
+
+    motor->I_term = motor->I_term + motor->error / 10.0;
+
+    d_term = (motor->error - motor->pre_error);
     motor->pre_error = motor->error;
 
-    motor->output = motor->kp * p_term + motor->ki * (motor->I_term) + motor->kd * d_term + motor->kff * (motor->ff_term);
+    motor->output =
+        motor->kp * p_term +
+        motor->ki * (motor->I_term) +
+        motor->kd * d_term +
+        motor->kff * (motor->ff_term);
 
+    //Clear data when setpoint is changed
+    if (target != motor->pre_target) {
+      motor->I_term = 0.0;
+      motor->pre_target = target;
+    }
+
+    //Limit maximum acceleration
     if (motor->output - motor->pre_output > motor->max_acc)
       motor->output = motor->pre_output + motor->max_acc;
     if (motor->output - motor->pre_output < -motor->max_acc)
       motor->output = motor->pre_output - motor->max_acc;
 
+    //Limit maximum velocity
+    if(d_term){
+      max_v = p_term/d_term;
+      if (max_v<0) max_v=-max_v;
+      max_v*=motor->max_acc;
+      if (motor->output> max_v) motor->output = max_v;
+      if (motor->output< -max_v)motor->output = -max_v;
+    }
+
+    //Limit maximum velocity
     motor->output = motor->output > motor->max_speed ? motor->max_speed : motor->output;
     motor->output = motor->output < -motor->max_speed ? -motor->max_speed : motor->output;
 
+    //Turn output signal to velocity control
     M[motor->motor_idx].SetPoint = motor->output;
     motor->pre_output = motor->output;
 
+    //Turn off motor if OOB
     if (motor->bound_en == 1) {
         if (motor->abs_pos >= motor->posUpLim && motor->output > 0){
             STOP_funt(motor);
@@ -49,7 +74,9 @@ int RUN_funt(P_PROFILE *motor, long int target) {
         }
     }
 
+    //Stop Moving when deadzone reached
     if(motor->error > -motor->deadzone && motor->error < motor->deadzone){
+      STOP_funt(motor);
       return 1;
     }else{
       return 0;
@@ -154,51 +181,54 @@ int run_p_mode(MOTOR_COMMAND cmd, P_PROFILE *pmotor, long int set_point) {
 
 void p_profile_init(void) {
   // 0 to -848904
-    pmotor[0].motor_idx = 4;
-    pmotor[0].adc_idx = 4;
-    pmotor[0].scale = 425;
-    pmotor[0].max_acc = 50;
-    pmotor[0].max_speed = 1300;
+//30378 per 360deg 15:1
+//62rpm=setpoint 1000;
+    pmotor[0].motor_idx = 0;
+    pmotor[0].adc_idx = 0;
+    pmotor[0].scale = 8.4535;      //457600 FOR 60.3CM (Range = 148 to 751)
+    pmotor[0].max_acc = 55;
+    pmotor[0].max_speed = 4500;
     pmotor[0].bound_en = 1;
-    pmotor[0].posLowLim = -10;    //relative to abs_pos
-    pmotor[0].posUpLim = 550;     //relative to abs_pos
+    pmotor[0].posLowLim = -1800;    //relative to abs_pos
+    pmotor[0].posUpLim = 1800;     //relative to abs_pos
     pmotor[0].current_pos = 0;
-    pmotor[0].deadzone = 10;
+    pmotor[0].deadzone = 30;
     pmotor[0].I_max = 400;
-    pmotor[0].kp = 4;
-    pmotor[0].ki = 0.06;
-    pmotor[0].kd = 0;
+    pmotor[0].kp = 10;//5
+    pmotor[0].ki = 0;
+    pmotor[0].kd = 10;
     pmotor[0].kff = 0;
 
-    pmotor[1].motor_idx = 5;
-    pmotor[1].adc_idx = 5;
-    pmotor[1].scale = 75.4879;
-    pmotor[1].max_acc = 50;
-    pmotor[1].max_speed = 1800;
-    pmotor[1].bound_en = 1;
-    pmotor[1].posLowLim = -2383;    //relative to abs_pos   //-2383
-    pmotor[1].posUpLim = 6617;     //relative to abs_pos    //6617
-    pmotor[1].current_pos = 0;
-    pmotor[1].deadzone = 60;
-    pmotor[1].I_max = 400;
-    pmotor[1].kp = 1;
-    pmotor[1].ki = 0.002;
-    pmotor[1].kd = 0;
-    pmotor[1].kff = 0;
-
-    pmotor[2].motor_idx = 6;
-    pmotor[2].adc_idx = 6;
-    pmotor[2].scale = 75.4879;   //284.86
-    pmotor[2].max_acc = 50;
-    pmotor[2].max_speed = 1800;
-    pmotor[2].bound_en = 1;
-    pmotor[2].posLowLim = -1200;    //relative to abs_pos
-    pmotor[2].posUpLim = 7800;     //relative to abs_pos
-    pmotor[2].current_pos = 0;
-    pmotor[2].deadzone = 60;
-    pmotor[2].I_max = 400;
-    pmotor[2].kp = 1;
-    pmotor[2].ki = 0.002;
-    pmotor[2].kd = 0;
-    pmotor[2].kff = 0;
+//
+//    pmotor[1].motor_idx = 5;
+//    pmotor[1].adc_idx = 5;
+//    pmotor[1].scale = 7587;  //739711 for 97.5 mm
+//    pmotor[1].max_acc = 50;
+//    pmotor[1].max_speed = 1800;
+//    pmotor[1].bound_en = 1;
+//    pmotor[1].posLowLim = 5;    //relative to abs_pos   //-2383
+//    pmotor[1].posUpLim = 95;     //relative to abs_pos    //6617
+//    pmotor[1].current_pos = 0;
+//    pmotor[1].deadzone = 1;
+//    pmotor[1].I_max = 400;
+//    pmotor[1].kp = 100;
+//    pmotor[1].ki = 0.2;
+//    pmotor[1].kd = 0;
+//    pmotor[1].kff = 0;
+//
+//    pmotor[2].motor_idx = 6;
+//    pmotor[2].adc_idx = 6;
+//    pmotor[2].scale = 7644;   //284.86 //745258 for 97.5mm
+//    pmotor[2].max_acc = 50;
+//    pmotor[2].max_speed = 1800;
+//    pmotor[2].bound_en = 1;
+//    pmotor[2].posLowLim = 5;    //relative to abs_pos
+//    pmotor[2].posUpLim = 95;     //relative to abs_pos
+//    pmotor[2].current_pos = 0;
+//    pmotor[2].deadzone = 1;
+//    pmotor[2].I_max = 400;
+//    pmotor[2].kp = 100;
+//    pmotor[2].ki = 0.2;
+//    pmotor[2].kd = 0;
+//    pmotor[2].kff = 0;
 }
