@@ -24,16 +24,27 @@
 #ifndef __STM32F4xx_FMC_H
 #define __STM32F4xx_FMC_H
 
+#include "hardware_conf.h"
+
 #ifdef __cplusplus
  extern "C" {
 #endif
 
+#if BOARD_VERSION == 1
 // HACKS to fix portability issues.
 #define STM32F429_439xx
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx.h"
 
+#elif BOARD_VERSION == 2
+   // HACKS to fix portability issues.
+   #define STM32F746xx
+   /* Includes ------------------------------------------------------------------*/
+   #include "stm32f746xx.h"
+  // #define FMC_Bank2   FMC_Bank3
+  // #define FMC_Bank3   FMC_Bank3
+#endif
 // More HACKS to fix portability issues.
 #if !defined(FMC_Bank2) && !defined(FMC_Bank3)
 	#define	FMC_Bank2	FMC_Bank2_3

@@ -1,4 +1,11 @@
 ##############################################################################
+#Hardware Configuration
+#Please select here for using v1 or v2 board
+#
+BOARD_VERSION = v2
+
+
+##############################################################################
 # Build global options
 # NOTE: Can be overridden externally.
 #
@@ -90,25 +97,45 @@ PROJECT = mb2016
 CHIBIOS = C:\ChibiStudio\ChibiOS
 GFXLIB = C:\ChibiStudio\ugfx-repository
 # Startup files.
-include $(CHIBIOS)/os/common/startup/ARMCMx/compilers/GCC/mk/startup_stm32f4xx.mk
-# HAL-OSAL files (optional).
-include $(CHIBIOS)/os/hal/hal.mk
-include $(CHIBIOS)/os/hal/ports/STM32/STM32F4xx/platform.mk
-include ./board/chibios_board/board.mk
-include $(CHIBIOS)/os/hal/osal/rt/osal.mk
-# RTOS files (optional).
-include $(CHIBIOS)/os/rt/rt.mk
-include $(CHIBIOS)/os/common/ports/ARMCMx/compilers/GCC/mk/port_v7m.mk
-# Other files (optional).
-include $(CHIBIOS)/test/rt/test.mk
-include $(CHIBIOS)/os/hal/lib/streams/streams.mk
-include $(CHIBIOS)/os/various/shell/shell.mk
-include $(GFXLIB)/gfx.mk
-include ./drivers/drivers.mk
-include ./modules/modules.mk
-include ./robot/robot.mk
-
-LDSCRIPT= ./ld/STM32F429xI.ld
+ifeq ($(BOARD_VERSION), v1)
+	include $(CHIBIOS)/os/common/startup/ARMCMx/compilers/GCC/mk/startup_stm32f4xx.mk
+	# HAL-OSAL files (optional).
+	include $(CHIBIOS)/os/hal/hal.mk
+	include $(CHIBIOS)/os/hal/ports/STM32/STM32F4xx/platform.mk
+	include ./board/chibios_board/board.mk
+	include $(CHIBIOS)/os/hal/osal/rt/osal.mk
+	# RTOS files (optional).
+	include $(CHIBIOS)/os/rt/rt.mk
+	include $(CHIBIOS)/os/common/ports/ARMCMx/compilers/GCC/mk/port_v7m.mk
+	# Other files (optional).
+	include $(CHIBIOS)/test/rt/test.mk
+	include $(CHIBIOS)/os/hal/lib/streams/streams.mk
+	include $(CHIBIOS)/os/various/shell/shell.mk
+	include $(GFXLIB)/gfx.mk
+	include ./drivers/drivers.mk
+	include ./modules/modules.mk
+	include ./robot/robot.mk
+	LDSCRIPT= ./ld/STM32F429xI.ld
+else ifeq ($(BOARD_VERSION), v2)
+	include $(CHIBIOS)/os/common/startup/ARMCMx/compilers/GCC/mk/startup_stm32f7xx.mk
+	# HAL-OSAL files (optional).
+	include $(CHIBIOS)/os/hal/hal.mk
+	include $(CHIBIOS)/os/hal/ports/STM32/STM32F7xx/platform.mk
+	include ./board/chibios_boardv2/board.mk
+	include $(CHIBIOS)/os/hal/osal/rt/osal.mk
+	# RTOS files (optional).
+	include $(CHIBIOS)/os/rt/rt.mk
+	include $(CHIBIOS)/os/common/ports/ARMCMx/compilers/GCC/mk/port_v7m.mk
+	# Other files (optional).
+	include $(CHIBIOS)/test/rt/test.mk
+	include $(CHIBIOS)/os/hal/lib/streams/streams.mk
+	include $(CHIBIOS)/os/various/shell/shell.mk
+	include $(GFXLIB)/gfx.mk
+	include ./drivers/drivers.mk
+	include ./modules/modules.mk
+	include ./robot/robot.mk
+	LDSCRIPT= ./ld/STM32F746xG.ld
+endif
 
 # C sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
@@ -170,9 +197,11 @@ INCDIR = $(CHIBIOS)/os/license \
 ##############################################################################
 # Compiler settings
 #
-
-MCU  = cortex-m4
-
+ifeq ($(BOARD_VERSION), v1)
+	MCU  = cortex-m4
+else ifeq ($(BOARD_VERSION), v2)
+	MCU  = cortex-m7
+endif
 #TRGT = arm-elf-
 TRGT = arm-none-eabi-
 CC   = $(TRGT)gcc

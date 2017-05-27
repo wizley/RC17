@@ -18,7 +18,7 @@
 #define _MCUCONF_H_
 
 #include "drivers_conf.h"
-
+#include "hardware_conf.h"
 /*
  * STM32F4xx drivers configuration.
  * The following settings override the default settings present in
@@ -33,8 +33,11 @@
  * 0...3        Lowest...Highest.
  */
 
+#if BOARD_VERSION == 1
 #define STM32F4xx_MCUCONF
-
+#elif BOARD_VERSION == 2
+#define STM32F7xx_MCUCONF
+#endif
 /*
  * HAL driver system settings.
  */
