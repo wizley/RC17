@@ -24,7 +24,6 @@
 #ifndef __STM32F4xx_FMC_H
 #define __STM32F4xx_FMC_H
 
-#include "hardware_conf.h"
 
 #ifdef __cplusplus
  extern "C" {
