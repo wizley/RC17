@@ -191,9 +191,10 @@ void runButton(void){
 
 int app_init(void) {
   chMBObjectInit(&app_mb, msg_buf, UI_MB_SIZE);
-  chThdCreateStatic(waApp, sizeof(waApp), LOWPRIO+1, menu.main, NULL);
-  InitDriving();
-  chThdCreateStatic(wa_ui_button_thread, sizeof(wa_ui_button_thread), LOWPRIO, ui_button_thread, NULL);
+  //chThdCreateStatic(waApp, sizeof(waApp), LOWPRIO+1, menu.main, NULL);
+
+ // InitDriving();
+  //chThdCreateStatic(wa_ui_button_thread, sizeof(wa_ui_button_thread), LOWPRIO, ui_button_thread, NULL);
   return 0;
 }
 

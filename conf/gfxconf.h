@@ -36,7 +36,7 @@
 //#define GDISP_LINEBUF_SIZE                           128
 
 #define GDISP_STARTUP_COLOR                          HTML2COLOR(0x00499C)
-#define GDISP_NEED_STARTUP_LOGO                      FALSE
+#define GDISP_NEED_STARTUP_LOGO                      TRUE
 #define GFX_USE_GFILE                                TRUE
 #define GFILE_NEED_ROMFS                             TRUE
 

@@ -62,7 +62,7 @@ void cmd_ds4(BaseSequentialStream *chp, int argc, char *argv[]) {
 void cmd_eeprom(BaseSequentialStream *chp, int argc, char *argv[]) {
   (void)argv;
   (void)argc;
-
+/*
   I2CEepromFileStream file;
 
   static uint8_t buf[10] = {0};
@@ -82,7 +82,7 @@ void cmd_eeprom(BaseSequentialStream *chp, int argc, char *argv[]) {
 
   eepfs_lseek(&file, 0);
 
-  /* write test pattern */
+  // write test pattern
   chprintf(chp, "Write test pattern to eeprom...\r\n");
   for(uint16_t i = 0; i < _24LC02_SIZE_; i++){
     if(EepromWriteByte((EepromFileStream *)&file, i) != 1){
@@ -94,7 +94,7 @@ void cmd_eeprom(BaseSequentialStream *chp, int argc, char *argv[]) {
 
   eepfs_lseek(&file, 0);
 
-  /* print stored data value */
+  // print stored data value
   chprintf(chp, "\r\neeprom data\r\n");
   chprintf(chp, "ADDR 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F");
   for (uint16_t i = 0; i < _24LC02_SIZE_; i++) {
@@ -107,6 +107,7 @@ void cmd_eeprom(BaseSequentialStream *chp, int argc, char *argv[]) {
   eepfs_close((EepromFileStream *)&file);
 
   chprintf(chp, "\r\n");
+  */
 }
 
 void cmd_usage(BaseSequentialStream *chp, int argc, char *argv[]) {

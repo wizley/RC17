@@ -12,7 +12,7 @@ BOARD_VERSION = v2
 
 # Compiler options here.
 ifeq ($(USE_OPT),)
-  USE_OPT = -O2 -ggdb -fomit-frame-pointer -falign-functions=16 \
+  USE_OPT = -O0 -ggdb -fomit-frame-pointer -falign-functions=16 \
             -fshort-enums --specs=nano.specs -std=gnu99 -finline-functions -fno-builtin
 endif
 
@@ -38,7 +38,7 @@ endif
 
 # Enable this if you want link time optimizations (LTO)
 ifeq ($(USE_LTO),)
-  USE_LTO = yes
+  USE_LTO = no
 endif
 
 # If enabled, this option allows to compile the application in THUMB mode.
@@ -82,6 +82,12 @@ ifeq ($(USE_FPU),)
   USE_FPU = hard
 endif
 
+ifeq (BOARD_VERSION, v2)
+# FPU-related options.
+#ifeq ($(USE_FPU_OPT),)
+#  USE_FPU_OPT = -mfloat-abi=$(USE_FPU) -mfpu=fpv5-sp-d16 -fsingle-precision-constant
+#endif
+endif
 #
 # Architecture or project specific options
 ##############################################################################
@@ -95,7 +101,7 @@ PROJECT = mb2016
 
 # Imported source files and paths
 CHIBIOS = C:\ChibiStudio\ChibiOS
-GFXLIB = C:\ChibiStudio\ugfx-repository
+GFXLIB = F:\Users\Melvin\Downloads\uGFX-ugfx_release_2.7\ugfx
 # Startup files.
 ifeq ($(BOARD_VERSION), v1)
 	include $(CHIBIOS)/os/common/startup/ARMCMx/compilers/GCC/mk/startup_stm32f4xx.mk
@@ -118,6 +124,7 @@ ifeq ($(BOARD_VERSION), v1)
 	LDSCRIPT= ./ld/STM32F429xI.ld
 else ifeq ($(BOARD_VERSION), v2)
 	include $(CHIBIOS)/os/common/startup/ARMCMx/compilers/GCC/mk/startup_stm32f7xx.mk
+	#include $(CHIBIOS)/os/common/ports/ARMCMx/compilers/GCC/mk/startup_stm32f7xx.mk
 	# HAL-OSAL files (optional).
 	include $(CHIBIOS)/os/hal/hal.mk
 	include $(CHIBIOS)/os/hal/ports/STM32/STM32F7xx/platform.mk
@@ -126,12 +133,13 @@ else ifeq ($(BOARD_VERSION), v2)
 	# RTOS files (optional).
 	include $(CHIBIOS)/os/rt/rt.mk
 	include $(CHIBIOS)/os/common/ports/ARMCMx/compilers/GCC/mk/port_v7m.mk
+	#include $(CHIBIOS)/os/rt/ports/ARMCMx/compilers/GCC/mk/port_v7m.mk
 	# Other files (optional).
 	include $(CHIBIOS)/test/rt/test.mk
 	include $(CHIBIOS)/os/hal/lib/streams/streams.mk
 	include $(CHIBIOS)/os/various/shell/shell.mk
 	include $(GFXLIB)/gfx.mk
-	include ./drivers/drivers.mk
+	include ./drivers/driversv2.mk
 	include ./modules/modules.mk
 	include ./robot/robot.mk
 	LDSCRIPT= ./ld/STM32F746xG.ld
@@ -259,4 +267,5 @@ ULIBS = -lc -lm -lnosys $(GFXLIBS)
 ##############################################################################
 
 RULESPATH = $(CHIBIOS)/os/common/startup/ARMCMx/compilers/GCC
+#RULESPATH = $(CHIBIOS)/os/commonports\ARM\compilers\GCC
 include $(RULESPATH)/rules.mk

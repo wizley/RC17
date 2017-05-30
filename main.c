@@ -12,6 +12,7 @@
 //#include "ARTracker.h"
 #include "RTTLog.h"
 #include "ds4.h"
+#include "bubbles.h"
 
 #define SDRAM_SIZE  0x1000000
 /*
@@ -77,12 +78,13 @@ static QEIConfig qeicfg = {
 /*
  * I2C1 config.
  */
+/*
 static const I2CConfig i2cfg1 = {
     OPMODE_I2C,
     400000,
     FAST_DUTY_CYCLE_2,
 };
-
+*/
 static gdispImage myImage;
 
 
@@ -114,10 +116,14 @@ int main(void) {
    * Activates the LCD-related drivers.
    */
   palSetPad(GPIOD, GPIOD_LCD_DISP);
-//  palSetPad(GPIOI, GPIOI_LCD_BLCTRL);
+  //palSetPad(GPIOI, GPIOI_LCD_BLCTRL);
 
   palSetPadMode(GPIOB, GPIOB_TIM2_CH4, PAL_MODE_OUTPUT_PUSHPULL);
   palClearPad(GPIOB, GPIOB_TIM2_CH4);
+
+  palClearPad(GPIOC, GPIOC_LED_R);
+  palClearPad(GPIOC, GPIOC_LED_G);
+
 
   /*
    * Activates the QEI driver.
@@ -125,15 +131,16 @@ int main(void) {
   qeiStart(&QEID4, &qeicfg);
   qeiEnable(&QEID4);
 
+  /* EEPROM rework
   i2cStart(&I2CD1, &i2cfg1);
-
+`*/
   gfxInit();
-
-  gdispImageOpenFile(&myImage, "m2logo.gif");
+  chThdCreateStatic(wabubbles, sizeof(wabubbles), HIGHPRIO, bubbles_thread, NULL);
+  /*gdispImageOpenFile(&myImage, "m2logo.gif");
   gdispImageCache(&myImage);
   gdispImageDraw(&myImage, 40, 180, myImage.width, myImage.height, 0, 0);
   gdispImageClose(&myImage);
-
+*/
   chThdSleepMilliseconds(1000);
 
   /*
@@ -144,16 +151,16 @@ int main(void) {
   chThdCreateStatic(waThread2, sizeof(waThread2), LOWPRIO,
                     Thread2, NULL);
 
-  app_init();
+  //app_init();
   cpu_usage_init();
 
   /*
    * Shell manager initialization.
    */
-  rtt_shell_init();
-  rtt_shell_start();
-
-  RTTLogObjectInit(&RTT_Log);
+//  rtt_shell_init();
+//  rtt_shell_start();
+//
+//  RTTLogObjectInit(&RTT_Log);
   chThdSleepMilliseconds(100);
 
   /*
@@ -165,9 +172,10 @@ int main(void) {
 //  chThdSleepMilliseconds(1000);
 //  usbStart(serusbcfg.usbp, &usbcfg);
 //  usbConnectBus(serusbcfg.usbp);
+
   adc_init();
 //  ps4_usbhost_init();
-  ActivateDriving();
+//  ActivateDriving();
 //  artracker_init();
   usbhStart(&USBHD2);
   chThdCreateStatic(waUSBHOST, sizeof(waUSBHOST), NORMALPRIO,
@@ -179,10 +187,10 @@ int main(void) {
    * a shell respawn upon its termination.
    */
   while (TRUE) {
-    if (rtt_is_active()) {
-      rtt_shell_create();
-      rtt_shell_wait();               /* Waiting termination.             */
-    }
+//    if (rtt_is_active()) {
+//      rtt_shell_create();
+//      rtt_shell_wait();               /* Waiting termination.             */
+//    }
     chThdSleepMilliseconds(1000);
   }
 }

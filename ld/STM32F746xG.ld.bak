@@ -90,8 +90,6 @@ REGION_ALIAS("HEAP_RAM", ram0);
 
 REGION_ALIAS("SDRAM", sdram);
 
-INCLUDE rules_stacks.ld
-
 __sdram_start__         = ORIGIN(sdram);
 __sdram_size__          = LENGTH(sdram);
 __sdram_end__           = __sdram_start__ + __sdram_size__;

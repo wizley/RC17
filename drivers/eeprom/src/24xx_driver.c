@@ -2,6 +2,7 @@
 #include "hal.h"
 #include "eeprom_driver.h"
 #include <string.h>
+#include "hardware_conf.h"
 
 #if (DRIVER_USE_EEPROM && HAL_USE_I2C) || defined(__DOXYGEN__)
 
@@ -10,8 +11,11 @@
  * DEFINES
  ******************************************************************************
  */
+#if BOARD_VERSION == 1
 #define EEPROM_I2C_CLOCK (i2cp->config->clock_speed)
-
+#elif BOARD_VERSION == 2
+#define EEPROM_I2C_CLOCK (uint32_t) ((float)(STM32_PCLK1)/(float)(i2cp->config->timingr))
+#endif
 /*
  ******************************************************************************
  * EXTERNS

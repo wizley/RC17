@@ -30,6 +30,8 @@
 
 #define _CHIBIOS_RT_CONF_
 
+#include "hardware_conf.h"
+
 /*===========================================================================*/
 /**
  * @name System timers settings
@@ -523,7 +525,9 @@ extern uint32_t idle_ticks;
 /*===========================================================================*/
 /* Port-specific settings (override port settings defaulted in chcore.h).    */
 /*===========================================================================*/
-
+#if BOARD_VERSION == 2
+#define CORTEX_VTOR_INIT                    0x00200000U
+#endif
 #endif  /* _CHCONF_H_ */
 
 /** @} */

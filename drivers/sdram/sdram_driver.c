@@ -1,8 +1,12 @@
 #include "ch.h"
 #include "hal.h"
 #include "sdram_driver.h"
+#include "hardware_conf.h"
+#if BOARD_VERSION == 1
 #include "stm32f4xx_fmc.h"
-
+#elif BOARD_VERSION == 2
+#include "stm32f746xx_fmc.h"
+#endif
 /**
   * @brief  Configures the FMC and GPIOs to interface with the SDRAM memory.
   *         This function must be called before any read/write operation

@@ -11,42 +11,42 @@ typedef enum tagDrivingState {
 #endif
 
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_MOTOR_0                 TRUE
+#define USE_MOTOR_0                 FALSE
 #define IS_MOTOR_0_DC               FALSE
 #endif
 
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_MOTOR_1                 TRUE
+#define USE_MOTOR_1                 FALSE
 #define IS_MOTOR_1_DC               FALSE
 #endif
 
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_MOTOR_2                 TRUE
+#define USE_MOTOR_2                 FALSE
 #define IS_MOTOR_2_DC               FALSE
 #endif
 
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_MOTOR_3                 TRUE
+#define USE_MOTOR_3                 FALSE
 #define IS_MOTOR_3_DC               FALSE
 #endif
 
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_MOTOR_4                 TRUE
+#define USE_MOTOR_4                 FALSE
 #define IS_MOTOR_4_DC               FALSE
 #endif
 
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_MOTOR_5                 TRUE
+#define USE_MOTOR_5                 FALSE
 #define IS_MOTOR_5_DC               FALSE
 #endif
 
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_MOTOR_6                 TRUE
+#define USE_MOTOR_6                 FALSE
 #define IS_MOTOR_6_DC               FALSE
 #endif
 
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_MOTOR_7                 TRUE
+#define USE_MOTOR_7                 FALSE
 #define IS_MOTOR_7_DC               FALSE
 #endif
 
@@ -61,22 +61,22 @@ typedef enum tagDrivingState {
 #endif
 
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_LINESENSOR_0            TRUE
+#define USE_LINESENSOR_0            FALSE
 #define LINESENSOR_0_SIZE             12
 #endif
 
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_LINESENSOR_1            TRUE
+#define USE_LINESENSOR_1            FALSE
 #define LINESENSOR_1_SIZE             12
 #endif
 
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_LINESENSOR_2            TRUE
+#define USE_LINESENSOR_2            FALSE
 #define LINESENSOR_2_SIZE             24
 #endif
 
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_LINESENSOR_3            TRUE
+#define USE_LINESENSOR_3            FALSE
 #define LINESENSOR_3_SIZE             24
 #endif
 
