@@ -170,9 +170,9 @@ static void _ltdc_init(void) {
 			#error STM32LTDC driver not implemented for your platform
 		#endif
 	#endif
-		 //RCC->PLLSAICFGR = STM32_PLLSAIN | STM32_PLLSAIR | STM32_PLLSAIQ; //fix
+		// RCC->PLLSAICFGR = STM32_PLLSAIN | STM32_PLLSAIR | STM32_PLLSAIQ;
 		 //RCC->DCKCFGR = (RCC->DCKCFGR & ~RCC_DCKCFGR_PLLSAIDIVR) | STM32_PLLSAIR_POST;
-		 //RCC->CR |= RCC_CR_PLLSAION;//fix
+		// RCC->CR |= RCC_CR_PLLSAION;
 
 	// Enable the peripheral
 	RCC->APB2ENR |= RCC_APB2ENR_LTDCEN;
@@ -244,7 +244,7 @@ LLDSPEC bool_t gdisp_lld_init(GDisplay* g) {
     post_init_board(g);
 
 	// Turn on the back-light
-	set_backlight_lld(g, GDISP_INITIAL_BACKLIGHT);
+	set_backlight(g, GDISP_INITIAL_BACKLIGHT);
 
 	// Initialise the GDISP structure
 	g->g.Width = driverCfg.bglayer.width;
@@ -386,6 +386,9 @@ LLDSPEC	color_t gdisp_lld_get_pixel_color(GDisplay* g) {
 	static void dma2d_init(void) {
 		// Enable DMA2D clock
 		RCC->AHB1ENR |= RCC_AHB1ENR_DMA2DEN;
+
+		// Set foreground memory address
+		DMA2D->FGMAR = (uint32_t)driverCfg.bglayer.frame;
 	
 		// Output color format
 		#if GDISP_LLD_PIXELFORMAT == GDISP_PIXELFORMAT_RGB565

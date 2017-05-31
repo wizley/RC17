@@ -84,9 +84,9 @@ endif
 
 ifeq (BOARD_VERSION, v2)
 # FPU-related options.
-#ifeq ($(USE_FPU_OPT),)
-#  USE_FPU_OPT = -mfloat-abi=$(USE_FPU) -mfpu=fpv5-sp-d16 -fsingle-precision-constant
-#endif
+ifeq ($(USE_FPU_OPT),)
+  USE_FPU_OPT = -mfloat-abi=$(USE_FPU) -mfpu=fpv5-sp-d16 -fsingle-precision-constant
+endif
 endif
 #
 # Architecture or project specific options
@@ -101,7 +101,7 @@ PROJECT = mb2016
 
 # Imported source files and paths
 CHIBIOS = C:\ChibiStudio\ChibiOS
-GFXLIB = F:\Users\Melvin\Downloads\uGFX-ugfx_release_2.7\ugfx
+GFXLIB = C:\ChibiStudio\ugfx-repository
 # Startup files.
 ifeq ($(BOARD_VERSION), v1)
 	include $(CHIBIOS)/os/common/startup/ARMCMx/compilers/GCC/mk/startup_stm32f4xx.mk

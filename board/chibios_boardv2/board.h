@@ -36,7 +36,7 @@
 /*
  * The board has an ULPI USB PHY.
  */
-#define BOARD_OTG2_USES_ULPI
+//#define BOARD_OTG2_USES_ULPI
 
 /*
  * Board oscillators-related settings.

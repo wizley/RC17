@@ -30,7 +30,7 @@
 #endif
 
 // HACKS to fix portability issues.
-#define STM32F746xx
+//#define STM32F746xx
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f746xx.h"
