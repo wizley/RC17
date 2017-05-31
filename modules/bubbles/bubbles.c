@@ -171,7 +171,7 @@ THD_FUNCTION(bubbles_thread, arg) {
 			angleZ += SCALE;
 
 		//gdispFlush();
-		gfxSleepMilliseconds(10);
+		gfxSleepMilliseconds(5);
 	}
 
 }

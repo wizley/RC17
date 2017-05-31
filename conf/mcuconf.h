@@ -75,25 +75,25 @@
 #define STM32_PLLSAIR_VALUE                 2
 #define STM32_PLLSAIDIVR                    STM32_PLLSAIDIVR_DIV4
 #if BOARD_VERSION == 2
-//#define STM32_SAI1SEL                       STM32_SAI1SEL_OFF
-//#define STM32_SAI2SEL                       STM32_SAI2SEL_OFF
-//#define STM32_USART1SEL                     STM32_USART1SEL_PCLK2
-//#define STM32_USART2SEL                     STM32_USART2SEL_PCLK1
-//#define STM32_USART3SEL                     STM32_USART3SEL_PCLK1
-//#define STM32_UART4SEL                      STM32_UART4SEL_PCLK1
-//#define STM32_UART5SEL                      STM32_UART5SEL_PCLK1
-//#define STM32_USART6SEL                     STM32_USART6SEL_PCLK2
-//#define STM32_UART7SEL                      STM32_UART7SEL_PCLK1
-//#define STM32_UART8SEL                      STM32_UART8SEL_PCLK1
-//#define STM32_I2C1SEL                       STM32_I2C1SEL_PCLK1
-//#define STM32_I2C2SEL                       STM32_I2C2SEL_PCLK1
-//#define STM32_I2C3SEL                       STM32_I2C3SEL_PCLK1
-//#define STM32_I2C4SEL                       STM32_I2C4SEL_PCLK1
-//#define STM32_LPTIM1SEL                     STM32_LPTIM1SEL_PCLK1
-//#define STM32_CECSEL                        STM32_CECSEL_LSE
-//#define STM32_CK48MSEL                      STM32_CK48MSEL_PLL
-//#define STM32_SDMMCSEL                      STM32_SDMMCSEL_PLL48CLK
-//#define STM32_SRAM2_NOCACHE                 FALSE
+#define STM32_SAI1SEL                       STM32_SAI1SEL_OFF
+#define STM32_SAI2SEL                       STM32_SAI2SEL_OFF
+#define STM32_USART1SEL                     STM32_USART1SEL_PCLK2
+#define STM32_USART2SEL                     STM32_USART2SEL_PCLK1
+#define STM32_USART3SEL                     STM32_USART3SEL_PCLK1
+#define STM32_UART4SEL                      STM32_UART4SEL_PCLK1
+#define STM32_UART5SEL                      STM32_UART5SEL_PCLK1
+#define STM32_USART6SEL                     STM32_USART6SEL_PCLK2
+#define STM32_UART7SEL                      STM32_UART7SEL_PCLK1
+#define STM32_UART8SEL                      STM32_UART8SEL_PCLK1
+#define STM32_I2C1SEL                       STM32_I2C1SEL_PCLK1
+#define STM32_I2C2SEL                       STM32_I2C2SEL_PCLK1
+#define STM32_I2C3SEL                       STM32_I2C3SEL_PCLK1
+#define STM32_I2C4SEL                       STM32_I2C4SEL_PCLK1
+#define STM32_LPTIM1SEL                     STM32_LPTIM1SEL_PCLK1
+#define STM32_CECSEL                        STM32_CECSEL_LSE
+#define STM32_CK48MSEL                      STM32_CK48MSEL_PLL
+#define STM32_SDMMCSEL                      STM32_SDMMCSEL_PLL48CLK
+#define STM32_SRAM2_NOCACHE                 FALSE
 #endif
 #define STM32_LCDTFT_REQUIRED               TRUE
 /*

@@ -116,7 +116,7 @@ int main(void) {
    * Activates the LCD-related drivers.
    */
   palSetPad(GPIOD, GPIOD_LCD_DISP);
-  //palSetPad(GPIOI, GPIOI_LCD_BLCTRL);
+  palSetPad(GPIOI, GPIOI_LCD_BLCTRL);
 
   palSetPadMode(GPIOB, GPIOB_TIM2_CH4, PAL_MODE_OUTPUT_PUSHPULL);
   palClearPad(GPIOB, GPIOB_TIM2_CH4);
@@ -135,12 +135,11 @@ int main(void) {
   i2cStart(&I2CD1, &i2cfg1);
 `*/
   gfxInit();
-  chThdCreateStatic(wabubbles, sizeof(wabubbles), HIGHPRIO, bubbles_thread, NULL);
-  /*gdispImageOpenFile(&myImage, "m2logo.gif");
+  gdispImageOpenFile(&myImage, "m2logo.gif");
   gdispImageCache(&myImage);
   gdispImageDraw(&myImage, 40, 180, myImage.width, myImage.height, 0, 0);
   gdispImageClose(&myImage);
-*/
+
   chThdSleepMilliseconds(1000);
 
   /*
@@ -151,16 +150,16 @@ int main(void) {
   chThdCreateStatic(waThread2, sizeof(waThread2), LOWPRIO,
                     Thread2, NULL);
 
-  //app_init();
+  app_init();
   cpu_usage_init();
 
   /*
    * Shell manager initialization.
    */
-//  rtt_shell_init();
-//  rtt_shell_start();
+  rtt_shell_init();
+  rtt_shell_start();
 //
-//  RTTLogObjectInit(&RTT_Log);
+  RTTLogObjectInit(&RTT_Log);
   chThdSleepMilliseconds(100);
 
   /*
@@ -174,8 +173,7 @@ int main(void) {
 //  usbConnectBus(serusbcfg.usbp);
 
   adc_init();
-//  ps4_usbhost_init();
-//  ActivateDriving();
+  ActivateDriving();
 //  artracker_init();
   usbhStart(&USBHD2);
   chThdCreateStatic(waUSBHOST, sizeof(waUSBHOST), NORMALPRIO,
@@ -187,10 +185,10 @@ int main(void) {
    * a shell respawn upon its termination.
    */
   while (TRUE) {
-//    if (rtt_is_active()) {
-//      rtt_shell_create();
-//      rtt_shell_wait();               /* Waiting termination.             */
-//    }
+    if (rtt_is_active()) {
+      rtt_shell_create();
+      rtt_shell_wait();               /* Waiting termination.             */
+    }
     chThdSleepMilliseconds(1000);
   }
 }

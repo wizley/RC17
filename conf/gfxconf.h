@@ -36,7 +36,7 @@
 //#define GDISP_LINEBUF_SIZE                           128
 
 #define GDISP_STARTUP_COLOR                          HTML2COLOR(0x00499C)
-#define GDISP_NEED_STARTUP_LOGO                      TRUE
+#define GDISP_NEED_STARTUP_LOGO                      FALSE
 #define GFX_USE_GFILE                                TRUE
 #define GFILE_NEED_ROMFS                             TRUE
 
@@ -161,29 +161,6 @@
 #define GDISP_TOTAL_DISPLAYS    1
 #define GDISP_TOTAL_CONTROLLERS   1
 
-//#define GDISP_PIXELFORMAT GDISP_PIXELFORMAT_RGB565
-
-//#define GDISP_TOTAL_DISPLAYS                         1
-//
-//#define GDISP_DRIVER_LIST                            GDISPVMT_STM32_LTDC_DMA2D
-//    #ifdef GDISP_DRIVER_LIST
-//        // For code and speed optimization define as TRUE or FALSE if all controllers have the same capability
-//        #define GDISP_HARDWARE_STREAM_WRITE          FALSE
-//        #define GDISP_HARDWARE_STREAM_READ           FALSE
-//        #define GDISP_HARDWARE_STREAM_POS            FALSE
-//        #define GDISP_HARDWARE_DRAWPIXEL             TRUE
-//        #define GDISP_HARDWARE_CLEARS                FALSE
-//        #define GDISP_HARDWARE_FILLS                 TRUE
-//        #define GDISP_HARDWARE_BITFILLS              TRUE
-//        #define GDISP_HARDWARE_SCROLL                FALSE
-//        #define GDISP_HARDWARE_PIXELREAD             TRUE
-//        #define GDISP_HARDWARE_CONTROL               FALSE
-//        #define GDISP_HARDWARE_QUERY                 FALSE
-//        #define GDISP_HARDWARE_CLIP                  FALSE
-//        #define GDISP_HARDWARE_FLUSH                 FALSE
-//
-//        #define GDISP_PIXELFORMAT                    GDISP_PIXELFORMAT_RGB565
-//    #endif
 #define GOS_NEED_X_THREADS                             FALSE
 #define GOS_NEED_X_HEAP                                FALSE
 
