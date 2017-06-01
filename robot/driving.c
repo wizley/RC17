@@ -386,8 +386,8 @@ void InitDriving(void) {
   motor_init(&M[7], &M7VMode);
   p_profile_init();
 
-  //UMD_Master_Init();
-  //UMD_Master_Start();
+  UMD_Master_Init();
+  UMD_Master_Start();
 
 }
 

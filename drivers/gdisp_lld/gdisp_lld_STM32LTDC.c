@@ -170,9 +170,9 @@ static void _ltdc_init(void) {
 			#error STM32LTDC driver not implemented for your platform
 		#endif
 	#endif
-		 //RCC->PLLSAICFGR = STM32_PLLSAIN | STM32_PLLSAIR | STM32_PLLSAIQ; //fix
+		 //RCC->PLLSAICFGR = STM32_PLLSAIN | STM32_PLLSAIR | STM32_PLLSAIQ; //not needed anymore
 		 //RCC->DCKCFGR = (RCC->DCKCFGR & ~RCC_DCKCFGR_PLLSAIDIVR) | STM32_PLLSAIR_POST;
-		 //RCC->CR |= RCC_CR_PLLSAION;//fix
+		 //RCC->CR |= RCC_CR_PLLSAION;//fix notneeded anymore
 
 	// Enable the peripheral
 	RCC->APB2ENR |= RCC_APB2ENR_LTDCEN;
