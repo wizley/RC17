@@ -11,6 +11,10 @@
 #include "widgets.h"
 #include "status_bar.h"
 
+#define BRIGHTNESS_UPPER_LIMIT (100)
+#define BRIGHTNESS_LOWER_LIMIT (0)
+#define BRIGHTNESS_INCREMENT_STEP (3)
+
 GHandle brightness_bar;
 
 void backlight_main(void* params){
@@ -20,8 +24,8 @@ void backlight_main(void* params){
   pageContainer = createContainer(0, STATUS_BAR_HEIGHT, GDISP_SCREEN_WIDTH, GDISP_SCREEN_HEIGHT - STATUS_BAR_HEIGHT, FALSE);
   gwinShow(pageContainer);
   gwinClear(pageContainer);
-  brightness_bar = createProgressBarInContainer(&pageContainer,NULL, 200, 120, 400, 60);
-  gwinProgressbarSetRange(brightness_bar, 0, 100);
+  brightness_bar = createProgressBarInContainer(&pageContainer,"LCD Backlight Brightness", 200, 120, 400, 60);
+  gwinProgressbarSetRange(brightness_bar, BRIGHTNESS_LOWER_LIMIT, BRIGHTNESS_UPPER_LIMIT);
   gwinProgressbarSetPosition(brightness_bar, gdispGetBacklight());
   gwinRedraw(brightness_bar);
     while(TRUE){
@@ -33,16 +37,20 @@ void backlight_main(void* params){
             if(evt->data.button_state == UI_BUTTON_BACK){
               return;
             }else if(evt->data.button_state == UI_BUTTON_UP){
-              uint8_t nbgn = gdispGetBacklight()+5;
-              gdispSetBacklight(nbgn);
-              gwinProgressbarSetPosition(brightness_bar, gdispGetBacklight());
-              gwinRedraw(brightness_bar);
+              if (gdispGetBacklight() < BRIGHTNESS_UPPER_LIMIT && gdispGetBacklight() > BRIGHTNESS_LOWER_LIMIT){
+                  uint8_t nbgn = gdispGetBacklight()+5;
+                  gdispSetBacklight(nbgn);
+                  gwinProgressbarSetPosition(brightness_bar, gdispGetBacklight());
+                  gwinRedraw(brightness_bar);
+              }
               //TODO: eeprom to save the brightness
             }else if(evt->data.button_state == UI_BUTTON_DOWN){
-              uint8_t nbgn = gdispGetBacklight()-5;
-              gdispSetBacklight(nbgn);
-              gwinProgressbarSetPosition(brightness_bar, gdispGetBacklight());
-              gwinRedraw(brightness_bar);
+              if (gdispGetBacklight() < BRIGHTNESS_UPPER_LIMIT && gdispGetBacklight() > BRIGHTNESS_LOWER_LIMIT){
+                  uint8_t nbgn = gdispGetBacklight()-5;
+                  gdispSetBacklight(nbgn);
+                  gwinProgressbarSetPosition(brightness_bar, gdispGetBacklight());
+                  gwinRedraw(brightness_bar);
+              }
               //TODO: eeprom to save the brightness
             }
             break;

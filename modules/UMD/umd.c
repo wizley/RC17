@@ -2,6 +2,7 @@
 #include "ch.h"
 #include "hal.h"
 #include "umd.h"
+#include "hardware_conf.h"
 
 /*===========================================================================*/
 /* Local definitions.                                                        */
@@ -38,6 +39,7 @@ static void umd_rxend(UARTDriver *uartp);
 static void umd_rxerr(UARTDriver *uartp, uartflags_t e);
 static void umd_txend(UARTDriver *uartp);
 
+#if BOARD_VERSION == 1
 UARTConfig umd_uart_cfg = {
   NULL, /* End of Transmission buffer callback               */
   umd_txend, /* Physical end of transmission callback             */
@@ -49,6 +51,21 @@ UARTConfig umd_uart_cfg = {
   USART_CR2_LBDL, /* cr2 register values                               */
   0 /* cr3 register values                               */
 };
+#elif BOARD_VERSION == 2
+UARTConfig umd_uart_cfg = {
+  NULL, /* End of Transmission buffer callback               */
+  umd_txend, /* Physical end of transmission callback             */
+  umd_rxend, /* Receive buffer filled callback                    */
+  NULL, /* Char received while out of the UART_RECEIVE state */
+  umd_rxerr, /* Receive error callback                            */
+  NULL,
+  11.0,
+  BAUDERATE, /* Baudrate                                          */
+  USART_CR1_M | USART_CR1_RE | USART_CR1_TE, /* cr1 register values     */
+  USART_CR2_LBDL, /* cr2 register values                               */
+  0 /* cr3 register values                               */
+};
+#endif
 
 static void umd_timeout_cb(GPTDriver *gptp);
 

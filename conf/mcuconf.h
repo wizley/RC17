@@ -50,9 +50,15 @@
 #define STM32_SW                            STM32_SW_PLL
 #define STM32_PLLSRC                        STM32_PLLSRC_HSE
 #define STM32_PLLM_VALUE                    8
+#if BOARD_VERSION == 1
 #define STM32_PLLN_VALUE                    336
 #define STM32_PLLP_VALUE                    2
 #define STM32_PLLQ_VALUE                    7
+#elif BOARD_VERSION == 2
+#define STM32_PLLN_VALUE                    432
+#define STM32_PLLP_VALUE                    2
+#define STM32_PLLQ_VALUE                    9
+#endif
 #define STM32_HPRE                          STM32_HPRE_DIV1
 #define STM32_PPRE1                         STM32_PPRE1_DIV4
 #define STM32_PPRE2                         STM32_PPRE2_DIV2
@@ -68,12 +74,11 @@
 #define STM32_PVD_ENABLE                    FALSE
 #define STM32_PLS                           STM32_PLS_LEV0
 #define STM32_BKPRAM_ENABLE                 FALSE
-
 #define STM32_SAISRC                        STM32_SAISRC_PLL
 #define STM32_PLLSAIN_VALUE                 212
 #define STM32_PLLSAIQ_VALUE                 4
 #define STM32_PLLSAIR_VALUE                 2
-#define STM32_PLLSAIDIVR                    STM32_PLLSAIDIVR_DIV4
+#define STM32_PLLSAIDIVR_VALUE              4
 #if BOARD_VERSION == 2
 #define STM32_SAI1SEL                       STM32_SAI1SEL_OFF
 #define STM32_SAI2SEL                       STM32_SAI2SEL_OFF
@@ -95,6 +100,7 @@
 #define STM32_SDMMCSEL                      STM32_SDMMCSEL_PLL48CLK
 #define STM32_SRAM2_NOCACHE                 FALSE
 #endif
+
 #define STM32_LCDTFT_REQUIRED               TRUE
 /*
  * ADC driver system settings.
