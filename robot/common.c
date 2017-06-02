@@ -703,7 +703,7 @@ void lower_hoist(void) {
 
 
 const unsigned int leftLoaderAliveDefalt = 200;
-unsigned int leftLoaderAlive = 200;
+unsigned int leftLoaderAlive = 0;
 void left_loader(bool start){
 
     if(start){
