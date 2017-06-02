@@ -1,33 +1,59 @@
 /*
  * red.h
  *
- *  Created on: 2016¦~6¤ë6¤é
- *      Author: Hung
+ *  Created on: 2017-03-22
+ *      Author: Lau
  */
 
 #ifndef ROBOT_RED_H_
 #define ROBOT_RED_H_
+#include "driving.h"
+#include "pid.h"
+#include "stdint.h"
 
-extern int track_init0_r;
-extern int x_r,y_r,tRotation_r;
-extern int E0_r,E1_r,E2_r,E3_r;
-extern int line_angle_r;
-extern int line_y_r;
-extern int sum_r;// Sum to tune encoder
-extern int online_flag_r;
-extern int pole_flag_r;
-extern int pole_detect_flag_r,pole_reach_flag_r;
-extern int line_a_d_r,line_x_d_r;
-extern int stage1_line_flag_x_r;
-extern int output_line_x_r;
-extern int output_line_a_r;
-extern int pass_line_count_r[4];
-extern int stage2_line_flag_r;
-extern int push_length_r;
+//auto or manual state for car
+#define START_STATE 0
+#define MANUAL_STATE 1
+#define AUTO_STATE 2
+
+#define PITCH_ZERO_DEGREE	0	//to be found
+#define ROLL_ZERO_DEGREE	0	//to be found
+#define ADC_TO_DEGREE 0		//to be found
 
 
-extern int step_r;
-extern int debug_display_r[10];
+extern int shootSpeed_r[8];
+
+extern int p_error, i_error;
+extern const float K_P, K_I;
+
+extern int carState_r;
+extern int currentPos_r;
+extern long encoder_1, encoder_2;
+extern int circleAlive;
+extern int distanceSum_r;
+
+extern int xCarSetPoint_r;
+extern int yCarSetPoint_r;
+
+#if IS_MOTOR_0_2016 && IS_MOTOR_1_2016
+	extern float xMotorSpeed_krpm_r;
+	extern float xMotorSpeed_rpm_r;
+	extern float PID_krpm_r;
+#elif !IS_MOTOR_0_2016 && !IS_MOTOR_1_2016
+	extern int xMotorSpeed;
+	extern int PID_setpoint;
+#endif
+
+extern float yMotorSpeed_krpm;
+extern float yMotorSpeed_rpm;
+extern float reloadMotorSpeed_krpm;
+
+extern int shootSpeed;
+extern int leftStickSpeed;
+extern int rightStickSpeed;
+
+extern int pushBarAlive;
+
 
 void RunPath_r(void);
 

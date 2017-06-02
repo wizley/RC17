@@ -9,8 +9,14 @@
 #include "udc.h"
 #include "servo.h"
 
-servo_t Servo1 = {.command={200, 200, 386 , 400, 308, 415, 400, 405}}; //200-600
-servo_t Servo2 = {.command={1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500}};
+//HS-7966HB range: 950 - 2050
+//HS-7965MG range: 750 - 2250
+
+//new servo board 200 - 550
+
+servo_t Servo1 = {.command={423, 396, 480/*290*/, 370, 370, 370, 370, 370}};
+servo_t Servo2 = {.command={400, 400, 400, 400, 400, 400, 400, 400}};
+
 
 void servo_setAlive(volatile void * arg){
      servo_t * s = (servo_t * ) arg;

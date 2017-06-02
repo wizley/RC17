@@ -15,7 +15,7 @@
 #include "linesensor.h"
 #endif
 
-#define barheight 30
+#define barheight 50
 
 GHandle console1;
 GHandle linesensorpageContainer;
@@ -41,17 +41,16 @@ void linesensor_test_main(void *params){
 
           } else if(evt->data.button_state == UI_BUTTON_UP){
             linesensor_send_command(&LineSensor[0], ESTIM_BLACK);
-            linesensor_send_command(&LineSensor[1], ESTIM_BLACK);
-            linesensor_send_command(&LineSensor[2], ESTIM_BLACK);
-            linesensor_send_command(&LineSensor[3], ESTIM_BLACK);
           }else if(evt->data.button_state == UI_BUTTON_DOWN){
             linesensor_send_command(&LineSensor[0], ESTIM_WHITE);
           }else if(evt->data.button_state == UI_BUTTON_RESERVED1){
-            linesensor_send_command(&LineSensor[1], ESTIM_WHITE);
+            linesensor_send_command(&LineSensor[1], ESTIM_BLACK);
           }else if(evt->data.button_state == UI_BUTTON_RESERVED2){
-            linesensor_send_command(&LineSensor[2], ESTIM_WHITE);
+            linesensor_send_command(&LineSensor[1], ESTIM_WHITE);
           }else if(evt->data.button_state == UI_BUTTON_RESERVED3){
-            linesensor_send_command(&LineSensor[3], ESTIM_WHITE);
+            linesensor_send_command(&LineSensor[2], ESTIM_BLACK);
+          }else if(evt->data.button_state == UI_BUTTON_7){
+            linesensor_send_command(&LineSensor[2], ESTIM_WHITE);
           }
           break;
         case UI_STATUSBAR_TICK:
@@ -82,7 +81,7 @@ void linesensor_test_main(void *params){
     int i;
 #if USE_LINESENSOR_0
     for(i=0; i<LineSensor[0].size; i++){
-    gdispFillArea(0+i*(GDISP_SCREEN_WIDTH/LineSensor[0].size),250+(barheight-(((LineSensor[0].Data[i])/15.0)*barheight)),
+    gdispFillArea(0+i*(GDISP_SCREEN_WIDTH/LineSensor[0].size),200+(barheight-(((LineSensor[0].Data[i])/15.0)*barheight)),
                    GDISP_SCREEN_WIDTH/LineSensor[0].size,((LineSensor[0].Data[i])/15.0)*barheight,Green);
     }
 #endif
@@ -94,13 +93,13 @@ void linesensor_test_main(void *params){
 #endif
 #if USE_LINESENSOR_2
     for (i=0; i<LineSensor[2].size; i++){
-        gdispFillArea(0+i*(GDISP_SCREEN_WIDTH/LineSensor[2].size),350+(barheight-(((LineSensor[2].Data[i])/15.0)*barheight)),
+        gdispFillArea(0+i*(GDISP_SCREEN_WIDTH/LineSensor[2].size),300+(barheight-(((LineSensor[2].Data[i])/15.0)*barheight)),
                       GDISP_SCREEN_WIDTH/LineSensor[2].size,((LineSensor[2].Data[i])/15.0)*barheight,Green);
         }
 #endif
 #if USE_LINESENSOR_3
     for (i=0; i<LineSensor[3].size; i++){
-        gdispFillArea(0+i*(GDISP_SCREEN_WIDTH/LineSensor[3].size),400+(barheight-(((LineSensor[3].Data[i])/15.0)*barheight)),
+        gdispFillArea(0+i*(GDISP_SCREEN_WIDTH/LineSensor[3].size),300+(barheight-(((LineSensor[3].Data[i])/15.0)*barheight)),
                       GDISP_SCREEN_WIDTH/LineSensor[3].size,((LineSensor[3].Data[i])/15.0)*barheight,Green);
         }
 #endif

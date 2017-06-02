@@ -10,11 +10,13 @@ ROBOTSRC += $(ROBOTPATH)/common.c
 ROBOTSRC += $(ROBOTPATH)/pid.c
 ROBOTSRC += $(ROBOTPATH)/blue.c
 ROBOTSRC += $(ROBOTPATH)/red.c
-ROBOTSRC += $(ROBOTPATH)/BoardIO/boardio.c
+ROBOTSRC += $(ROBOTPATH)/airboard/airboard.c
+ROBOTSRC += $(ROBOTPATH)/distancesensor/distancesensor.c
 
 ROBOTINC = $(ROBOTPATH)
 ROBOTINC += $(ROBOTPATH)/motor
 ROBOTINC += $(ROBOTPATH)/servo
 ROBOTINC += $(ROBOTPATH)/encoder
 ROBOTINC += $(ROBOTPATH)/linesensor
-ROBOTINC += $(ROBOTPATH)/BoardIO
+ROBOTINC += $(ROBOTPATH)/airboard
+ROBOTINC += $(ROBOTPATH)/distancesensor

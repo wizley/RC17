@@ -29,8 +29,6 @@
 #define ID_L2_POS CAL_ID_POS(2)
 #define ID_L3_POS CAL_ID_POS(3)
 
-#define ID_AIRBOARD_0 110
-
 typedef struct tagLineSensor {
   int size;
   int short Position[4];
@@ -40,6 +38,18 @@ typedef struct tagLineSensor {
   const uint8_t id;
 } LINE_SENSOR;
 
+typedef enum{
+	LINE_UNDETECTED = 0,
+	LINE_DETECTED,
+	JUNCTION_DETECTED
+}ls_status_e;
+
+typedef struct{
+	uint16_t status : 4;
+	uint16_t position : 12;
+}__attribute__((packed)) ls_pos_info_t;
+
+extern ls_pos_info_t LineSensor2016[4];
 extern LINE_SENSOR LineSensor[4];
 
 void linesensor_decAlive(volatile void * arg);

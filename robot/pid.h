@@ -24,7 +24,7 @@ typedef struct PID_gain
     float kp;
     float ki;
     float kd;
-    int i_term;
+    float i_term;
     int pre_output;
     int pre_input;
 }GAIN;
@@ -51,10 +51,9 @@ typedef volatile struct
   float kp,ki,kd,kff;
   int I_term,I_max,ff_term;
   int max_speed,max_acc;
-  long int current_pos, posUpLim, posLowLim;
+  long int current_pos,posUpLim, posLowLim;
   int  abs_pos;
   int output, pre_output, error, pre_error;
-  long int pre_target;
 }P_PROFILE;
 
 typedef enum tagPMode

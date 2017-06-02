@@ -65,35 +65,35 @@ typedef struct{
     /** 
      *  IDLE  : Motor terminals is left open (not shorted or driven)
      *  BRAKE : Motor terminals are short
-     *  VMODE : Motor is running in V Mode
-     *  PMODE : Motor is running in P Mode
-     *  For VMODE and PMODE, if there is no correct set point command received,
+	 *  VMODE : Motor is running in V Mode
+	 *  PMODE : Motor is running in P Mode
+	 *  For VMODE and PMODE, if there is no correct set point command received,
      *  motor will be in brake state
      */
     //enum { IDLE = 0, BRAKE = 1, VMODE = 2, PMODE = 3 } Mode ;
   uint16_t Mode;
-  float ScaleFactor;                // PID Controller SetPoint = Input SetPoint * ScaleFactor
-  uint16_t AccelerationLimit;   // in Encoder count / CommandCycle
-  uint16_t SpeedLimit;      // in Encoder count / CommandCycle
-    uint16_t CommandCycle;      // in us
-    uint16_t MotorVoltage;      // in mV
-    uint16_t CurrentLimit;      // in mA
-    int16_t kP;
-    int16_t kI;
-    int16_t kD;
-    int16_t kFF;
+  float ScaleFactor;				// PID Controller SetPoint = Input SetPoint * ScaleFactor
+  uint16_t AccelerationLimit;	// in Encoder count / CommandCycle
+  uint16_t SpeedLimit;		// in Encoder count / CommandCycle
+	uint16_t CommandCycle;		// in us
+	uint16_t MotorVoltage;		// in mV
+	uint16_t CurrentLimit;		// in mA
+	int16_t kP;
+	int16_t kI;
+	int16_t kD;
+	int16_t kFF;
 }__attribute__((packed)) motor_setting_t;
 
 typedef void (*setAliveCallback) (void);
 
 typedef struct{
-    int16_t SetPoint;
-    int16_t Feedback;
+	int16_t SetPoint;
+	int16_t Feedback;
 
-    board_status_t Board;
-    motor_setting_t Setting;
-    const uint8_t id;
-    uint8_t Alive;
+	board_status_t Board;
+	motor_setting_t Setting;
+	const uint8_t id;
+	uint8_t Alive;
 }MotorObj;
 
 extern MotorObj M[8];
@@ -108,6 +108,7 @@ extern const motor_setting_t M3VMode;
 extern const motor_setting_t M4VMode;
 extern const motor_setting_t M5VMode;
 extern const motor_setting_t M6VMode;
+extern const motor_setting_t M6PMode;
 extern const motor_setting_t M7VMode;
 
 

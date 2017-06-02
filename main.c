@@ -1,4 +1,4 @@
-
+#include "stdint.h"
 #include "ch.h"
 #include "hal.h"
 #include "drivers.h"
@@ -9,7 +9,7 @@
 #include "ps4_usbhost.h"
 #include "driving.h"
 #include "usage.h"
-#include "ARTracker.h"
+#include "airboard.h"
 
 #define SDRAM_SIZE  0x1000000
 /*
@@ -155,7 +155,10 @@ int main(void) {
   adc_init();
   ps4_usbhost_init();
   ActivateDriving();
-  artracker_init();
+#if USE_DISTANCESENSOR
+  distance_init();	//distance sensor, not quite reliable
+#endif
+
   /*
    * Normal main() thread activity, in this demo it just performs
    * a shell respawn upon its termination.

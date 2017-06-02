@@ -22,7 +22,6 @@ GHandle  createConsole(GHandle* container, int x, int y, int width, int height){
   return gwinConsoleCreate(0, &wi.g);
 
 
-  return;
 }
 
 GHandle  createProgressBar( const char* text, int x, int y, int width, int height){

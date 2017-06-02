@@ -15,7 +15,6 @@
 DS4_status_t ps4_data;
 DS4_status_t old_data;
 DS4_command_t cmd = {0};
-
 uint8_t DS4_ButtonPress(ButtonEnum b){
      if (b <= LEFT){
          switch (b) {
@@ -106,6 +105,7 @@ static THD_FUNCTION(DS4, arg) {
 #endif
 
   while (TRUE) {
+    //memcpy(&old_data, &ps4_data, sizeof(old_data));
     switch (ds4p->state) {
     case USBHDS4_STATE_UNINIT:
     case USBHDS4_STATE_STOP:
@@ -198,4 +198,5 @@ void ps4_usbhost_init(void){
                         DS4, NULL);
 
 }
+
 

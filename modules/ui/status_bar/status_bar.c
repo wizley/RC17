@@ -82,13 +82,17 @@ void get_time(int * hour, int * min, int * sec){
 
 void online_status_update(void){
   memset(left, 0,sizeof(left));
-#if  USE_MOTOR_0
+#if  USE_MOTOR_0 && !IS_MOTOR_0_2016
   if (M[0].Alive)
      strcat(left, "M0 ");
+#elif IS_MOTOR_0_2016 && USE_MOTOR_0
+  strcat(left, "M0 ");
 #endif
-#if  USE_MOTOR_1
+#if  USE_MOTOR_1 && !IS_MOTOR_1_2016
   if (M[1].Alive)
      strcat(left, "M1 ");
+#elif USE_MOTOR_1 && IS_MOTOR_1_2016
+  strcat(left, "M1 ");
 #endif
 #if  USE_MOTOR_2
   if (M[2].Alive)
