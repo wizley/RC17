@@ -24,7 +24,7 @@ void backlight_main(void* params){
   pageContainer = createContainer(0, STATUS_BAR_HEIGHT, GDISP_SCREEN_WIDTH, GDISP_SCREEN_HEIGHT - STATUS_BAR_HEIGHT, FALSE);
   gwinShow(pageContainer);
   gwinClear(pageContainer);
-  brightness_bar = createProgressBarInContainer(&pageContainer,"LCD Backlight Brightness", 200, 120, 400, 60);
+  brightness_bar = createProgressBarInContainer(&pageContainer,"brightness", 200, 120, 400, 60);
   gwinProgressbarSetRange(brightness_bar, BRIGHTNESS_LOWER_LIMIT, BRIGHTNESS_UPPER_LIMIT);
   gwinProgressbarSetPosition(brightness_bar, gdispGetBacklight());
   gwinRedraw(brightness_bar);
@@ -37,20 +37,16 @@ void backlight_main(void* params){
             if(evt->data.button_state == UI_BUTTON_BACK){
               return;
             }else if(evt->data.button_state == UI_BUTTON_UP){
-              if (gwinProgressbarGetPosition(brightness_bar) < BRIGHTNESS_UPPER_LIMIT && gwinProgressbarGetPosition(brightness_bar) > BRIGHTNESS_LOWER_LIMIT){
-                  uint8_t nbgn = gdispGetBacklight()+5;
+                  uint8_t nbgn = gdispGetBacklight()+BRIGHTNESS_INCREMENT_STEP;
                   gdispSetBacklight(nbgn);
                   gwinProgressbarSetPosition(brightness_bar, gdispGetBacklight());
                   gwinRedraw(brightness_bar);
-              }
               //TODO: eeprom to save the brightness
             }else if(evt->data.button_state == UI_BUTTON_DOWN){
-              if (gwinProgressbarGetPosition(brightness_bar) < BRIGHTNESS_UPPER_LIMIT && gwinProgressbarGetPosition(brightness_bar) > BRIGHTNESS_LOWER_LIMIT){
-                  uint8_t nbgn = gdispGetBacklight()-5;
+                  uint8_t nbgn = gdispGetBacklight()-BRIGHTNESS_INCREMENT_STEP;
                   gdispSetBacklight(nbgn);
                   gwinProgressbarSetPosition(brightness_bar, gdispGetBacklight());
                   gwinRedraw(brightness_bar);
-              }
               //TODO: eeprom to save the brightness
             }
             break;

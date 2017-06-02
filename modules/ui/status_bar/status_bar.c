@@ -52,11 +52,11 @@ int16_t UpdateVoltage(void){
           Count++;
       }
   }
-//  if (Sum == 0 && Count == 0)
-//    return 0.0;
-//  else
-   //return (float) (((float)(Sum / Count))/1000.0);
-  return M[5].Board.Voltage;
+  if (Count == 0)
+    return 0.0;
+  else
+   return (float) (((float)(Sum / Count))/1000.0);
+  //return M[5].Board.Voltage;
 }
 #endif
 
