@@ -37,7 +37,7 @@ void backlight_main(void* params){
             if(evt->data.button_state == UI_BUTTON_BACK){
               return;
             }else if(evt->data.button_state == UI_BUTTON_UP){
-              if (gdispGetBacklight() < BRIGHTNESS_UPPER_LIMIT && gdispGetBacklight() > BRIGHTNESS_LOWER_LIMIT){
+              if (gwinProgressbarGetPosition(brightness_bar) < BRIGHTNESS_UPPER_LIMIT && gwinProgressbarGetPosition(brightness_bar) > BRIGHTNESS_LOWER_LIMIT){
                   uint8_t nbgn = gdispGetBacklight()+5;
                   gdispSetBacklight(nbgn);
                   gwinProgressbarSetPosition(brightness_bar, gdispGetBacklight());
@@ -45,7 +45,7 @@ void backlight_main(void* params){
               }
               //TODO: eeprom to save the brightness
             }else if(evt->data.button_state == UI_BUTTON_DOWN){
-              if (gdispGetBacklight() < BRIGHTNESS_UPPER_LIMIT && gdispGetBacklight() > BRIGHTNESS_LOWER_LIMIT){
+              if (gwinProgressbarGetPosition(brightness_bar) < BRIGHTNESS_UPPER_LIMIT && gwinProgressbarGetPosition(brightness_bar) > BRIGHTNESS_LOWER_LIMIT){
                   uint8_t nbgn = gdispGetBacklight()-5;
                   gdispSetBacklight(nbgn);
                   gwinProgressbarSetPosition(brightness_bar, gdispGetBacklight());
