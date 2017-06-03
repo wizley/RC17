@@ -12,7 +12,7 @@ BOARD_VERSION = v2
 
 # Compiler options here.
 ifeq ($(USE_OPT),)
-  USE_OPT = -O0 -ggdb -fomit-frame-pointer -falign-functions=16 \
+  USE_OPT = -O -ggdb -fomit-frame-pointer -falign-functions=16 \
             -fshort-enums --specs=nano.specs -std=gnu99 -finline-functions -fno-builtin
 endif
 

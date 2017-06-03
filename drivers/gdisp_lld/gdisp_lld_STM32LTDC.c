@@ -5,6 +5,7 @@
  *              http://ugfx.org/license.html
  */
 
+#include "drivers.h"
 #include "gfx.h"
 
 #if GFX_USE_GDISP
@@ -243,15 +244,31 @@ LLDSPEC bool_t gdisp_lld_init(GDisplay* g) {
     // Finish Init the board
     post_init_board(g);
 
+    //TODO:get default brightness from EEPROM
+    I2CEepromFileStream file;
+    static uint8_t buf[10] = {0};
+    static I2CEepromFileConfig eepcfg = {
+      0,
+      _24LC02_SIZE_,
+      _24LC02_SIZE_,
+      _24LC024H_PAGESIZE_,
+      MS2ST(5),
+      &I2CD1,
+      0b1010000,
+      buf
+    };
+    I2CEepromFileOpen(&file, &eepcfg, EepromFindDevice("24XX"));
+    eepfs_lseek(&file, _PROM_LCD_BRIGHTNESS);
+    uint8_t bgns = EepromReadByte((EepromFileStream *)&file);
 	// Turn on the back-light
-	set_backlight_lld(g, GDISP_INITIAL_BACKLIGHT);
-
+          set_backlight_lld(g, bgns);
+    eepfs_close((EepromFileStream *)&file);
 	// Initialise the GDISP structure
 	g->g.Width = driverCfg.bglayer.width;
 	g->g.Height = driverCfg.bglayer.height;
 	g->g.Orientation = GDISP_ROTATE_0;
 	g->g.Powermode = powerOn;
-	g->g.Backlight = GDISP_INITIAL_BACKLIGHT;
+	g->g.Backlight = bgns;
 	g->g.Contrast = GDISP_INITIAL_CONTRAST;
 
 	return TRUE;

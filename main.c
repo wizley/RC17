@@ -13,6 +13,7 @@
 #include "RTTLog.h"
 #include "ds4.h"
 #include "bubbles.h"
+#include "hardware_conf.h"
 
 #define SDRAM_SIZE  0x1000000
 /*
@@ -78,13 +79,19 @@ static QEIConfig qeicfg = {
 /*
  * I2C1 config.
  */
-/*
+#if BOARD_VERSION == 1
 static const I2CConfig i2cfg1 = {
     OPMODE_I2C,
     400000,
     FAST_DUTY_CYCLE_2,
 };
-*/
+#elif BOARD_VERSION == 2
+static const I2CConfig i2cfg1 = {
+    0x20730814,
+    0x0300,
+    0
+};
+#endif
 static gdispImage myImage;
 
 
@@ -131,9 +138,9 @@ int main(void) {
   qeiStart(&QEID4, &qeicfg);
   qeiEnable(&QEID4);
 
-  /* EEPROM rework
+  /* EEPROM rework*/
   i2cStart(&I2CD1, &i2cfg1);
-`*/
+
   gfxInit();
   gdispImageOpenFile(&myImage, "m2logo.gif");
   gdispImageCache(&myImage);

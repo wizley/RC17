@@ -140,13 +140,13 @@
         Mode="Alternate"
         Alternate="0" />
       <pin15
-        ID="T_BUSY"
+        ID="BUZZER"
         Type="PushPull"
         Speed="Minimum"
         Resistor="Floating"
         Level="High"
-        Mode="Input"
-        Alternate="0" />
+        Mode="Alternate"
+        Alternate="1" />
     </GPIOA>
     <GPIOB>
       <pin0

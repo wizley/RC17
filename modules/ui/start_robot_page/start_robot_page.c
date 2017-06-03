@@ -246,12 +246,24 @@
 
 #include "stdio.h"
 #include "usage.h"
+#if  USE_MOTOR_0  ||  USE_MOTOR_1  ||  USE_MOTOR_2  ||  USE_MOTOR_3  ||  USE_MOTOR_4  ||  USE_MOTOR_5  ||  USE_MOTOR_6  ||  USE_MOTOR_7
+    #include "motor.h"
+#endif
+#if USE_ENCODER
 #include "encoder.h"
-#include "motor.h"
+#endif
+#if USE_SERVO
+#include "servo.h"
+#endif
+#if USE_LINESENSOR_0 || USE_LINESENSOR_1 || USE_LINESENSOR_2 || USE_LINESENSOR_3
+#include "linesensor.h"
+#endif
 #include "loop_stats.h"
 #include "custom_draw.h"
 #include "log.h"
 #include "ds4.h"
+#include "status_bar.h"
+
 
 static char buf[8];
 
@@ -348,16 +360,15 @@ void start_robot_main(void *params){
     if(chMBFetch(&app_mb, (msg_t*)(&evt), TIME_IMMEDIATE) == MSG_OK){
 
       switch(evt->type){
-        case UI_DS4_BUTTON:
+        //case UI_DS4_BUTTON:
         case UI_INPUT_BUTTON:
           if(evt->data.button_state == UI_BUTTON_BACK){
-            gwinDestroy(ghConsole);
-            ghConsole = NULL;
+            //gwinDestroy(ghConsole);
+            //ghConsole = NULL;
             return;
           } else if(evt->data.button_state == UI_BUTTON_ENTER){
             log_i("LoLLoLLoLLoLLoLLoLLoLLoL\n");
           } else {
-
           }
           break;
         case UI_STATUSBAR_TICK:

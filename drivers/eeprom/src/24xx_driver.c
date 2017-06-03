@@ -14,7 +14,7 @@
 #if BOARD_VERSION == 1
 #define EEPROM_I2C_CLOCK (i2cp->config->clock_speed)
 #elif BOARD_VERSION == 2
-#define EEPROM_I2C_CLOCK (uint32_t) ((float)(STM32_PCLK1)/(float)(i2cp->config->timingr))
+#define EEPROM_I2C_CLOCK (uint32_t) (400000.0)
 #endif
 /*
  ******************************************************************************
@@ -80,7 +80,7 @@ static msg_t eeprom_read(const I2CEepromFileConfig *eepcfg,
              "out of device bounds");
 
   eeprom_split_addr(eepcfg->write_buf, (offset + eepcfg->barrier_low));
-
+  //dmaBufferFlush(eepcfg->write_buf, 1);
 #if I2C_USE_MUTUAL_EXCLUSION
   i2cAcquireBus(eepcfg->i2cp);
 #endif
@@ -91,7 +91,7 @@ static msg_t eeprom_read(const I2CEepromFileConfig *eepcfg,
 #if I2C_USE_MUTUAL_EXCLUSION
   i2cReleaseBus(eepcfg->i2cp);
 #endif
-
+  //dmaBufferInvalidate(data, len);
   return status;
 }
 
@@ -120,7 +120,7 @@ static msg_t eeprom_write(const I2CEepromFileConfig *eepcfg, uint32_t offset,
   eeprom_split_addr(eepcfg->write_buf, (offset + eepcfg->barrier_low));
   /* write data bytes */
   memcpy(&(eepcfg->write_buf[1]), data, len);
-
+  //dmaBufferFlush(eepcfg->write_buf, len+1);
 #if I2C_USE_MUTUAL_EXCLUSION
   i2cAcquireBus(eepcfg->i2cp);
 #endif

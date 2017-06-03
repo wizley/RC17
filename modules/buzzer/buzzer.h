@@ -9,6 +9,7 @@
 #define MODULES_BUZZER_BUZZER_H_
 
 #define PWMDRIVER PWMD2
+#define PWMCHANNEL (0)
 
 #define PWM_TIME_BASE 14000000 /* 14 MHz */
 

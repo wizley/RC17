@@ -14,6 +14,7 @@
 #include "crc.h"
 #include "usbh.h"
 #include "eeprom_driver.h"
+#include "eeprom_format.h"
 
 #ifdef __cplusplus
 extern "C" {

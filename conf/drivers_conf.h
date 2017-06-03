@@ -23,7 +23,7 @@
 #endif
 
 #if !defined(DRIVER_USE_EEPROM) || defined(__DOXYGEN__)
-#define DRIVER_USE_EEPROM               FALSE
+#define DRIVER_USE_EEPROM               TRUE
 #endif
 
 #if !defined(DRIVER_USE_CRC) || defined(__DOXYGEN__)

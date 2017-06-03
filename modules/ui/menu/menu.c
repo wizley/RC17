@@ -203,7 +203,7 @@ static void menu_ui_init(void) {
   //gwinSetDefaultStyle(&WhiteWidgetStyle, FALSE);
   //gwinSetDefaultColor(HTML2COLOR(0x09180A));
   //gwinSetDefaultBgColor(HTML2COLOR(0xEEEEEE));
-  gwinSetDefaultStyle(&white, FALSE);
+  gwinSetDefaultStyle(&black, FALSE);
   gwinSetDefaultColor(black_studio);
   gwinSetDefaultBgColor(white_studio);
 

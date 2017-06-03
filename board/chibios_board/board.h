@@ -264,7 +264,7 @@
                                      PIN_MODE_OUTPUT(GPIOA_T_IRQ) |          \
                                      PIN_MODE_ALTERNATE(GPIOA_SWDIO) |      \
                                      PIN_MODE_ALTERNATE(GPIOA_SWCLK) |      \
-                                     PIN_MODE_INPUT(GPIOA_BUZZER))
+                                     PIN_MODE_ALTERNATE(GPIOA_BUZZER))
 #define VAL_GPIOA_OTYPER            (PIN_OTYPE_PUSHPULL(GPIOA_ADC3_IN0) |   \
                                      PIN_OTYPE_PUSHPULL(GPIOA_ADC3_IN1) |   \
                                      PIN_OTYPE_PUSHPULL(GPIOA_ADC3_IN2) |   \
@@ -344,7 +344,7 @@
                                      PIN_AFIO_AF(GPIOA_T_IRQ, 0) |          \
                                      PIN_AFIO_AF(GPIOA_SWDIO, 0) |          \
                                      PIN_AFIO_AF(GPIOA_SWCLK, 0) |          \
-                                     PIN_AFIO_AF(GPIOA_BUZZER, 0))
+                                     PIN_AFIO_AF(GPIOA_BUZZER, 1))
 
 /*
  * GPIOB setup:

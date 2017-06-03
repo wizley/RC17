@@ -55,14 +55,12 @@ void cmd_ds4(BaseSequentialStream *chp, int argc, char *argv[]) {
 
 }
 
-#define _24LC02_SIZE_      256
-//#define _24LC02_PAGESIZE_  8
-#define _24LC024H_PAGESIZE_  16
+
 
 void cmd_eeprom(BaseSequentialStream *chp, int argc, char *argv[]) {
   (void)argv;
   (void)argc;
-/*
+
   I2CEepromFileStream file;
 
   static uint8_t buf[10] = {0};
@@ -107,7 +105,7 @@ void cmd_eeprom(BaseSequentialStream *chp, int argc, char *argv[]) {
   eepfs_close((EepromFileStream *)&file);
 
   chprintf(chp, "\r\n");
-  */
+
 }
 
 void cmd_usage(BaseSequentialStream *chp, int argc, char *argv[]) {
@@ -151,7 +149,7 @@ void rtt_shell_start(void){
 void rtt_shell_create(void){
   if(shelltp == NULL)
     shelltp = chThdCreateFromHeap(NULL, SHELL_WA_SIZE,
-                                  "shell", NORMALPRIO + 1,
+                                  "shell", NORMALPRIO+1,
                                   shellThread, (void *)&shell_cfg1);
 }
 

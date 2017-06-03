@@ -76,7 +76,7 @@ static THD_FUNCTION(ControlLoop, arg) {
       //motor_get_status(&M[4]);
       //motor_get_status(&M[5]);
       //motor_get_status(&M[6]);
-      RunPath();
+      //RunPath();
       palClearPad(GPIOC, GPIOC_LED_G);
     }else if (current_running_menu->data.app == &ps4_test_app){
              //should not do anything at all --> TODO: to be removed

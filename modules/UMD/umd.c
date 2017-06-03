@@ -21,8 +21,19 @@
 /* Local variables and types.                                                */
 /*===========================================================================*/
 
+#if BOARD_VERSION == 1
 static uint16_t tx_buffer[32];
 static uint16_t rx_buffer[32];
+#elif BOARD_VERSION == 2
+#if defined(__GNUC__)
+  __attribute__((aligned (32)))
+#endif
+static uint16_t tx_buffer[32];
+#if defined(__GNUC__)
+  __attribute__((aligned (32)))
+#endif
+static uint16_t rx_buffer[32];
+#endif
 static thread_t* umd_thread_ptr = NULL;
 static thread_reference_t umd_thread_ref = NULL;
 static mutex_t umd_mutex;
@@ -61,7 +72,7 @@ UARTConfig umd_uart_cfg = {
   NULL,
   11.0,
   BAUDERATE, /* Baudrate                                          */
-  USART_CR1_M | USART_CR1_RE | USART_CR1_TE, /* cr1 register values     */
+  USART_CR1_M_0 | USART_CR1_RE | USART_CR1_TE, /* cr1 register values     */
   USART_CR2_LBDL, /* cr2 register values                               */
   0 /* cr3 register values                               */
 };
@@ -157,9 +168,10 @@ static THD_FUNCTION(umd_process, arg) {
         tx_checksum ^= active_object->tx_data[i];
       }
       tx_buffer[active_object->tx_len + 1] = tx_checksum;
-
+      //dmaBufferFlush(tx_buffer, 32); stuck in irq
       uartStartSend(&UMD_UART, active_object->tx_len + 2, tx_buffer);
     }else
+      //dmaBufferFlush(tx_buffer, 32); stuck in irq
       uartStartSend(&UMD_UART, 1, tx_buffer);
 
     /* prepare receive */
@@ -168,7 +180,6 @@ static THD_FUNCTION(umd_process, arg) {
       rx_frame.checksum = active_object->id;
       rx_frame.rx_len = active_object->rx_len + 1;
       rx_frame.out_data_ptr = active_object->rx_data;
-
       uartStartReceive(&UMD_UART, rx_frame.rx_len, rx_buffer);
       gptStartOneShot(&UMD_TIMER, BYTE_TIMEOUT(rx_frame.rx_len));
 
@@ -180,6 +191,7 @@ static THD_FUNCTION(umd_process, arg) {
       if(msg == MSG_TIMEOUT)
         chMsgRelease(p, UMD_TIMEOUT);
       else{
+        dmaBufferInvalidate(rx_buffer, 32);
         /* calculate checksum */
         for(int i = 0; i <= rx_frame.rx_len; i++)
           rx_frame.checksum ^= rx_buffer[i] & 0xFF;

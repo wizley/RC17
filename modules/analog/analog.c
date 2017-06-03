@@ -15,6 +15,7 @@ static adcsample_t samples2[ADC_GRP2_NUM_CHANNELS * ADC_GRP2_BUF_DEPTH];
  */
 uint16_t ADCValue[8] = {0};
 static void adccallback(ADCDriver *adcp, adcsample_t *buffer, size_t n) {
+  //dmaBufferInvalidate(buffer, n);
   if(samples2 != buffer){
 //  if (adcp == &ADCD1){
 //    if (adcp->state == ADC_COMPLETE) {
