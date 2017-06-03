@@ -62,11 +62,12 @@ void runManual(void);
 void runAuto(PositionStates *set, int pos);
 void castLimit(void);
 
-#define PITCH_MIN	396
+#define PITCH_MIN	395
 #define PITCH_MAX	PITCH_MIN + 45
+#define SERVO_STEP_ROLL (float)(500.0-425.0)/(428.0-2.0)
 //0.2deg = 423 42.88deg=488
-#define SERVO_STEP (float)(488.0-423.0)/(428.0-2.0)
-#define ROLL_DEFAULT 423
+#define SERVO_STEP_PITCH (float)(488.0-425.0)/(428.0-2.0)
+#define ROLL_DEFAULT 424
 #define ROLL_MIN	ROLL_DEFAULT - 65 //more positive = roll to right
 #define	ROLL_MAX	ROLL_DEFAULT + 65
 #define RAMMER_MIN	290

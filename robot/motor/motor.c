@@ -109,7 +109,7 @@ const motor_setting_t M2VMode = {	//linear actuator
  .kP = 4500,//2000,
  .kI = 0,//700,
  .kD = 0,//50,
- .kFF = 2500             //1800
+ .kFF = 0             //1800
 };
 
 const motor_setting_t M3VMode = {

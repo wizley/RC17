@@ -487,7 +487,7 @@ void runAuto_r(void) {
 	//		at reload position
 	if(distanceSum >= xTrack_r[reloadPos]) {
 		airSetState(&airBoard, 2, 0);
-	}debug_display[6];
+	}
 	if(distanceSum == xCarSetPoint_r) {
 		nextCarState_r = MANUAL_STATE;
 	}
@@ -507,8 +507,8 @@ void displayDebug_r(void) {
 	debug_display[4] = M[1].SetPoint;//M[4].Feedback;	//left to mid
 	debug_display[5] = polezone;//M[5].Feedback;	//right to mid
 	// = 0;
-	//debug_display[7] = 0;
-    //debug_display[8] = 0;
+	debug_display[7] = M[4].Board.ADCValue;
+    debug_display[8] = M[5].Board.ADCValue;
     debug_display[9] = targetPosition;
 }
 
@@ -574,13 +574,13 @@ void RunPath_r(void) {
 	      redStateSet[targetPosition].shootspd = (M[4].SetPoint+M[5].SetPoint)/2;
 	    }
 	//Update position according to pole aiming
-	    if(PS4_ButtonPress(RIGHT)) {
+	    if(PS4_ButtonPress(RIGHT) && !ps4_data.r1) {
 	      //Shift the pole aiming at
 	        //For Wizley
 	        targetPosition = constrain(--targetPosition, 8, 0);
 	    }
 
-	    if(PS4_ButtonPress(LEFT)) {
+	    if(PS4_ButtonPress(LEFT) && !ps4_data.r1) {
 	        //Shift the pole aiming at
 	        //For Wizley
 	        targetPosition = constrain(++targetPosition, 8, 0);
@@ -611,11 +611,11 @@ void RunPath_r(void) {
 	        }
 	    }
 	    else if ((airBoard.state)&(1<<8)){
-	      int servoRoll = constrain(ROLL_DEFAULT + getRoll()*SERVO_STEP, ROLL_MAX, ROLL_MIN);
+	      int servoRoll = constrain(ROLL_DEFAULT + getRoll()*SERVO_STEP_ROLL, ROLL_MAX, ROLL_MIN);
 	      if (servoRoll > Servo1.command[0]) Servo1.command[0]+= (servoRoll > Servo1.command[0] + 20)?3:1;
 	      else if (servoRoll < Servo1.command[0]) Servo1.command[0]-= (servoRoll < Servo1.command[0] - 20)?2:1;
 
-	      int servoPitch = constrain(PITCH_MIN + getPitch()*SERVO_STEP, PITCH_MAX, PITCH_MIN);
+	      int servoPitch = constrain(PITCH_MIN + getPitch()*SERVO_STEP_PITCH, PITCH_MAX, PITCH_MIN);
 	      if (servoPitch > Servo1.command[1] )Servo1.command[1]+=(servoPitch > Servo1.command[1] + 20)?2:1;
 	      else if (servoPitch < Servo1.command[1] )Servo1.command[1]-=(servoPitch < Servo1.command[1] - 20)?2:1;
 

@@ -409,13 +409,13 @@ bool YPID(int32_t current, int target){
 
 
 /*
- * Pitch = 34063 when horizontal
- * Pitch = 38060 when elevated 20.0deg
+ * ADC30279 = 0.0deg
+ * ADC35271 = 25.0deg
  *
  */
 
 int getPitch(void){
-  int servoPitch = ((uint16_t)(M[5].Board.ADCValue)-34063)/((38060-34063)/200.0);//6625
+  int servoPitch = ((uint16_t)(M[5].Board.ADCValue)-30279)/((35271-30279)/250.0);//6625
   return servoPitch;
 }
 
@@ -423,8 +423,10 @@ bool setPitchRoll(int pitch, int roll){
   //Move pitch roll
   pitch=constrain(pitch,300,0);
   roll=constrain(roll,350,-350);
-  int pitchAngle = -AddDeadZone(pitch-getPitch(), 0)*550;
-  int rollAngle = -AddDeadZone(roll-getRoll(), 0)*550;
+  int pitchAngle = -AddDeadZone(pitch-getPitch(), 0);
+  int rollAngle = -AddDeadZone(roll-getRoll(), 0);
+  pitchAngle*=(abs(pitchAngle) > 100)? 900:80;
+  rollAngle*=(abs(rollAngle) > 100)? 200:50;
   M[2].SetPoint = constrain(pitchAngle + rollAngle, 32367, -32367);
   M[3].SetPoint = constrain(pitchAngle - rollAngle, 32367, -32367);
         /*servoPitch= constrain((int)servoPitch + PITCH_MIN, PITCH_MAX, PITCH_MIN);
@@ -436,12 +438,12 @@ bool setPitchRoll(int pitch, int roll){
 
 
 /*
- *
- * Roll = 27601 when horizontal
+ *ADC30025=0.0deg
+ *ADC36492=30.0deg
  * Roll = 29630 when rolled to left by 20.0deg.
  */
 int getRoll(void){
-  int servoRoll = ((int)27639-(uint16_t)(M[4].Board.ADCValue))/((29630-27601)/100.0);//7730
+  int servoRoll = ((int)30025-(uint16_t)(M[4].Board.ADCValue))/((36492-30025)/300.0);//7730
   return servoRoll;
 }
 
@@ -699,7 +701,7 @@ void lower_hoist(void) {
 /////////////////////////////////////////////////////////////////////////
 
 
-
+int LMR = 0;
 
 
 const unsigned int leftLoaderAliveDefalt = 200;
@@ -790,7 +792,7 @@ void pusher(bool start){
           }
         }
         if(pusherAlive == pusherAliveDefault-55){ // Retrieve piston and check if centre have disc
-            if (!LSwitch && !RSwitch){
+            if (!LSwitch && !RSwitch && !(ps4_data.triangle)){
                 airSetState(&airBoard, 6, 0); //Retrieve right disc piston
                 airSetState(&airBoard, 7, 0); //Retrieve left disc piston
                 pusherAlive=pusherAliveDefault+50;
@@ -801,14 +803,27 @@ void pusher(bool start){
             }
         }
         if(pusherAlive == 1){ //Raise Hoist & Load Other Disc
-              if(lastDiscIsLeft){
-                right_loader(true);
-                lastDiscIsLeft=false;
-              }
-              else{
-                left_loader(true);
-                lastDiscIsLeft=true;
-              }
+          switch(LMR){
+            case -1:
+              left_loader(true);
+              lastDiscIsLeft=true;
+              break;
+            case 1:
+              right_loader(true);
+              lastDiscIsLeft=false;
+              break;
+            default:
+                if(lastDiscIsLeft){
+                  right_loader(true);
+                  lastDiscIsLeft=false;
+                }
+                else{
+                  left_loader(true);
+                  lastDiscIsLeft=true;
+                }
+              break;
+          }
+
                             /*
                              * roll
                              * ADC: 10962   Servo: 415
@@ -843,18 +858,18 @@ void shooter(bool start){
       }
 
       if (shooterAlive < shooterAliveDefault-10 && shooterAlive > shooterAliveDefault-40){ // Central Platform follow Pitch and Roll
-            int servoRoll = constrain(ROLL_DEFAULT + getRoll()*SERVO_STEP, ROLL_MAX, ROLL_MIN);
+            int servoRoll = constrain(ROLL_DEFAULT + getRoll()*SERVO_STEP_ROLL, ROLL_MAX, ROLL_MIN);
             if (servoRoll > Servo1.command[0]) Servo1.command[0]+= (servoRoll > Servo1.command[0] + 20)?3:1;
             else if (servoRoll < Servo1.command[0]) Servo1.command[0]-= (servoRoll < Servo1.command[0] - 20)?2:1;
       }
       if(shooterAlive < shooterAliveDefault-20 && shooterAlive > shooterAliveDefault-40){
-            int servoPitch = constrain(PITCH_MIN + getPitch()*SERVO_STEP, PITCH_MAX, PITCH_MIN);
+            int servoPitch = constrain(PITCH_MIN + getPitch()*SERVO_STEP_PITCH, PITCH_MAX, PITCH_MIN);
             if (servoPitch > Servo1.command[1] )Servo1.command[1]+=(servoPitch > Servo1.command[1] + 10)?6:2;
             else if (servoPitch < Servo1.command[1] )Servo1.command[1]-=(servoPitch < Servo1.command[1] - 20)?2:1;
       }
       if (shooterAlive == shooterAliveDefault-40){
-                  Servo1.command[0]=constrain(ROLL_DEFAULT + getRoll()*SERVO_STEP, ROLL_MAX, ROLL_MIN);
-                  Servo1.command[1]=constrain(PITCH_MIN + getPitch()*SERVO_STEP, PITCH_MAX, PITCH_MIN);
+                  Servo1.command[0]=constrain(ROLL_DEFAULT + getRoll()*SERVO_STEP_ROLL, ROLL_MAX, ROLL_MIN);
+                  Servo1.command[1]=constrain(PITCH_MIN + getPitch()*SERVO_STEP_PITCH, PITCH_MAX, PITCH_MIN);
       }
       if (shooterAlive < shooterAliveDefault-40){
         if(Servo1.command[2]<RAMMER_MAX){
@@ -953,10 +968,16 @@ void runManual(void) {
       M[6].SetPoint = yMotorSpeed;
     }
     //Move pitch roll
-    int pitchAngle = -AddDeadZone((int)((uint16_t)(ps4_data.hat_right_y) - 128), HatDeadzone);
-    int rollAngle = -AddDeadZone((int)((uint16_t)(ps4_data.hat_right_x) - 128), HatDeadzone);
-    pitchAngle= (float)2000*abs(pitchAngle)*pitchAngle/13942.0;
-    rollAngle = (float)2000*abs(rollAngle)*rollAngle/13942.0;
+    int pitchAngle = 0;
+    int rollAngle = 0;
+    if (abs(ps4_data.hat_right_x - 128) > abs(ps4_data.hat_right_y - 128)){
+      rollAngle = -AddDeadZone((int)((uint16_t)(ps4_data.hat_right_x) - 128), HatDeadzone);
+    }
+    else if (abs(ps4_data.hat_right_x - 128) < abs(ps4_data.hat_right_y - 128)){
+      pitchAngle = -AddDeadZone((int)((uint16_t)(ps4_data.hat_right_y) - 128), HatDeadzone);
+    }
+    pitchAngle= pitchAngle*1 + 1000*(float)abs(pitchAngle)*abs(pitchAngle)*pitchAngle/2097152.0;
+    rollAngle = rollAngle*1 + 1000*(float)abs(rollAngle)*abs(rollAngle)*rollAngle/2097152.0;
     M[2].SetPoint = pitchAngle + rollAngle;
     M[3].SetPoint = pitchAngle - rollAngle;
 
@@ -989,6 +1010,15 @@ void runManual(void) {
     }
     else {
         dpadDOWNAlive = 0;
+    }
+
+    if(ps4_data.r1){
+      if(PS4_ButtonPress(LEFT)){
+        LMR = constrain(--LMR, 1, -1);
+      }
+      if(PS4_ButtonPress(RIGHT)){
+        LMR = constrain(++LMR, 1, -1);
+      }
     }
     shootSpeed = constrain(shootSpeed, 3000, 200);
     M[4].SetPoint = shootSpeed;
