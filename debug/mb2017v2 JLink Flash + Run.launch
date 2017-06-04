@@ -67,12 +67,12 @@
 <intAttribute key="org.eclipse.cdt.launch.ATTR_BUILD_BEFORE_LAUNCH_ATTR" value="2"/>
 <stringAttribute key="org.eclipse.cdt.launch.COREFILE_PATH" value=""/>
 <stringAttribute key="org.eclipse.cdt.launch.DEBUGGER_REGISTER_GROUPS" value=""/>
-<stringAttribute key="org.eclipse.cdt.launch.PROGRAM_NAME" value="./build/mb2016.elf"/>
-<stringAttribute key="org.eclipse.cdt.launch.PROJECT_ATTR" value="mb2016_new"/>
+<stringAttribute key="org.eclipse.cdt.launch.PROGRAM_NAME" value="C:\ChibiStudio\workspace26\mb2016_new - Copy\build\mb2016.elf"/>
+<stringAttribute key="org.eclipse.cdt.launch.PROJECT_ATTR" value="mb2016_new - Copy"/>
 <booleanAttribute key="org.eclipse.cdt.launch.PROJECT_BUILD_CONFIG_AUTO_ATTR" value="false"/>
 <stringAttribute key="org.eclipse.cdt.launch.PROJECT_BUILD_CONFIG_ID_ATTR" value=""/>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-<listEntry value="/mb2016_new"/>
+<listEntry value="/mb2016_new - Copy"/>
 </listAttribute>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
 <listEntry value="4"/>

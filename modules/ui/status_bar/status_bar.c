@@ -86,6 +86,7 @@ void get_time(int * hour, int * min, int * sec){
 
 void online_status_update(void){
   memset(left, 0,sizeof(left));
+  char sntmp[10] = { 0 };
 //<<<<<<< HEAD
 //#if  USE_MOTOR_0
 //  if (M[0].timeout)
@@ -96,73 +97,91 @@ void online_status_update(void){
 //     strcat(left, "M1 ");
 //=======
 #if  USE_MOTOR_0 && !IS_MOTOR_0_2016
-  if (M[0].timeout)
-     strcat(left, "M0 ");
+  //if (M[0].timeout)
+     chsnprintf(sntmp, (sizeof(sntmp)/sizeof(char)), "M0:%01d ", M[0].timeout);
+     strcat(left, sntmp);
 #elif IS_MOTOR_0_2016 && USE_MOTOR_0
-  strcat(left, "M0 ");
+     chsnprintf(sntmp, (sizeof(sntmp)/sizeof(char)), "M0:%01d ", m[0].timeout);
+     strcat(left, sntmp);
 #endif
 #if  USE_MOTOR_1 && !IS_MOTOR_1_2016
-  if (M[1].timeout)
-     strcat(left, "M1 ");
+  //if (M[1].timeout)
+     chsnprintf(sntmp, (sizeof(sntmp)/sizeof(char)), "M1:%01d ", M[1].timeout);
+     strcat(left, sntmp);
 #elif USE_MOTOR_1 && IS_MOTOR_1_2016
-  strcat(left, "M1 ");
-//>>>>>>> 8a0975270c4439013eb3433a11c64826ce44e612
+     chsnprintf(sntmp, (sizeof(sntmp)/sizeof(char)), "M1:%01d ", m[1].timeout);
+     strcat(left, sntmp);
 #endif
 #if  USE_MOTOR_2
-  if (M[2].timeout)
-     strcat(left, "M2 ");
+//  if (M[2].timeout)
+     chsnprintf(sntmp, (sizeof(sntmp)/sizeof(char)), "M2:%01d ", M[2].timeout);
+     strcat(left, sntmp);
 #endif
 #if  USE_MOTOR_3
-  if (M[3].timeout)
-     strcat(left, "M3 ");
+//  if (M[3].timeout)
+     chsnprintf(sntmp, (sizeof(sntmp)/sizeof(char)), "M3:%01d ", M[3].timeout);
+     strcat(left, sntmp);
 #endif
 #if  USE_MOTOR_4
-  if (M[4].timeout)
-     strcat(left, "M4 ");
+//  if (M[4].timeout)
+     chsnprintf(sntmp, (sizeof(sntmp)/sizeof(char)), "M4:%01d ", M[4].timeout);
+     strcat(left, sntmp);
 #endif
 #if  USE_MOTOR_5
-  if (M[5].timeout)
-     strcat(left, "M5 ");
+//  if (M[5].timeout)
+     chsnprintf(sntmp, (sizeof(sntmp)/sizeof(char)), "M5:%01d ", M[5].timeout);
+     strcat(left, sntmp);
 #endif
 #if  USE_MOTOR_6
-  if (M[6].timeout)
-     strcat(left, "M6 ");
+//  if (M[6].timeout)
+     chsnprintf(sntmp, (sizeof(sntmp)/sizeof(char)), "M6:%01d ", M[6].timeout);
+     strcat(left, sntmp);
 #endif
 #if  USE_MOTOR_7
-  if (M[7].timeout)
-     strcat(left, "M7 ");
+//  if (M[7].timeout)
+    chsnprintf(sntmp, (sizeof(sntmp)/sizeof(char)), "M7:%01d ", M[7].timeout);
+    strcat(left, sntmp);
 #endif
 #if USE_ENCODER && ENCODER_NUMBER > 0
-  if (encoder1_2.Alive)
-      strcat(left, "E0_1 ");
+//  if (encoder1_2.Alive)
+      chsnprintf(sntmp, (sizeof(sntmp)/sizeof(char)), "E0_1:%01d ", encoder1_2.Alive);
+      strcat(left, sntmp);
+//      strcat(left, "E0_1 ");
 #endif
 #if USE_ENCODER && ENCODER_NUMBER > 2
-  if (encoder3_4.Alive)
-      strcat(left, "E2_3 ");
+//  if (encoder3_4.Alive)
+      chsnprintf(sntmp, (sizeof(sntmp)/sizeof(char)), "E2_3:%01d ", encoder3_4.Alive);
+      strcat(left, sntmp);
 #endif
 #if USE_SERVO && SERVO_NUMBER > 0
-  if (Servo1.Alive)
-      strcat(left, "S0 ");
+//  if (Servo1.Alive)
+      chsnprintf(sntmp, (sizeof(sntmp)/sizeof(char)), "S0:%01d ", Servo1.Alive);
+      strcat(left, sntmp);
 #endif
 #if USE_SERVO && SERVO_NUMBER > 8
-  if (Servo2.Alive)
-      strcat(left, "S1 ");
+//   if (Servo2.Alive)
+      chsnprintf(sntmp, (sizeof(sntmp)/sizeof(char)), "S1:%01d ", Servo2.Alive);
+      strcat(left, sntmp);
 #endif
 #if USE_LINESENSOR_0
-  if (LineSensor[0].Alive)
-      strcat(left, "L0 ");
+//  if (LineSensor[0].Alive)
+      chsnprintf(sntmp, (sizeof(sntmp)/sizeof(char)), "L0:%01d ", LineSensor[0].Alive);
+      strcat(left, sntmp);
 #endif
 #if USE_LINESENSOR_1
-  if (LineSensor[1].Alive)
-      strcat(left, "L1 ");
+//  if (LineSensor[1].Alive)
+    chsnprintf(sntmp, (sizeof(sntmp)/sizeof(char)), "L1:%01d ", LineSensor[1].Alive);
+    strcat(left, sntmp);
 #endif
 #if USE_LINESENSOR_2
-  if (LineSensor[2].Alive)
-      strcat(left, "L2 ");
+//  if (LineSensor[2].Alive)
+    chsnprintf(sntmp, (sizeof(sntmp)/sizeof(char)), "L2:%01d ", LineSensor[2].Alive);
+    strcat(left, sntmp);
 #endif
 #if USE_LINESENSOR_3
-  if (LineSensor[3].Alive)
-      strcat(left, "L3 ");
+//  if (LineSensor[3].Alive)
+    chsnprintf(sntmp, (sizeof(sntmp)/sizeof(char)), "L3:%01d ", LineSensor[3].Alive);
+    strcat(left, sntmp);
 #endif
 }
 
@@ -174,7 +193,7 @@ void status_bar_redraw(void){
   int hour, min, sec;
   get_time(&hour, &min, &sec);
   gwinClear(statusbar);
-  //chsnprintf(left, (sizeof(left)/sizeof(char)), "M0 M1 M2");
+  //chsnprintf(left, (sizeof(left)/sizeof(char)), "M0%01d M1%01d M2%01d", M[0].timeout, M[1].timeout, M[2].timeout);
   online_status_update();
   //draw the left part
   gdispDrawStringBox(0, 0, (GDISP_SCREEN_WIDTH/2 - gdispGetFontMetric(font1, fontMaxWidth) * (6/2))-1, STATUS_BAR_HEIGHT,
@@ -183,7 +202,7 @@ void status_bar_redraw(void){
   chsnprintf(center, (sizeof(center)/sizeof(char)), "%02d:%02d:%02d", hour, min, sec);
   gdispDrawStringBox((GDISP_SCREEN_WIDTH/2 - gdispGetFontMetric(font1, fontMaxWidth) * (6/2)),0,
                          gdispGetFontMetric(font1, fontMaxWidth) * 6, STATUS_BAR_HEIGHT, center, font1 , Black, justifyCenter);
-  chsnprintf(right, (sizeof(right)/sizeof(char)),"CPU:%d CKSUM_ERR:%d FRAME_ERR:%d TIMEOUT:%d",
+  chsnprintf(right, (sizeof(right)/sizeof(char)),"CKSUM_ERR:%d FRAME_ERR:%d TIMEOUT:%d CPU:%d",
              UDC_GetStatistics(UDC_CHECKSUM_ERROR),UDC_GetStatistics(UDC_FRAMING_ERROR),UDC_GetStatistics(UDC_TIMEOUT),
              (int) cpu_usage_get_recent());
   //draw the right part

@@ -8,6 +8,8 @@
 #include "ch.h"
 #include "hal.h"
 #include "udc.h"
+#include "hardware_conf.h"
+
 
 static uint16_t tx_buffer[32];
 static thread_t* udc_lld_thread_ptr = NULL;
@@ -286,9 +288,10 @@ void udc_lld_rxend(UARTDriver *uartp) {
             UDCD.checksum_error++;
             UDCD.udc_rx_state = udc_rx_checksum_error;
           }
+          palClearPad(GPIOC, GPIOC_LED_G);
         break;
       case udc_rx_framing_error:
-        //palClearPad(GPIOC, GPIOC_LED_R);
+        palClearPad(GPIOC, GPIOC_LED_R);
         break;
       case udc_rx_state_error:
         break;

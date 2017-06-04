@@ -90,8 +90,8 @@
 #include "udc.h"
 #include "linesensor.h"
 
-LINE_SENSOR LineSensor[4] = {{.id = 0, .size = LINESENSOR_0_SIZE},{.id = 1, .size = LINESENSOR_1_SIZE},
-                             {.id = 2, .size = LINESENSOR_2_SIZE},{.id = 3, .size = LINESENSOR_3_SIZE}};
+LINE_SENSOR LineSensor[4] = {{.id = 0, .size = LINESENSOR_0_SIZE, .Alive = 0},{.id = 1, .size = LINESENSOR_1_SIZE, .Alive = 0},
+                             {.id = 2, .size = LINESENSOR_2_SIZE, .Alive = 0},{.id = 3, .size = LINESENSOR_3_SIZE, .Alive = 0}};
 ls_pos_info_t LineSensor2016[4];
 
 udc_rx_state_e linesensor_send_command(LINE_SENSOR *line, int command){

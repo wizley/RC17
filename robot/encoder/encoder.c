@@ -35,8 +35,8 @@
 #include "udc.h"
 #include "encoder.h"
 
-ENCObj_t encoder1_2;
-ENCObj_t encoder3_4;
+ENCObj_t encoder1_2 = {.Alive = 0};
+ENCObj_t encoder3_4 = {.Alive = 0};
 
 void encoder_setAlive(volatile void * arg){
      ENCObj_t * e = (ENCObj_t *) arg;

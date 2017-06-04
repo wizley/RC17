@@ -8,6 +8,8 @@
 #ifndef ROBOT_UDC_OBJECTLIST_H_
 #define ROBOT_UDC_OBJECTLIST_H_
 
+#include "driving.h"
+
 #define ID_SYNC 0
 #define ID_END -1
 
@@ -22,49 +24,49 @@ UDC_Obj_t udc_objectlist[32] =
 {
     {ID_SYNC, NULL, 0, NULL, 0, NULL, NULL},
 #if USE_MOTOR_0 && IS_MOTOR_0_2016
-    {ID_M0_VMODE, (udc_tx_data_t)&m[0].speed_ref_krpm, 4, (udc_rx_data_t)&m[0].speed_krpm, 4, NULL, NULL},
+    {ID_M0_VMODE, (udc_tx_data_t)&m[0].speed_ref_krpm, 4, (udc_rx_data_t)&m[0].speed_krpm, 4, &motor_setAlive, &m[0]},
 #elif USE_MOTOR_0 && !IS_MOTOR_0_2016
   	{ID_M0_VMODE, (udc_tx_data_t)&M[0].SetPoint, 2, (udc_rx_data_t)&M[0].Feedback, 2, &motor_setAlive, &M[0]},
 #endif
 
 #if USE_MOTOR_1 && IS_MOTOR_1_2016
-    {ID_M1_VMODE, (udc_tx_data_t)&m[1].speed_ref_krpm, 4, (udc_rx_data_t)&m[1].speed_krpm, 4, NULL, NULL},
+    {ID_M1_VMODE, (udc_tx_data_t)&m[1].speed_ref_krpm, 4, (udc_rx_data_t)&m[1].speed_krpm, 4, &motor_setAlive, &m[1],
 #elif USE_MOTOR_1 && !IS_MOTOR_1_2016
   	{ID_M1_VMODE, (udc_tx_data_t)&M[1].SetPoint, 2, (udc_rx_data_t)&M[1].Feedback, 2, &motor_setAlive, &M[1]},
 #endif
 
 #if USE_MOTOR_2 && IS_MOTOR_2_2016
-    {ID_M2_VMODE, (udc_tx_data_t)&m[2].speed_ref_krpm, 4, (udc_rx_data_t)&m[2].speed_krpm, 4, NULL, NULL},
+    {ID_M2_VMODE, (udc_tx_data_t)&m[2].speed_ref_krpm, 4, (udc_rx_data_t)&m[2].speed_krpm, 4, &motor_setAlive, &m[2]},
 #elif USE_MOTOR_2 && !IS_MOTOR_2_2016
   	{ID_M2_VMODE, (udc_tx_data_t)&M[2].SetPoint, 2, (udc_rx_data_t)&M[2].Feedback, 2, &motor_setAlive, &M[2]},
 #endif
 
 #if USE_MOTOR_3 && IS_MOTOR_3_2016
-    {ID_M3_VMODE, (udc_tx_data_t)&m[3].speed_ref_krpm, 4, (udc_rx_data_t)&m[3].speed_krpm, 4, NULL, NULL},
+    {ID_M3_VMODE, (udc_tx_data_t)&m[3].speed_ref_krpm, 4, (udc_rx_data_t)&m[3].speed_krpm, 4, &motor_setAlive, &m[3]},
 #elif USE_MOTOR_3 && !IS_MOTOR_3_2016
   	{ID_M3_VMODE, (udc_tx_data_t)&M[3].SetPoint, 2, (udc_rx_data_t)&M[3].Feedback, 2, &motor_setAlive, &M[3]},
 #endif
 
 #if USE_MOTOR_4 && IS_MOTOR_4_2016
-    {ID_M4_VMODE, (udc_tx_data_t)&m[4].speed_ref_krpm, 4, (udc_rx_data_t)&m[4].speed_krpm, 4, NULL, NULL},
+    {ID_M4_VMODE, (udc_tx_data_t)&m[4].speed_ref_krpm, 4, (udc_rx_data_t)&m[4].speed_krpm, 4, &motor_setAlive, &m[4]},
 #elif USE_MOTOR_4 && !IS_MOTOR_4_2016
   	{ID_M4_VMODE, (udc_tx_data_t)&M[4].SetPoint, 2, (udc_rx_data_t)&M[4].Feedback, 2, &motor_setAlive, &M[4]},
 #endif
 
 #if USE_MOTOR_5 && IS_MOTOR_5_2016
-    {ID_M5_VMODE, (udc_tx_data_t)&m[5].speed_ref_krpm, 4, (udc_rx_data_t)&m[5].speed_krpm, 4, NULL, NULL},
+    {ID_M5_VMODE, (udc_tx_data_t)&m[5].speed_ref_krpm, 4, (udc_rx_data_t)&m[5].speed_krpm, 4, &motor_setAlive, &m[5]},
 #elif USE_MOTOR_5 && !IS_MOTOR_5_2016
   	{ID_M5_VMODE, (udc_tx_data_t)&M[5].SetPoint, 2, (udc_rx_data_t)&M[5].Feedback, 2, &motor_setAlive, &M[5]},
 #endif
 
 #if USE_MOTOR_6 && IS_MOTOR_6_2016
-    {ID_M6_VMODE, (udc_tx_data_t)&m[6].speed_ref_krpm, 4, (udc_rx_data_t)&m[6].speed_krpm, 4, NULL, NULL},
+    {ID_M6_VMODE, (udc_tx_data_t)&m[6].speed_ref_krpm, 4, (udc_rx_data_t)&m[6].speed_krpm, 4, &motor_setAlive, &m[6]},
 #elif USE_MOTOR_6 && !IS_MOTOR_6_2016
   	{ID_M6_VMODE, (udc_tx_data_t)&M[6].SetPoint, 2, (udc_rx_data_t)&M[6].Feedback, 2, &motor_setAlive, &M[6]},
 #endif
 
 #if USE_MOTOR_7 && IS_MOTOR_7_2016
-    {ID_M7_VMODE, (udc_tx_data_t)&m[7].speed_ref_krpm, 4, (udc_rx_data_t)&m[7].speed_krpm, 4, NULL, NULL},
+    {ID_M7_VMODE, (udc_tx_data_t)&m[7].speed_ref_krpm, 4, (udc_rx_data_t)&m[7].speed_krpm, 4, &motor_setAlive, &m[7]},
 #elif USE_MOTOR_7 && !IS_MOTOR_7_2016
   	{ID_M7_VMODE, (udc_tx_data_t)&M[7].SetPoint, 2, (udc_rx_data_t)&M[7].Feedback, 2, &motor_setAlive, &M[7]},
 #endif
@@ -84,7 +86,7 @@ UDC_Obj_t udc_objectlist[32] =
     {ID_L0_POS, NULL, 0, (udc_rx_data_t) &LineSensor[0].Position, 8, &linesensor_setAlive, &LineSensor[0]},
 
 #elif USE_LINESENSOR_0 && IS_LINESENSOR_0_2016
-    {ID_L0_POS, NULL, 0, (udc_rx_data_t) &LineSensor2016[0], 2, NULL, NULL},
+    {ID_L0_POS, NULL, 0, (udc_rx_data_t) &LineSensor2016[0], 2, &linesensor_setAlive, &LineSensor[0]},
 #endif
 #if USE_LINESENSOR_1 && !IS_LINESENSOR_1_2016
     {ID_L1_POS, NULL, 0, (udc_rx_data_t) &LineSensor[1].Position, 8, &linesensor_setAlive, &LineSensor[1]},

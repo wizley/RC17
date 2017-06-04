@@ -133,8 +133,8 @@ int main(void) {
   palSetPadMode(GPIOB, GPIOB_TIM2_CH4, PAL_MODE_OUTPUT_PUSHPULL);
   palClearPad(GPIOB, GPIOB_TIM2_CH4);
 
-  palClearPad(GPIOC, GPIOC_LED_R);
-  palClearPad(GPIOC, GPIOC_LED_G);
+  //palClearPad(GPIOC, GPIOC_LED_R);
+  //palClearPad(GPIOC, GPIOC_LED_G);
 
 
   /*

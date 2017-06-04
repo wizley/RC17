@@ -87,7 +87,7 @@ static THD_FUNCTION(ControlLoop, arg) {
     last_loop_start = chVTGetSystemTimeX();
     // communication roundtrip stat
     systime_t start = chVTGetSystemTimeX();
-    //UMD_PollObjectList(umd_objectlist);
+    UDC_PollObjectList(udc_objectlist);
     systime_t after_comm = chVTGetSystemTimeX();
     comm_stat_sample(ST2US(after_comm - start));
     //
@@ -492,27 +492,43 @@ void DeactivateDriving(void){
 void decAllAlive(void){
 #if USE_MOTOR_0 && !IS_MOTOR_0_2016
     motor_decAlive(&M[0]);
+#elif USE_MOTOR_0 && IS_MOTOR_0_2016
+    motor_devAlive(&m[0]);
 #endif
 #if USE_MOTOR_1 && !IS_MOTOR_1_2016
     motor_decAlive(&M[1]);
+#elif USE_MOTOR_1 && IS_MOTOR_1_2016
+    motor_devAlive(&m[1]);
 #endif
 #if USE_MOTOR_2 && !IS_MOTOR_2_2016
     motor_decAlive(&M[2]);
+#elif USE_MOTOR_2 && IS_MOTOR_2_2016
+    motor_devAlive(&m[2]);
 #endif
 #if USE_MOTOR_3 && !IS_MOTOR_3_2016
     motor_decAlive(&M[3]);
+#elif USE_MOTOR_3 && IS_MOTOR_3_2016
+    motor_devAlive(&m[3]);
 #endif
 #if USE_MOTOR_4 && !IS_MOTOR_4_2016
     motor_decAlive(&M[4]);
+#elif USE_MOTOR_4 && IS_MOTOR_4_2016
+    motor_devAlive(&m[4]);
 #endif
 #if USE_MOTOR_5 && !IS_MOTOR_5_2016
     motor_decAlive(&M[5]);
+#elif USE_MOTOR_5 && IS_MOTOR_5_2016
+    motor_devAlive(&m[5]);
 #endif
 #if USE_MOTOR_6 && !IS_MOTOR_6_2016
     motor_decAlive(&M[6]);
+#elif USE_MOTOR_6 && IS_MOTOR_6_2016
+    motor_devAlive(&m[6]);
 #endif
 #if USE_MOTOR_7 && !IS_MOTOR_7_2016
     motor_decAlive(&M[7]);
+#elif USE_MOTOR_7 && IS_MOTOR_7_2016
+    motor_devAlive(&m[7]);
 #endif
 #if USE_SERVO && SERVO_NUMBER > 0
     servo_decAlive(&Servo1);

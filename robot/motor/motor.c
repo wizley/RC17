@@ -4,13 +4,13 @@
 #include "common.h"
 #include "string.h"
 
-MotorObj M[8] = {{.id=0},{.id=1},{.id=2},
-                 {.id=3},{.id=4},{.id=5},
-                 {.id=6},{.id=7}};
+MotorObj M[8] = {{.id=0, .timeout=0},{.id=1,.timeout=0},{.id=2,.timeout=0},
+                 {.id=3,.timeout=0},{.id=4,.timeout=0},{.id=5,.timeout=0},
+                 {.id=6,.timeout=0},{.id=7,.timeout=0}};
 
-motor_2016_t m[8] = {{.id=0},{.id=1},{.id=2},
-					{.id=3},{.id=4},{.id=5},
-					{.id=6},{.id=7}};
+motor_2016_t m[8] = {{.id=0,.timeout=0},{.id=1,.timeout=0},{.id=2,.timeout=0},
+					{.id=3,.timeout=0},{.id=4,.timeout=0},{.id=5,.timeout=0},
+					{.id=6,.timeout=0},{.id=7,.timeout=0}};
 
 
 const motor_setting_t DefaultIdle = {

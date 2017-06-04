@@ -40,8 +40,8 @@
 
 //new servo board 200 - 550
 
-servo_t Servo1 = {.command={423, 396, 480/*290*/, 370, 370, 370, 370, 370}};
-servo_t Servo2 = {.command={400, 400, 400, 400, 400, 400, 400, 400}};
+servo_t Servo1 = {.command={423, 396, 480/*290*/, 370, 370, 370, 370, 370}, .Alive = 0};
+servo_t Servo2 = {.command={400, 400, 400, 400, 400, 400, 400, 400}, .Alive = 0};
 
 
 void servo_setAlive(volatile void * arg){
