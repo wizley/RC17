@@ -1,8 +1,8 @@
 #ifndef _MOTOR_H_
 #define _MOTOR_H_
 
-#include "umd.h"
 
+#include "udc.h"
 #define MOTOR_STATE_OK 0x8000
 
 #define CAL_ID_VMODE(n) (8+(n*4)+0)
@@ -113,23 +113,111 @@ extern const motor_setting_t M3VMode;
 extern const motor_setting_t M4VMode;
 extern const motor_setting_t M5VMode;
 extern const motor_setting_t M6VMode;
+extern const motor_setting_t M6PMode;
 extern const motor_setting_t M7VMode;
 
 
 void motor_init(MotorObj *motor, const motor_setting_t *cfg);
 //<<<<<<< HEAD
-//udc_rx_state_e motor_send_setpoint(MotorObj *motor);
-//udc_rx_state_e motor_get_status(MotorObj *motor);
-//udc_rx_state_e motor_send_setting(MotorObj *motor);
-//udc_rx_state_e motor_setIdle(MotorObj *motor);
-//udc_rx_state_e motor_setBrake(MotorObj *motor);
-void motor_setAlive( void * arg);
-void motor_decAlive(void * arg);
+////<<<<<<< HEAD
+////udc_rx_state_e motor_send_setpoint(MotorObj *motor);
+////udc_rx_state_e motor_get_status(MotorObj *motor);
+////udc_rx_state_e motor_send_setting(MotorObj *motor);
+////udc_rx_state_e motor_setIdle(MotorObj *motor);
+////udc_rx_state_e motor_setBrake(MotorObj *motor);
+//void motor_setAlive( void * arg);
+//void motor_decAlive(void * arg);
+////=======
+//umd_return_e motor_send_setpoint(MotorObj *motor);
+//umd_return_e motor_get_status(MotorObj *motor);
+//umd_return_e motor_send_setting(MotorObj *motor);
+//umd_return_e motor_setIdle(MotorObj *motor);
+//umd_return_e motor_setBrake(MotorObj *motor);
 //=======
-umd_return_e motor_send_setpoint(MotorObj *motor);
-umd_return_e motor_get_status(MotorObj *motor);
-umd_return_e motor_send_setting(MotorObj *motor);
-umd_return_e motor_setIdle(MotorObj *motor);
-umd_return_e motor_setBrake(MotorObj *motor);
+udc_rx_state_e motor_send_setpoint(MotorObj *motor);
+udc_rx_state_e motor_get_status(MotorObj *motor);
+udc_rx_state_e motor_send_setting(MotorObj *motor);
+udc_rx_state_e motor_setIdle(MotorObj *motor);
+udc_rx_state_e motor_setBrake(MotorObj *motor);
+void motor_setAlive(void * arg);
+void motor_decAlive(void * arg);
+//2016 board
+
+
+typedef enum{
+  FAULT_UVLO,
+  FAULT_PARAM_INVALID,
+  FAULT_EMERGENCY_SWITCH
+}board_fault_2016_e;
+
+typedef struct{
+  uint8_t fault : 1;
+  uint8_t align_ok : 1;
+  uint8_t param_loaded : 1;
+  uint8_t est_ok : 1;
+  uint8_t st_id_ok : 1;
+  uint8_t profile_idle : 1;
+  uint8_t homing_ok : 1;
+  uint8_t setting_loaded : 1;
+
+  uint8_t fault_code;
+}__attribute__((packed)) board_state_2016_t;
+
+typedef enum{
+  UNLOCK,
+  VMODE,
+  PMODE,
+  HOMING
+}motor_mode_2016_e;
+
+typedef struct{
+  float voltage_V;
+  float current_A;
+  float torque_nm;
+
+  uint32_t adc1 : 12;
+  uint32_t adc2 : 12;
+  uint32_t temperature : 8;
+
+  board_state_2016_t state;
+}__attribute__((packed)) board_status_2016_t;
+
+typedef struct{
+  uint8_t mode;
+  uint8_t curvetype;
+  float bandwidth;
+  float max_jerk_krpmps2;
+  float max_accel_krpmps;
+  float max_speed_krpm;
+  float max_current_A;
+}__attribute__((packed)) motor_setting_2016_t;
+
+typedef struct{
+  float speed_ref_krpm;
+  int32_t pos_ref_mrev;
+
+  float speed_krpm;
+  int32_t pos_mrev;
+
+  motor_setting_2016_t setting;
+  board_status_2016_t status;
+
+  uint32_t timeout;
+  uint8_t id;
+
+}__attribute__((packed)) motor_2016_t;
+
+extern motor_2016_t m[8];
+extern const motor_setting_2016_t DefaultIdle_2016;
+//extern const motor_setting_t DefaultBrake;
+extern const motor_setting_2016_t DefaultVMode_2016;
+extern const motor_setting_2016_t DefaultPMode_2016;
+
+
+void motor_init_2016(motor_2016_t *motor, const motor_setting_2016_t *cfg);
+udc_rx_state_e motor_send_setpoint_2016(motor_2016_t *motor);
+udc_rx_state_e motor_get_status_2016(motor_2016_t *motor);
+udc_rx_state_e motor_send_setting_2016(motor_2016_t *motor);
+udc_rx_state_e motor_setIdle_2016(motor_2016_t *motor);
 
 #endif  /* _MOTOR_H_ */

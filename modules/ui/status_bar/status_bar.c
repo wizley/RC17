@@ -8,7 +8,7 @@
 #include "ch.h"
 #include "hal.h"
 #include "gfx.h"
-#include "umd.h"
+#include "udc.h"
 #include "app.h"
 #include "status_bar.h"
 #include "widgets.h"
@@ -86,13 +86,27 @@ void get_time(int * hour, int * min, int * sec){
 
 void online_status_update(void){
   memset(left, 0,sizeof(left));
-#if  USE_MOTOR_0
+//<<<<<<< HEAD
+//#if  USE_MOTOR_0
+//  if (M[0].timeout)
+//     strcat(left, "M0 ");
+//#endif
+//#if  USE_MOTOR_1
+//  if (M[1].timeout)
+//     strcat(left, "M1 ");
+//=======
+#if  USE_MOTOR_0 && !IS_MOTOR_0_2016
   if (M[0].timeout)
      strcat(left, "M0 ");
+#elif IS_MOTOR_0_2016 && USE_MOTOR_0
+  strcat(left, "M0 ");
 #endif
-#if  USE_MOTOR_1
+#if  USE_MOTOR_1 && !IS_MOTOR_1_2016
   if (M[1].timeout)
      strcat(left, "M1 ");
+#elif USE_MOTOR_1 && IS_MOTOR_1_2016
+  strcat(left, "M1 ");
+//>>>>>>> 8a0975270c4439013eb3433a11c64826ce44e612
 #endif
 #if  USE_MOTOR_2
   if (M[2].timeout)
@@ -169,8 +183,8 @@ void status_bar_redraw(void){
   chsnprintf(center, (sizeof(center)/sizeof(char)), "%02d:%02d:%02d", hour, min, sec);
   gdispDrawStringBox((GDISP_SCREEN_WIDTH/2 - gdispGetFontMetric(font1, fontMaxWidth) * (6/2)),0,
                          gdispGetFontMetric(font1, fontMaxWidth) * 6, STATUS_BAR_HEIGHT, center, font1 , Black, justifyCenter);
-  chsnprintf(right, (sizeof(right)/sizeof(char)),"CPU:%d              ",
-//             UDC_GetStatistics(UDC_CHECKSUM_ERROR),UDC_GetStatistics(UDC_FRAMING_ERROR),UDC_GetStatistics(UDC_TIMEOUT),
+  chsnprintf(right, (sizeof(right)/sizeof(char)),"CPU:%d CKSUM_ERR:%d FRAME_ERR:%d TIMEOUT:%d",
+             UDC_GetStatistics(UDC_CHECKSUM_ERROR),UDC_GetStatistics(UDC_FRAMING_ERROR),UDC_GetStatistics(UDC_TIMEOUT),
              (int) cpu_usage_get_recent());
   //draw the right part
   gdispDrawStringBox((GDISP_SCREEN_WIDTH/2 + gdispGetFontMetric(font1, fontMaxWidth) * (6/2))+1,0,

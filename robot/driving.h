@@ -6,53 +6,75 @@ typedef enum tagDrivingState {
 	DEACTIVATED
 } DRIVING_STATE;
 
-#ifndef MOTOR_NUM
-#define MOTOR_NUM 8
-#endif
-
+//<<<<<<< HEAD
+//#ifndef MOTOR_NUM
+//#define MOTOR_NUM 8
+//#endif
+//
+//=======
+//base x-axis movement
+//>>>>>>> 8a0975270c4439013eb3433a11c64826ce44e612
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
 #define USE_MOTOR_0                 TRUE
 #define IS_MOTOR_0_DC               FALSE
+#define IS_MOTOR_0_2016				0
 #endif
-
+//base x-axis movement gear ratio 15:1
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
 #define USE_MOTOR_1                 TRUE
 #define IS_MOTOR_1_DC               FALSE
+#define IS_MOTOR_1_2016				0
 #endif
-
+//left stick
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
 #define USE_MOTOR_2                 TRUE
-#define IS_MOTOR_2_DC               FALSE
+#define IS_MOTOR_2_DC               TRUE
+#define IS_MOTOR_2_2016				FALSE
 #endif
-
+//right stick
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
 #define USE_MOTOR_3                 TRUE
-#define IS_MOTOR_3_DC               FALSE
+#define IS_MOTOR_3_DC               TRUE
+#define IS_MOTOR_3_2016				FALSE
 #endif
-
+//<<<<<<< HEAD
+//
+//=======
+//shooter
+//>>>>>>> 8a0975270c4439013eb3433a11c64826ce44e612
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
 #define USE_MOTOR_4                 TRUE
 #define IS_MOTOR_4_DC               FALSE
+#define IS_MOTOR_4_2016				FALSE
 #endif
-
+//shooter
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
 #define USE_MOTOR_5                 TRUE
 #define IS_MOTOR_5_DC               FALSE
+//<<<<<<< HEAD
+//=======
+#define IS_MOTOR_5_2016				FALSE
+//>>>>>>> 8a0975270c4439013eb3433a11c64826ce44e612
 #endif
-
+//base y-axis movement, gear ratio 28:1
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
 #define USE_MOTOR_6                 TRUE
 #define IS_MOTOR_6_DC               FALSE
+//<<<<<<< HEAD
+//=======
+#define IS_MOTOR_6_2016				FALSE
+//>>>>>>> 8a0975270c4439013eb3433a11c64826ce44e612
 #endif
-
+//reload action
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_MOTOR_7                 TRUE
+#define USE_MOTOR_7                 FALSE
 #define IS_MOTOR_7_DC               FALSE
+#define IS_MOTOR_7_2016				TRUE
 #endif
 
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
 #define USE_ENCODER                 TRUE
-#define ENCODER_NUMBER              3
+#define ENCODER_NUMBER              2
 #endif
 
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
@@ -62,22 +84,44 @@ typedef enum tagDrivingState {
 
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
 #define USE_LINESENSOR_0            TRUE
-#define LINESENSOR_0_SIZE             12
+#define IS_LINESENSOR_0_2016 		TRUE
+#define LINESENSOR_0_SIZE             24//how many line sensor module i use per line, only need to define if using old line sensor
 #endif
 
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_LINESENSOR_1            TRUE
-#define LINESENSOR_1_SIZE             12
+#define USE_LINESENSOR_1            FALSE
+#define IS_LINESENSOR_1_2016 		FALSE
+#define LINESENSOR_1_SIZE             24
 #endif
 
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_LINESENSOR_2            TRUE
+//<<<<<<< HEAD
+//#define USE_LINESENSOR_2            TRUE
+//=======
+#define USE_LINESENSOR_2            FALSE
+#define IS_LINESENSOR_2_2016		FALSE
+//>>>>>>> 8a0975270c4439013eb3433a11c64826ce44e612
 #define LINESENSOR_2_SIZE             24
 #endif
 
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define USE_LINESENSOR_3            TRUE
+//<<<<<<< HEAD
+//#define USE_LINESENSOR_3            TRUE
+//#define LINESENSOR_3_SIZE             24
+//=======
+#define USE_LINESENSOR_3            FALSE
+#define IS_LINESENSOR_3_2016		FALSE
 #define LINESENSOR_3_SIZE             24
+#endif
+
+#if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
+#define USE_AIRBOARD_0            TRUE
+#define AIRBOARD_0_SIZE             16
+#endif
+
+#if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
+#define USE_DISTANCESENSOR			TRUE
+//>>>>>>> 8a0975270c4439013eb3433a11c64826ce44e612
 #endif
 
 #ifndef NUMBER_OF_WHEEL

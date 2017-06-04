@@ -1,4 +1,4 @@
-
+#include "stdint.h"
 #include "ch.h"
 #include "hal.h"
 #include "drivers.h"
@@ -8,12 +8,17 @@
 #include "analog.h"
 //#include "ps4_usbhost.h"
 #include "driving.h"
-#include "usage.h"
-//#include "ARTracker.h"
-#include "RTTLog.h"
-#include "ds4.h"
-#include "bubbles.h"
+//<<<<<<< HEAD
+//#include "usage.h"
+////#include "ARTracker.h"
+//#include "RTTLog.h"
+//#include "ds4.h"
+//#include "bubbles.h"
 #include "hardware_conf.h"
+//=======
+#include "usage.h"
+#include "airboard.h"
+//>>>>>>> 8a0975270c4439013eb3433a11c64826ce44e612
 
 #define SDRAM_SIZE  0x1000000
 /*
@@ -166,7 +171,7 @@ int main(void) {
   rtt_shell_init();
   rtt_shell_start();
 //
-  RTTLogObjectInit(&RTT_Log);
+  //RTTLogObjectInit(&RTT_Log);
   chThdSleepMilliseconds(100);
 
   /*
@@ -180,13 +185,21 @@ int main(void) {
 //  usbConnectBus(serusbcfg.usbp);
 
   adc_init();
+  ps4_usbhost_init();
   ActivateDriving();
-//  artracker_init();
-  usbhStart(&USBHD2);
-  chThdCreateStatic(waUSBHOST, sizeof(waUSBHOST), NORMALPRIO,
-                      USBHOST, NULL);
-  chThdSleepMilliseconds(100);
-  DS4_Start();
+//<<<<<<< HEAD
+////  artracker_init();
+//  usbhStart(&USBHD2);
+//  chThdCreateStatic(waUSBHOST, sizeof(waUSBHOST), NORMALPRIO,
+//                      USBHOST, NULL);
+//  chThdSleepMilliseconds(100);
+//  DS4_Start();
+//=======
+#if USE_DISTANCESENSOR
+  distance_init();	//distance sensor, not quite reliable
+#endif
+
+//>>>>>>> 8a0975270c4439013eb3433a11c64826ce44e612
   /*
    * Normal main() thread activity, in this demo it just performs
    * a shell respawn upon its termination.

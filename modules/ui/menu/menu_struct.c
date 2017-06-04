@@ -89,6 +89,7 @@ menu_list main_menu = {
     "Main menu",
     {
        { APP,       NULL,     { .app = &start_robot } },
+       { APP,       NULL,     { .app = &red } },
        { APP,       NULL,     { .app = &motor_tuning } },
        { SUBMENU,   NULL,     { .submenu = &board_testing_menu} },
        { SUBMENU,   NULL,     { .submenu = &settings_menu } },

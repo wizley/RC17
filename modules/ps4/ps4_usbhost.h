@@ -31,8 +31,9 @@ typedef enum{
         TOUCHPAD = 17,
 }ButtonEnum;
 
+
 extern DS4_status_t ps4_data;
-extern DS4_status_t old_data;
+//extern DS4_status_t old_data;
 extern DS4_command_t cmd;
 
 void ps4_usbhost_init(void);

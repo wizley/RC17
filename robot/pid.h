@@ -24,7 +24,7 @@ typedef struct PID_gain
     float kp;
     float ki;
     float kd;
-    int i_term;
+    float i_term;
     int pre_output;
     int pre_input;
 }GAIN;

@@ -79,18 +79,27 @@ void update_pmotor(void) {
       pmotor[1].abs_pos = pmotor[1].current_pos / pmotor[1].scale;
       pmotor[2].current_pos = M[pmotor[2].motor_idx].Board.EncoderCount - pmotor[2].offset;
       pmotor[2].abs_pos = pmotor[2].current_pos / pmotor[2].scale;
-//      pmotor[2].current_pos = M[pmotor[2].motor_idx].Board.EncoderCount - pmotor[2].offset;
+//<<<<<<< HEAD
+////      pmotor[2].current_pos = M[pmotor[2].motor_idx].Board.EncoderCount - pmotor[2].offset;
+////      pmotor[2].abs_pos = pmotor[2].current_pos / pmotor[2].scale;
+////      pmotor[3].current_pos = M[pmotor[3].motor_idx].Board.EncoderCount - pmotor[3].offset;
+////      pmotor[3].abs_pos = pmotor[3].current_pos / pmotor[3].scale;
+//=======
+      pmotor[3].current_pos = M[pmotor[3].motor_idx].Board.EncoderCount - pmotor[3].offset;
+      pmotor[3].abs_pos = pmotor[3].current_pos / pmotor[3].scale;
+//      pmotor[2].current_pos = M[pmotor[2].motor_idx].Board.EncoderCounter - pmotor[2].offset;
 //      pmotor[2].abs_pos = pmotor[2].current_pos / pmotor[2].scale;
-//      pmotor[3].current_pos = M[pmotor[3].motor_idx].Board.EncoderCount - pmotor[3].offset;
-//      pmotor[3].abs_pos = pmotor[3].current_pos / pmotor[3].scale;
+
+//>>>>>>> 8a0975270c4439013eb3433a11c64826ce44e612
 
 }
 #endif
 #define PID_INTEGRATION_TERM_LIMIT 1000
 int PIDcontroller(TARGET *t, int src, GAIN *pid, int circular_flag){
-    int p_term = t->destination - src;
-    if(p_term > -t->deadzone && p_term <t->deadzone){
+    int p_term = t->destination - src;;
+    if(p_term >= -t->deadzone && p_term <t->deadzone){
       t->reach_flag = 1;
+      p_term = 0;
     }else{
       t->reach_flag =0;
     }
@@ -161,7 +170,7 @@ void p_profile_init(void) {
     pmotor[0].max_speed = 1300;
     pmotor[0].bound_en = 1;
     pmotor[0].posLowLim = -10;    //relative to abs_pos
-    pmotor[0].posUpLim = 550;     //relative to abs_pos
+    pmotor[0].posUpLim = 580;     //relative to abs_pos
     pmotor[0].current_pos = 0;
     pmotor[0].deadzone = 10;
     pmotor[0].I_max = 400;
@@ -201,4 +210,20 @@ void p_profile_init(void) {
     pmotor[2].ki = 0.002;
     pmotor[2].kd = 0;
     pmotor[2].kff = 0;
+
+//    pmotor[3].motor_idx = 7;
+//    pmotor[3].adc_idx = 7;
+//    pmotor[3].scale = 803.228;   //284.86
+//    pmotor[3].max_acc = 30;
+//    pmotor[3].max_speed = 1000;
+//    pmotor[3].bound_en = 1;
+//    pmotor[3].posLowLim = -200;    //relative to abs_pos
+//    pmotor[3].posUpLim = 1000;     //relative to abs_pos
+//    pmotor[3].current_pos = 0;
+//    pmotor[3].deadzone = 2;
+//    pmotor[3].I_max = 400;
+//    pmotor[3].kp = 1.5;
+//    pmotor[3].ki = 0.004;
+//    pmotor[3].kd = 0;
+//    pmotor[3].kff = 0;
 }
