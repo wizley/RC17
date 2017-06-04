@@ -82,6 +82,7 @@ UDC_Obj_t udc_objectlist[32] =
 #endif
 #if USE_LINESENSOR_0 && !IS_LINESENSOR_0_2016
     {ID_L0_POS, NULL, 0, (udc_rx_data_t) &LineSensor[0].Position, 8, &linesensor_setAlive, &LineSensor[0]},
+
 #elif USE_LINESENSOR_0 && IS_LINESENSOR_0_2016
     {ID_L0_POS, NULL, 0, (udc_rx_data_t) &LineSensor2016[0], 2, NULL, NULL},
 #endif
