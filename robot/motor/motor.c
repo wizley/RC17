@@ -104,11 +104,11 @@ const motor_setting_t M2VMode = {	//linear actuator
  .SpeedLimit = 5000,
  .CommandCycle = (int) (RearWheelSamplingTime * 1000),
  .MotorVoltage = 12000,
- .CurrentLimit = 12000,
- .kP = 4500,//2000,
- .kI = 0,//700,
- .kD = 0,//50,
- .kFF = 0             //1800
+ .CurrentLimit = 10000,
+ .kP = 4500,
+ .kI = 00,
+ .kD = 0,
+ .kFF = 2500,
 };
 
 const motor_setting_t M3VMode = {

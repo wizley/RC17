@@ -42,6 +42,8 @@ typedef struct{
 
 
 extern PositionStates stateSet[9];
+extern PositionStates blueStateSet[9];
+extern PositionStates redStateSet[9];
 /*
 
 */
@@ -55,7 +57,7 @@ int setPitch(int value);
 int getRoll(void);
 
 int setRoll(int value);
-
+void pusher(bool start);
 bool setPitchRoll(int pitch, int roll);
 
 void runManual(void);
@@ -66,7 +68,7 @@ void castLimit(void);
 #define PITCH_MAX	PITCH_MIN + 45
 #define SERVO_STEP_ROLL (float)(500.0-425.0)/(428.0-2.0)
 //0.2deg = 423 42.88deg=488
-#define SERVO_STEP_PITCH (float)(488.0-425.0)/(428.0-2.0)
+#define SERVO_STEP_PITCH (float)(488.0-420.0)/(428.0-2.0)
 #define ROLL_DEFAULT 424
 #define ROLL_MIN	ROLL_DEFAULT - 65 //more positive = roll to right
 #define	ROLL_MAX	ROLL_DEFAULT + 65
@@ -77,15 +79,17 @@ void castLimit(void);
 #define ADC_PITCH_MAX	39791
 #define ADC_ROLL_MIN	25730
 
-extern int leftDisc;
-extern int rightDisc;
+//extern int leftDisc;
+//extern int rightDisc;
 extern int shooterNextState;
-extern enum shooter_states;
-
+//extern enum shooter_states;
+extern bool leftDisc;
+extern bool rightDisc;
+extern bool middleDisc;
 extern int leftMiddle_f;
 extern int rightMiddle_f;
 extern int lowerHoist_f;
-
+extern bool firstPush;
 extern const int platformNoMiddleYesAlive;
 
 extern int shooterAlive;
@@ -96,6 +100,7 @@ extern int platformHaveDisc_f;
 extern long encoder_1, encoder_2;
 extern int32_t distance_1, distance_2;
 extern int distanceSum;
+extern long xDistanceOffset;
 extern float yDistance;
 extern int carDirection;
 void UpdatePosition(void);

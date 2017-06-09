@@ -335,7 +335,7 @@ LLDSPEC	color_t gdisp_lld_get_pixel_color(GDisplay* g) {
 	#endif
 
 	color = PIXEL_ADDR(g, pos)[0];
-	
+
 	return gdispNative2Color(color);
 }
 
@@ -404,14 +404,14 @@ LLDSPEC	color_t gdisp_lld_get_pixel_color(GDisplay* g) {
 	static void dma2d_init(void) {
 		// Enable DMA2D clock
 		RCC->AHB1ENR |= RCC_AHB1ENR_DMA2DEN;
-	
+
 		// Output color format
 		#if GDISP_LLD_PIXELFORMAT == GDISP_PIXELFORMAT_RGB565
 			DMA2D->OPFCCR = OPFCCR_RGB565;
 		#elif GDISP_LLD_PIXELFORMAT == GDISP_PIXELFORMAT_RGB888
 			DMA2D->OPFCCR = OPFCCR_RGB888;
 		#endif
-	
+
 		// Foreground color format
 		#if GDISP_LLD_PIXELFORMAT == GDISP_PIXELFORMAT_RGB565
 			DMA2D->FGPFCCR = FGPFCCR_CM_RGB565;
@@ -459,13 +459,13 @@ LLDSPEC	color_t gdisp_lld_get_pixel_color(GDisplay* g) {
 			lineadd = g->g.Width - g->p.cx;
 			shape = (g->p.cx << 16) | (g->p.cy);
 		#endif
-		
+
 		// Start the DMA2D
 		DMA2D->OMAR = (uint32_t)PIXEL_ADDR(g, pos);
 		DMA2D->OOR = lineadd;
 		DMA2D->NLR = shape;
 		DMA2D->OCOLR = (uint32_t)(gdispColor2Native(g->p.color));
-		DMA2D->CR = DMA2D_CR_MODE_R2M | DMA2D_CR_START;	
+		DMA2D->CR = DMA2D_CR_MODE_R2M | DMA2D_CR_START;
 	}
 
 	/* Oops - the DMA2D only supports GDISP_ROTATE_0.
@@ -495,7 +495,7 @@ LLDSPEC	color_t gdisp_lld_get_pixel_color(GDisplay* g) {
 			// Source setup
 			DMA2D->FGMAR = LTDC_PIXELBYTES * (g->p.y1 * g->p.x2 + g->p.x1) + (uint32_t)g->p.ptr;
 			DMA2D->FGOR = g->p.x2 - g->p.cx;
-		
+
 			// Output setup
 			DMA2D->OMAR = (uint32_t)PIXEL_ADDR(g, PIXIL_POS(g, g->g.Width-g->p.x-g->p.cx, g->g.Height-g->p.y-g->p.cy));
 			DMA2D->OOR = g->g.Width - g->p.cx;

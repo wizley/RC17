@@ -100,8 +100,13 @@ endif
 PROJECT = mb2016
 
 # Imported source files and paths
+ifeq ($(BOARD_VERSION), v1)
+CHIBIOS = C:\ChibiStudio\ChibiOS-stable
+GFXLIB = C:\ChibiStudio\ugfx-repository-stable
+else ifeq ($(BOARD_VERSION), v2)
 CHIBIOS = C:\ChibiStudio\ChibiOS
 GFXLIB = C:\ChibiStudio\ugfx-repository
+endif
 # Startup files.
 ifeq ($(BOARD_VERSION), v1)
 	include $(CHIBIOS)/os/common/startup/ARMCMx/compilers/GCC/mk/startup_stm32f4xx.mk

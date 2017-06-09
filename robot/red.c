@@ -503,12 +503,12 @@ void displayDebug_r(void) {
 	debug_display[0] = LineSensor2016[0].status;//M[0].Board.ADCValue;
 	debug_display[1] = LineSensor2016[0].position;//M[1].Board.ADCValue;
 	debug_display[2] = LineSensor2016[0].position - 1911;
-	debug_display[3] = M[0].SetPoint;
-	debug_display[4] = M[1].SetPoint;//M[4].Feedback;	//left to mid
-	debug_display[5] = polezone;//M[5].Feedback;	//right to mid
-	// = 0;
-	debug_display[7] = M[4].Board.ADCValue;
-    debug_display[8] = M[5].Board.ADCValue;
+	debug_display[3] = M[3].Board.ADCValue;
+	debug_display[4] = M[6].Board.ADCValue;//M[4].Feedback;	//left to mid
+	debug_display[5] = ps4_data.tpad_click;//M[5].Feedback;	//right to mid
+    debug_display[6] = ps4_data.tpad_info[0].finger[0].x;
+	debug_display[7] = ps4_data.tpad_info[0].finger[0].y;
+    debug_display[8] = ps4_data.tpad_info[0].finger[0].is_touching;
     debug_display[9] = targetPosition;
 }
 
@@ -517,42 +517,46 @@ PositionStates redStateSet[9] =
 // {id      ,x      ,y      ,pitch  ,roll   ,shootspd   },
 //   {        ,       ,       ,       ,       ,           },
 
-   {0		,0		,0		,0		,0		,0          }, //Start Zone
-   {1		, 4042	,250	,139	,144	,965         },
-   {2       , 6149	,250	,199	,146	,1005          },
-   {3       , 7426	,250	,209	,185	,695          }, //Middle Near
-   {4       , 7736	,250	,225	,103	,1030       }, //Middle Middle
-   {5       , 7935	,250	,175	,61		,1315       }, //Middle Far
-   {6       , 9915	,250	,228	,81 	,1040          },
-   {7       , 11267	,250	,171	,-96	,930          },
-   {8       , 12537	,0		,108	,5		,0          }  //Loading Zone
+   {0		, -500  ,0		,0		,0		,0          }, //Start Zone
+   {1		, 4621	,250	,190	,140	,1010       },
+   {2       , 6246	,250	,210	,50 	,1045       },
+   {3       , 7400	,250	,240	,0	    ,710        }, //Middle Near
+   {4       , 7236	,250	,235	,60 	,1070       }, //Middle Middle
+   {5       , 7435	,250	,130	,120    ,1345       }, //Middle Far
+   {6       , 9709	,250	,210    ,50     ,1045       },
+   {7       , 10767	,250	,74	    ,-20	,930        },
+   {8       , 12500	,0		,108	,5		,0          }  //Loading Zone
 };
-bool init = false;
+bool init_r = false;
 void RunPath_r(void) {
 	UpdatePosition();
 
-	if (!init){
+	if (!init_r){
       airSetState(&airBoard, 2, 1);
       airSetState(&airBoard, 4, 1);
       airSetState(&airBoard, 0, 1);
       airSetState(&airBoard, 1, 1);
+      xDistanceOffset = redStateSet[0].x;
       if (!BSwitch && !PS4_ButtonPress(TRIANGLE)){
         M[6].SetPoint = -100;
       }
       else{
         M[6].SetPoint = 0;
         if (!ps4_data.circle){
-          init = true;
+          init_r = true;
         }
       }
 	}
 	else{
-        if(ps4_data.l2_trigger) {
+        if(ps4_data.l2_trigger>200) {
           targetPosition = 8; //reload position
+          firstPush=false;
+          leftDisc=false;
+          rightDisc=false;
           runAuto(redStateSet, targetPosition);
 
         }
-        else if(ps4_data.r2_trigger) {
+        else if(ps4_data.r2_trigger>200) {
           targetPosition = 0;
           runAuto(redStateSet, targetPosition);
         }
@@ -570,7 +574,7 @@ void RunPath_r(void) {
 	      redStateSet[targetPosition].pitch = getPitch();
 	      redStateSet[targetPosition].roll = getRoll();
 	      redStateSet[targetPosition].x = distanceSum;
-	        redStateSet[targetPosition].y = yDistance;
+	      redStateSet[targetPosition].y = yDistance;
 	      redStateSet[targetPosition].shootspd = (M[4].SetPoint+M[5].SetPoint)/2;
 	    }
 	//Update position according to pole aiming
@@ -586,6 +590,40 @@ void RunPath_r(void) {
 	        targetPosition = constrain(++targetPosition, 8, 0);
 	    }
 
+	    if(ps4_data.tpad_click){
+	      switch(ps4_data.tpad_info[0].finger[0].x / 400){
+	      case 0:
+	        targetPosition=7;
+	        break;
+	      case 1:
+	        targetPosition=6;
+	        break;
+	      case 2:
+	        switch(ps4_data.tpad_info[0].finger[0].y / 300){
+	        case 0:
+	          targetPosition=5;
+	          break;
+	        case 1:
+	          targetPosition=4;
+	          break;
+	        case 2:
+	          targetPosition=3;
+	          break;
+	        }
+	        break;
+	      case 3:
+	        targetPosition=2;
+	        break;
+	      case 4:
+	        targetPosition=1;
+	        break;
+	      }
+	    }
+
+        if(PS4_ButtonPress(PS)&& ps4_data.cross) {
+          pusher(true);
+        }
+
 	    if(ps4_data.cross) {
 	      //Reset all pneumatic to initial mode
 	       // airSetState(&airBoard, 0, 0);
@@ -600,6 +638,7 @@ void RunPath_r(void) {
 	        Servo1.command[0] = (ROLL_MIN+ROLL_MAX)/2;
 	        Servo1.command[1] = PITCH_MIN;
 	        Servo1.command[2] = RAMMER_MIN;
+	        shooterAlive=0;
 	    }
 
 

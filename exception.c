@@ -42,6 +42,9 @@ typedef enum  {
     UsageFault = 6,
 } FaultType;
 
+void **HARDFAULT_PSP;
+register void *stack_pointer asm("sp");
+
 void HardFault_Handler(void) {
     //Copy to local variables (not pointers) to allow GDB "i loc" to directly show the info
     //Get thread context. Contains main registers including PC and LR
@@ -91,6 +94,8 @@ void HardFault_Handler(void) {
     /* When the following line is hit, the variables contain the register values. */
     (void) _SCB_SHCSR;
     //Cause debugger to stop. Ignored if no debugger is attached
+    asm("mrs %0, psp" : "=r" (HARDFAULT_PSP) : :);
+    stack_pointer = HARDFAULT_PSP;
     bkpt();
     NVIC_SystemReset();
 }

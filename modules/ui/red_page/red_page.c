@@ -44,7 +44,7 @@
 #include "widgets.h"
 #include "status_bar.h"
 char * UIDrivingState_r[2] = {"activated","deactivated"}; //for ui
-int oldENvalue = 0;
+
 // GHandles
 GHandle ContainerPage0_r;
 GHandle Console_r;
@@ -52,7 +52,7 @@ GHandle Console1_r;
 GHandle Console2_r;
 GHandle Console3_r;
 GHandle Console4_r;
-
+GHandle Console5_r;
 // Fonts
 //font_t dejavu_sans_16_anti_aliased;
 //font_t dejavu_sans_10;
@@ -85,7 +85,8 @@ static void createPagePage0_r(void)
   Console4_r = createConsole(&ContainerPage0_r, 400, 125, 200, 350);
   gwinRedraw(Console4_r);
 
-
+  Console5_r = createConsole(&ContainerPage0_r, 600, 125, 200, 350);
+  gwinRedraw(Console4_r);
 //  Console1_r = createConsole(&ContainerPage0_r, 1,1,520,130);
 //  gwinSetColor(Console1_r, Silver);
 //  gwinSetBgColor(Console1_r, Black);
@@ -249,14 +250,12 @@ void guiUpdate_r(void){
 //     gwinPrintf(Console3_r, "stage: %d\r\n", stage_r);
 
      gwinClear(Console4_r);
-     gwinPrintf(Console4_r, "Jintsuu kai \r\n");
-//     gwinPrintf(Console4_r, "EN: %d\r\n", (int)((encoder_1 + encoder_2)/2));
-//     gwinPrintf(Console4_r, "EN1: %d\r\n", encoder_1);
-//     gwinPrintf(Console4_r, "EN2: %d\r\n", encoder_2);
-     gwinPrintf(Console4_r, "DIS: %d\r\n", distanceSum);
-     gwinPrintf(Console4_r, "XSP: %d\r\n", xCarSetPoint_r);
-     gwinPrintf(Console4_r, "YSP: %d\r\n", asdasd);
-     gwinPrintf(Console4_r, "POS: %d\r\n", currentPos_r);
+     gwinPrintf(Console4_r, "Pos: %d\r\n", redStateSet[targetPosition].id);
+     gwinPrintf(Console4_r, "Pit: %d\r\n", redStateSet[targetPosition].pitch);
+     gwinPrintf(Console4_r, "Rol: %d\r\n", redStateSet[targetPosition].roll);
+     gwinPrintf(Console4_r, "Sht: %d\r\n", redStateSet[targetPosition].shootspd);
+     gwinPrintf(Console4_r, "Xxx: %d\r\n", redStateSet[targetPosition].x);
+     gwinPrintf(Console4_r, "Yyy: %d\r\n", redStateSet[targetPosition].y);
 //     if(shooterNextState == PLATFORM_NO_MIDDLE_NO) {
 //    	 gwinPrintf(Console4_r, "PLATFORM_NO_MIDDLE_NO\r\n");
 //     }

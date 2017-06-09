@@ -92,25 +92,7 @@ static THD_FUNCTION(ControlLoop, arg) {
     comm_stat_sample(ST2US(after_comm - start));
     //
     runButton();
-    if (current_running_menu->data.app == &start_robot){
-//<<<<<<< HEAD
-//      //motor_get_status(&M[4]);
-//      //motor_get_status(&M[5]);
-//      //motor_get_status(&M[6]);
-//      //RunPath();
-//      palClearPad(GPIOC, GPIOC_LED_G);
-//=======
-      motor_get_status(&M[1]);
-      motor_get_status(&M[2]);
-      motor_get_status(&M[3]);
-      motor_get_status(&M[4]);
-      motor_get_status(&M[5]);
-      motor_get_status(&M[6]);
-      motor_get_status(&M[7]);
-      RunPath();
-      palClearPad(GPIOC, GPIOC_LED_B);
-      palSetPad(GPIOC, GPIOC_LED_R);
-    }else if(current_running_menu->data.app == &red){
+    if(current_running_menu->data.app == &red || current_running_menu->data.app == &blue){
 #if IS_MOTOR_0_2016
     	motor_get_status_2016(&m[0]);
 #else
@@ -158,7 +140,6 @@ static THD_FUNCTION(ControlLoop, arg) {
 //      motor_get_status(&M[5]);
 //      motor_get_status(&M[6]);
 //      motor_get_status(&M[7]);
-      RunPath_r();
       palClearPad(GPIOC, GPIOC_LED_R);
       palSetPad(GPIOC, GPIOC_LED_B);
 //>>>>>>> 8a0975270c4439013eb3433a11c64826ce44e612

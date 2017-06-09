@@ -176,7 +176,7 @@ static THD_FUNCTION(DS4, arg) {
           old_data.hat_right_x = 128;
           old_data.hat_right_y = 128;
       }
-      if(need_post && (current_running_menu->data.app != &start_robot && current_running_menu->data.app != &red)){
+      if(need_post && (current_running_menu->data.app != &blue && current_running_menu->data.app != &red)){
           chMBPost(&app_mb, (msg_t)&evt, TIME_IMMEDIATE);
           need_post = false;
       }

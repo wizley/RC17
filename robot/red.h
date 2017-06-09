@@ -35,6 +35,7 @@ extern int distanceSum_r;
 extern int xCarSetPoint_r;
 extern int yCarSetPoint_r;
 
+
 #if IS_MOTOR_0_2016 && IS_MOTOR_1_2016
 	extern float xMotorSpeed_krpm_r;
 	extern float xMotorSpeed_rpm_r;
@@ -48,7 +49,7 @@ extern float yMotorSpeed_krpm;
 extern float yMotorSpeed_rpm;
 extern float reloadMotorSpeed_krpm;
 
-extern int shootSpeed;
+
 extern int leftStickSpeed;
 extern int rightStickSpeed;
 

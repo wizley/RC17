@@ -45,8 +45,8 @@ extern application set_buzzer;
 extern application set_logging;
 extern application set_usb;
 
-extern application start_robot;
 extern application red;
+extern application blue;
 extern application motor_tuning;
 extern application console;
 //extern application game;

@@ -90,7 +90,9 @@ REGION_ALIAS("HEAP_RAM", ram0);
 
 REGION_ALIAS("SDRAM", sdram);
 
-INCLUDE rules_stacks.ld
+/*INCLUDE rules_stacks.ld*/
+/* Generic rules inclusion.*/
+INCLUDE rules.ld
 
 __sdram_start__         = ORIGIN(sdram);
 __sdram_size__          = LENGTH(sdram);
@@ -140,7 +142,7 @@ SECTIONS
 }
 
 /* Code rules inclusion.*/
-INCLUDE rules_code.ld
+/*INCLUDE rules_code.ld*/
 
 /* Data rules inclusion.*/
-INCLUDE rules_data.ld
+/*INCLUDE rules_data.ld*/
