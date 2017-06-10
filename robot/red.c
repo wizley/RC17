@@ -507,8 +507,8 @@ void displayDebug_r(void) {
 	debug_display[4] = M[6].Board.ADCValue;//M[4].Feedback;	//left to mid
 	debug_display[5] = ps4_data.tpad_click;//M[5].Feedback;	//right to mid
     debug_display[6] = ps4_data.tpad_info[0].finger[0].x;
-	debug_display[7] = ps4_data.tpad_info[0].finger[0].y;
-    debug_display[8] = ps4_data.tpad_info[0].finger[0].is_touching;
+//	debug_display[7] = ps4_data.tpad_info[0].finger[0].y;
+//    debug_display[8] = ps4_data.tpad_info[0].finger[0].is_touching;
     debug_display[9] = targetPosition;
 }
 

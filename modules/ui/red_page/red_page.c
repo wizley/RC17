@@ -140,7 +140,6 @@ void guiCreate_r(void)
 }
 
 void guiUpdate_r(void){
-	 RunPath_r();
 //     gwinClear(Console1_r);
 //     gwinPrintf(Console1_r, UIDrivingState_r[DrivingState]);
      gwinClear(Console_r);

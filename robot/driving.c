@@ -92,7 +92,7 @@ static THD_FUNCTION(ControlLoop, arg) {
     comm_stat_sample(ST2US(after_comm - start));
     //
     runButton();
-    if(current_running_menu->data.app == &red || current_running_menu->data.app == &blue){
+    if(current_running_menu->data.app == &red||current_running_menu->data.app == &blue){
 #if IS_MOTOR_0_2016
     	motor_get_status_2016(&m[0]);
 #else
@@ -142,8 +142,14 @@ static THD_FUNCTION(ControlLoop, arg) {
 //      motor_get_status(&M[7]);
       palClearPad(GPIOC, GPIOC_LED_R);
       palSetPad(GPIOC, GPIOC_LED_B);
-//>>>>>>> 8a0975270c4439013eb3433a11c64826ce44e612
-    }else if (current_running_menu->data.app == &ps4_test_app){
+      if (current_running_menu->data.app == &blue){
+            RunPath();
+          }
+          else if(current_running_menu->data.app == &red){
+            RunPath_r();
+          }
+    }
+      else if (current_running_menu->data.app == &ps4_test_app){
              //should not do anything at all --> TODO: to be removed
            palClearPad(GPIOC, GPIOC_LED_G);
     }
@@ -175,6 +181,7 @@ static THD_FUNCTION(ControlLoop, arg) {
          cycle_count = 0;
          last_monitor_time = start;
          }
+
     }
     chEvtUnregister(&CtrlLp_evt, &el);
 }

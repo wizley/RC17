@@ -1,3 +1,9 @@
+/*
+ *  uart_log.c
+ *  Created on: March 8, 2017
+ *      Author: Paul
+ */
+
 #include "ch.h"
 #include "hal.h"
 #include "uart_log.h"
@@ -36,7 +42,7 @@ static THD_FUNCTION(uart_log_process, arg) {
     uartStart(&UARTD6, &ulog_uart_cfg);
     uartStopReceive(&UARTD6);
     uartStopSend(&UARTD6);
-    uartStartReceive(&UARTD6, sizeof(Rx_data), &uart_log.rx);
+    uartStartReceive(&UARTD6, sizeof(Rx_data_ps4), &uart_log.rx);
     uartStartSend(&UARTD6, sizeof(Tx_data)*16, &uart_log.tx);
     uart_log.state = uart_active;
 
@@ -44,7 +50,7 @@ static THD_FUNCTION(uart_log_process, arg) {
         if (uart_log_received == 1) {
             uart_log_received = 0;
             uartStopReceive(&UARTD6);
-            uartStartReceive(&UARTD6, sizeof(Rx_data), &uart_log.rx);
+            uartStartReceive(&UARTD6, sizeof(Rx_data_ps4), &uart_log.rx);
         }
         if (uart_log_sent == 1) {
             uart_log_sent = 0;

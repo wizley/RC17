@@ -35,7 +35,7 @@ int debug_display[10]={};
 const int HatDeadzone = 10;
 const int upLimit = 5300;// in terms of SetPoint (Motor Board Max Limit 53XX)
 const int lowLimit = -5300;
-const int acceleration_limit = 70;//60;
+const int acceleration_limit = 200;//60;
 
 //for ps4 button debounce
 int old_r1_state,old_l1_state,old_dpad_state;
@@ -188,7 +188,7 @@ int distanceSum;
 float yDistance;
 float something;
 long xDistanceOffset = -500;//offset of the Origin to the Line
-
+long long encoderSum = 0;
 void UpdatePosition(void) {
     update_shooter_flags();
     //common code for motor, encoder and line sensor
@@ -196,25 +196,25 @@ void UpdatePosition(void) {
       encoder1_2.delta_count[0] = 0;
       encoder1_2.delta_count[1] = 0;
     }
+    else{
+      LencoderSum += (int16_t)encoder1_2.delta_count[0];
+      RencoderSum += (int16_t)encoder1_2.delta_count[1];
+    }
 
-
-    LencoderSum += (int16_t)encoder1_2.delta_count[0];
-    RencoderSum += (int16_t)encoder1_2.delta_count[1];
-    long long encoderSum = 0;
-    if (LencoderSum > RencoderSum + 3500){
+    if (LencoderSum > RencoderSum + 350){
       encoderSum = 2*LencoderSum;
     }
-    else if (RencoderSum > LencoderSum + 3500){
+    else if (RencoderSum > LencoderSum + 350){
       encoderSum = 2* RencoderSum;
     }
     else{
       encoderSum = LencoderSum+RencoderSum;
     }
-    distanceSum = ((float) encoderSum * 12000 / 682160) + xDistanceOffset;
+    distanceSum = ((float) encoderSum * 13000.0 / 667170) + xDistanceOffset;//667170
     yDistance = (long long)(M[6].Board.EncoderCount-yEncoderOffset) *500 / 395473;
 
-//    debug_display[7] = encoderSum/10000;
-//    debug_display[8] = encoderSum%10000;
+    debug_display[7] = encoderSum/10000;
+    debug_display[8] = encoderSum%10000;
 
     int LSpos = 1911 - LineSensor2016[0].position; //line at right = -ve, line at left = +ve;
     Linesensor();
@@ -339,10 +339,10 @@ bool XPID(int current, int target){
         max_speed = (int) constrain(max_speed, 32767,-32767);
       }
 
-      if (output>100)output = constrain(output,max_speed,100);
-      else if (output<-100)output = constrain(output,-100,-max_speed);
-      else if (output<0) output = ((curr_error/100)-1)*100;
-      else if (output>0) output =  ((curr_error/100)+1)*100;
+      if (output>50)output = constrain(output,max_speed,300);
+      else if (output<-50)output = constrain(output,-300,-max_speed);
+      else if (output<0) output = ((curr_error/10)-1)*100;
+      else if (output>0) output =  ((curr_error/10)+1)*100;
 
 //	  float P_p = (float)(curr_error) * 5.0;
 //	  i_term += (curr_error) * 0.5;

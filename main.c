@@ -18,6 +18,7 @@
 //=======
 #include "usage.h"
 #include "airboard.h"
+//#include "uart_log.h"
 //>>>>>>> 8a0975270c4439013eb3433a11c64826ce44e612
 
 #define SDRAM_SIZE  0x1000000
@@ -187,6 +188,8 @@ int main(void) {
   adc_init();
   ps4_usbhost_init();
   ActivateDriving();
+
+//  uart_log_init();
 //<<<<<<< HEAD
 ////  artracker_init();
 //  usbhStart(&USBHD2);
@@ -195,9 +198,6 @@ int main(void) {
 //  chThdSleepMilliseconds(100);
 //  DS4_Start();
 //=======
-#if USE_DISTANCESENSOR
-  distance_init();	//distance sensor, not quite reliable
-#endif
 
 //>>>>>>> 8a0975270c4439013eb3433a11c64826ce44e612
   /*

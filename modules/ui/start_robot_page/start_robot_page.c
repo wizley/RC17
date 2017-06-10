@@ -141,7 +141,6 @@ void guiCreate(void)
 }
 
 void guiUpdate(void){
-	 RunPath();
 //     gwinClear(Console1);
 //     gwinPrintf(Console1, UIDrivingState[DrivingState]);
      gwinClear(Console);
