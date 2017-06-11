@@ -56,17 +56,39 @@ void displayDebug (void) {
     debug_display[9] = targetPosition;
 }
 
-PositionStates blueStateSet[9];
+PositionStates blueStateSet[9]={
+                                // {id      ,x      ,y      ,pitch  ,roll   ,shootspd   },
+                                //   {        ,       ,       ,       ,       ,           },
+
+                                   {0       , 500    ,0      ,0      ,0      ,0          }, //Start Zone
+                                   {1       , -883   ,336    ,138    ,-80    ,905        },
+                                   {2       , -1864  ,250    ,228    ,128    ,1050       },
+                                   {3       , -4600  ,250    ,240    ,0      ,710        }, //Middle Near
+                                   {4       , -4454  ,398    ,191    ,220    ,1105       }, //Middle Middle
+                                   {5       , -2830  ,3453   ,184    ,183    ,1390       }, //Middle Far
+                                   {6       , -5730  ,350    ,212    ,132    ,1040       },
+                                   {7       , -7767  ,320    ,189    ,75     ,990        },
+                                   {8       , -12500 ,0      ,108    ,5      ,0          }  //Loading Zone
+                                };
 bool init = false;
 void RunPath (void) {
 	UpdatePosition();
 
 	if (!init){
+	  /*
 	  for(int i=0; i<9; i++){
 	    blueStateSet[i]=redStateSet[i];
-	    blueStateSet[i].x *=-1;
 	  }
+	  blueStateSet[0].x =500;
+	  blueStateSet[1].x = (redStateSet[7].x - 12000);
+	  blueStateSet[2].x = (redStateSet[6].x - 12000);
+	    blueStateSet[3].x = (redStateSet[3].x - 12000);
+	      blueStateSet[4].x = (redStateSet[4].x - 12000);
+	      blueStateSet[5].x = (redStateSet[5].x - 12000);
+	      blueStateSet[6].x = (redStateSet[2].x - 12000);
+	      blueStateSet[7].x = (redStateSet[1].x - 12000);
       xDistanceOffset = blueStateSet[0].x;
+      */
       airSetState(&airBoard, 2, 1);
       airSetState(&airBoard, 4, 1);
       airSetState(&airBoard, 0, 1);
